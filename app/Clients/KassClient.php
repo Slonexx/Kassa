@@ -49,4 +49,50 @@ class KassClient
         return json_decode($res->getBody());
     }
 
+    /**
+     * @throws GuzzleException
+     */
+    public function get($uri){
+        $jsonWithToken = $this->getNewJwtToken();
+        $res = $this->client->get($uri,[
+            'headers' => [
+                'Accept' => 'application/json',
+                'Authorization' => 'Bearer '.$jsonWithToken->token,
+            ],
+        ]);
+        return json_decode($res->getBody());
+    }
+
+    /**
+     * @throws GuzzleException
+     */
+    public function post($uri, $body){
+        $jsonWithToken = $this->getNewJwtToken();
+        $res = $this->client->post($uri,[
+            'headers' => [
+                'Accept' => 'application/json',
+                'Authorization' => 'Bearer '.$jsonWithToken->token,
+            ],
+            'json' => $body
+        ]);
+        return json_decode($res->getBody());
+    }
+
+    public function getStatusCode(){
+        $res =  $this->client->post('auth/login',[
+            'headers' => [
+                'Accept' => 'application/json',
+            ],
+            'query' => [
+                'apiKey' => $this->apiKey,
+                'format' => 'json',
+            ],
+            'json' => [
+                'number' => $this->kassaNumber,
+                'password' => $this->password,
+            ],
+        ]);
+        return $res->getStatusCode();
+    }
+
 }
