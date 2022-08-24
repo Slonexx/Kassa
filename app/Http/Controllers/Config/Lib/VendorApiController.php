@@ -49,12 +49,7 @@ function makeHttpRequest(string $method, string $url, string $bearerToken, $body
             )
         );
     $context = stream_context_create($opts);
-    try {
-        $result = file_get_contents($url, false, $context);
-    } catch (\Exception $e) {
-        dd($e->getMessage());
-    }
-
+    $result = file_get_contents($url, false, $context);
     return json_decode($result);
 }
 
