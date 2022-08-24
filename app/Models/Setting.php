@@ -11,7 +11,7 @@ class Setting extends Model
         'accountId',
         'tokenMs',
         'saleChannel',
-        'document',
+        'paymentDocument',
         'project',
         'apiKey',
     ];
