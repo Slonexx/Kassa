@@ -1,0 +1,31 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Services\ticket\TicketService;
+use Illuminate\Http\Request;
+
+class TicketController extends Controller
+{
+
+    private TicketService $ticketService;
+
+    /**
+     * @param TicketService $ticketService
+     */
+    public function __construct(TicketService $ticketService)
+    {
+        $this->ticketService = $ticketService;
+    }
+
+    public function initTicket(Request $request){
+        $data = $request->validate([
+            'apiKey' => 'required|string',
+            'password' => 'required|string',
+            'num_kassa' => 'required|string',
+        ]);
+
+        $this->ticketService->init($data);
+    }
+
+}

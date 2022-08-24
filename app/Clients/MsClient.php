@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Components;
+namespace App\Clients;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Http\Client\Pool;
