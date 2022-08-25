@@ -95,4 +95,26 @@ class KassClient
         return $res->getStatusCode();
     }
 
+
+    /**
+     * @throws GuzzleException
+     */
+    public function postWithHeaders($uri, $headers){
+        $res = $this->client->post($uri,[
+            'headers' => $headers,
+        ]);
+        return json_decode($res->getBody());
+    }
+
+    public function delete($uri){
+        $jsonWithToken = $this->getNewJwtToken();
+        $res = $this->client->delete($uri,[
+            'headers' => [
+                'Accept' => 'application/json',
+                'Authorization' => 'Bearer '.$jsonWithToken->token,
+            ],
+        ]);
+        return json_decode($res->getBody());
+    }
+
 }

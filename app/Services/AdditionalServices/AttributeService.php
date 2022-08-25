@@ -2,8 +2,7 @@
 
 namespace App\Services\AdditionalServices;
 
-use App\Components\MsClient;
-use App\Http\Controllers\BackEnd\BDController;
+use App\Clients\MsClient;
 use GuzzleHttp\Exception\ClientException;
 
 class AttributeService
@@ -167,18 +166,17 @@ class AttributeService
         $accountId = $data['accountId'];
 
         try {
-            $this->createProductAttributes($apiKeyMs);
+            //$this->createProductAttributes($apiKeyMs);
             //$this->createAgentAttributes($apiKeyMs);
             $this->createOrderAttributes($apiKeyMs);
             $this->createDemandAttributes($apiKeyMs);
-            $this->createPaymentInAttributes($apiKeyMs);
+            //$this->createPaymentInAttributes($apiKeyMs);
             //$this->createPaymentOutAttributes($apiKeyMs);
-            $this->createCashInAttributes($apiKeyMs);
+            //$this->createCashInAttributes($apiKeyMs);
             //$this->createCashOutAttributes($apiKeyMs);
-            $this->createInvoiceOutAttributes($apiKeyMs);
+            //$this->createInvoiceOutAttributes($apiKeyMs);
         } catch (ClientException $e){
-            $bd = new BDController();
-            $bd->errorLog($accountId,$e->getMessage());
+
         }
     }
 
@@ -187,41 +185,12 @@ class AttributeService
     {
         return [
             0 => [
-                "name" => "Списание баллов (UDS)",
-                "type" => "boolean",
+                "name" => "id-билета (ReKassa)",
+                "type" => "string",
                 "required" => false,
-                "description" => "Списание баллов (UDS)",
-            ],
-            1 => [
-                "name" => "Начисление баллов (UDS)",
-                "type" => "boolean",
-                "required" => false,
-                "description" => "Начисление баллов (UDS)",
-            ],
-            2 => [
-                "name" => "Использование сертификата (UDS)",
-                "type" => "boolean",
-                "required" => false,
-                "description" => "Использование сертификата (UDS)",
+                "description" => "id-билета (ReKassa)",
             ],
         ];
-
-       /*
-       2 => [
-                "name" => "Покупка сертификата (UDS)",
-                "type" => "boolean",
-                "required" => false,
-                "description" => "Покупка сертификата (UDS)",
-            ],
-       4 => [
-        "name" => "Ссылка на операцию (UDS)",
-        "type" => "link",
-        "required" => false,
-        "description" => "Ссылка на операцию (UDS)",
-        ],
-
-       */
-
     }
 
     /**
