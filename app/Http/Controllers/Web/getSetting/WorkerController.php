@@ -19,17 +19,13 @@ class WorkerController extends Controller
         $Device = $Device->devices;
 
         $Workers = null;
-
         foreach ($Device as $item){
             $Workers = new getWorkers($item->znm);
         }
 
-        try {
-            if ($Workers != null) $Workers = $Workers->workers;
-        } catch (\Throwable $e) {
+        if ( array_key_exists(0, $Workers->workers) ){
             $Workers = null;
-        }
-
+        } else $Workers = $Workers->workers;
 
         $Setting = new getSetting($accountId);
         $tokenMs = $Setting->tokenMs;
@@ -37,13 +33,12 @@ class WorkerController extends Controller
         $Client = new MsClient($tokenMs);
         $Body_employee = $Client->get($url_employee)->rows;
         $security = [];
-        //СДЕЛАТЬ ПАРАЛЕЛЬНЫЙ ЗАПРОС
+
+
         $urls = [];
         foreach ($Body_employee as $id=>$item){
             $url_security = $url_employee.'/'.$item->id.'/security';
             $urls [] = $url_security;
-            //$Body_security = $Client->get($url_security)->role;
-            //$security[$item->id] = mb_substr ($Body_security->meta->href, 53);
         }
 
         $pools = function (Pool $pool) use ($urls,$tokenMs){

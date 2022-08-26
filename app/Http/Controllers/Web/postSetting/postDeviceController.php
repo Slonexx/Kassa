@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Web\postSetting;
 
+use App\Clients\KassClient;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\getData\getDeviceFirst;
 use App\Http\Controllers\getData\getDevices;
@@ -13,6 +14,8 @@ class postDeviceController extends Controller
 {
     public function postDevice(Request $request, $accountId){
         $Setting = new getSetting($accountId);
+
+
         $ZHM_1 = $request->ZHM_1;
         $PASSWORD_1 = $request->PASSWORD_1;
         /*$ZHM_2 = $request->ZHM_2;
@@ -23,9 +26,28 @@ class postDeviceController extends Controller
 
                 //ПРОВЕРКА НА КЛИЕНТА ААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААА
 
-                $Device = new getDeviceFirst($ZHM_1);
-                if ($Device->accountId == null) DataBaseService::createDevice($ZHM_1, $PASSWORD_1, 1, $accountId);
-                else DataBaseService::updateDevice($ZHM_1, $PASSWORD_1, 1, $accountId);
+                $Client = new KassClient($ZHM_1, $PASSWORD_1, $Setting->apiKey);
+                $StatusCode = $Client->getStatusCode();
+                if ($StatusCode == 200 ){
+                    $Device = new getDeviceFirst($ZHM_1);
+                    if ($Device->accountId == null) DataBaseService::createDevice($ZHM_1, $PASSWORD_1, 1, $accountId);
+                    else DataBaseService::updateDevice($ZHM_1, $PASSWORD_1, 1, $accountId);
+                } else {
+
+                    $message = [
+                        'alert' => ' alert alert-danger alert-dismissible fade show in text-center ',
+                        'message' => ' Api key или заводской номер кассового аппарата с паролем не верный ! ',
+                    ];
+
+                    return view('setting.base', [
+                        'accountId' => $accountId,
+                        'apiKey' => $Setting->apiKey,
+                        'paymentDocument' => $Setting->paymentDocument,
+                        'message' => $message,
+                    ]);
+                }
+
+
             } catch (\Throwable $e) {
 
             }

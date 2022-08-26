@@ -13,9 +13,10 @@ class getWorkers extends Controller
     public function __construct($znm)
     {
         $app = DataBaseService::showWorkers($znm);
-        foreach ($app as $item){
+        if ($app) foreach ($app as $item){
             $this->workers[$item->id] = $item;
         }
+        else  $this->workers[] = null;
 
     }
 

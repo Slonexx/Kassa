@@ -78,8 +78,11 @@ class KassClient
         return json_decode($res->getBody());
     }
 
-    public function getStatusCode(){
+    public function getStatusCode(): int
+    {
+
         $res =  $this->client->post('auth/login',[
+            'http_errors' => false,
             'headers' => [
                 'Accept' => 'application/json',
             ],
