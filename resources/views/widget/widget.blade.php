@@ -2,7 +2,7 @@
 <html lang="en">
 @include('head')
 
-<body class="bg-white bg-white text-Black rounded">
+<body class="bg-white">
 
         @yield('content')
 

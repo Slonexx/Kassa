@@ -3,23 +3,44 @@
 
 @section('content')
 
+    <script>
+        var hostWindow = window.parent;
+        var GlobalobjectId;
 
-    <div class="p-1">
+        window.addEventListener("message", function(event) {
+            var receivedMessage = event.data;
+            GlobalobjectId = receivedMessage.objectId;
+
+            if (receivedMessage.name === 'Open') {
+
+                var oReq = new XMLHttpRequest();
+                oReq.addEventListener("load", function() {
+
+                });
+                oReq.open("GET", "");
+                oReq.send();
+            }
+
+        });
+        //Доделать потом обновление кнопка
+    </script>
+
+
         <div class="row gradient rounded p-2">
-            <div class="col-11">
+            <div class="col-10">
                 <div class="mx-2"> <img src="https://app.rekassa.kz/static/logo.png" width="35" height="35"  alt="">
                     <span class="text-white"> РеКасса 3.0 </span>
                 </div>
             </div>
-            <div class="col-1">
-                <button type="submit" onclick="update()" class="myButton btn "> <i class="fa-solid fa-arrow-rotate-right"></i> </button>
+            <div class="col-2 ">
+                <button type="submit" onclick="" class="myButton btn "> <i class="fa-solid fa-arrow-rotate-right"></i> </button>
             </div>
         </div>
         <div class="row mt-4 rounded bg-white">
             <div class="col-1"></div>
             <button onclick="" class="col-10 btn btn-warning text-black rounded-pill"> Фискализация </button>
         </div>
-    </div>
+
 
 
 @endsection
