@@ -20,12 +20,24 @@ class TicketController extends Controller
 
     public function initTicket(Request $request){
         $data = $request->validate([
-            'apiKey' => 'required|string',
-            'password' => 'required|string',
-            'num_kassa' => 'required|string',
+            "accountId" => "required|string",
+            "id_entity" => "required||string",
+            "entity_type" => "required|string",
+            "position" => "required|integer",
         ]);
 
-        $this->ticketService->init($data);
+        $this->ticketService->createTicket($data);
+    }
+
+    public function cancelTicket(Request $request){
+        $data = $request->validate([
+            "accountId" => "required|string",
+            "id_entity" => "required||string",
+            "entity_type" => "required|string",
+            "position" => "required|integer",
+        ]);
+
+        $this->ticketService->cancelTicket($data);
     }
 
 }

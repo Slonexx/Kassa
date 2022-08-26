@@ -2,7 +2,7 @@
 
 namespace App\Services\MetaServices\MetaHook;
 
-use App\Components\MsClient;
+use App\Clients\MsClient;
 
 class AttributeHook
 {
