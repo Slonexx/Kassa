@@ -16,10 +16,10 @@ use Illuminate\Support\Facades\Route;
 Route::get('delete/{accountId}', [DeleteVendorApiController::class, 'delete']);
 
 Route::get('/', [indexController::class, 'index']);
-Route::get('/{accountId}', [indexController::class, 'indexShow'])->name('main');
+Route::get('/{accountId}/', [indexController::class, 'indexShow'])->name('main');
 
 
-Route::get('/customerorder', [customerorderEditController::class, 'customerorder']);
+Route::get('/widget/customerorder', [customerorderEditController::class, 'customerorder']);
 
 
 Route::get('/Setting/{accountId}', [BaseController::class, 'getBase'])->name('getBase');
