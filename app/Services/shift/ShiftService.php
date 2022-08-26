@@ -13,7 +13,7 @@ class ShiftService
      */
     public function closeShift($data){
         $accountId = $data['accountId'];
-        $positionDevice = $data['position'];
+        //$positionDevice = $data['position'];
         $pincode = $data['pincode'];
 
         //take settings by accountId

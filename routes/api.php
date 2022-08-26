@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Route;
 Route::post('attributes',[AttributeController::class,'setAllAttributes']);
 
 Route::post('ticket',[TicketController::class,'initTicket']);
-Route::post('cancelTicket',[TicketController::class,'cancelTicket']);
+//Route::post('cancelTicket',[TicketController::class,'cancelTicket']);
 
 Route::post('closeShift',[ShiftController::class,'closeShift']);
 

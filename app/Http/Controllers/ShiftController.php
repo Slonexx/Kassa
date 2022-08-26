@@ -20,7 +20,6 @@ class ShiftController extends Controller
     public function closeShift(Request $request){
         $data = $request->validate([
             "accountId" => "required|string",
-            "position" => "required|integer",
             "pincode" => "required|string",
         ]);
 
