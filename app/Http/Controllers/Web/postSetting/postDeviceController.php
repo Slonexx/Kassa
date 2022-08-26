@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\Web\postSetting;
 
 use App\Clients\KassClient;
+use App\Http\Controllers\Config\Lib\AppInstanceContoller;
+use App\Http\Controllers\Config\Lib\cfg;
+use App\Http\Controllers\Config\Lib\VendorApiController;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\getData\getDeviceFirst;
 use App\Http\Controllers\getData\getDevices;
@@ -38,6 +41,14 @@ class postDeviceController extends Controller
                         'alert' => ' alert alert-danger alert-dismissible fade show in text-center ',
                         'message' => ' Api key или заводской номер кассового аппарата с паролем не верный ! ',
                     ];
+                    $cfg = new cfg();
+                    $app = AppInstanceContoller::loadApp($cfg->appId, $accountId);
+                    $app->status = AppInstanceContoller::ACTIVATED;
+
+                    $vendorAPI = new VendorApiController();
+                    $vendorAPI->updateAppStatus($cfg->appId, $accountId, $app->getStatusName());
+
+                    $app->persist();
 
                     return view('setting.base', [
                         'accountId' => $accountId,
