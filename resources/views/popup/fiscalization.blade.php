@@ -43,8 +43,7 @@
         </div>
     </div>
     <div class="row mt-4 rounded bg-white">
-        <div class="col-1"></div>
-        <button onclick="fiscalization()" class="col-10 btn btn-warning text-black rounded-pill"> Фискализация </button>
+      Кастомный попап
     </div>
 
 
