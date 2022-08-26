@@ -10,12 +10,16 @@ use App\Http\Controllers\Web\postSetting\postBaseController;
 use App\Http\Controllers\Web\postSetting\postDeviceController;
 use App\Http\Controllers\Web\postSetting\postWorkerController;
 use App\Http\Controllers\Web\settingController;
+use App\Http\Controllers\Widget\customerorder\customerorderEditController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('delete/{accountId}', [DeleteVendorApiController::class, 'delete']);
 
 Route::get('/', [indexController::class, 'index']);
 Route::get('/{accountId}', [indexController::class, 'indexShow'])->name('main');
+
+
+Route::get('/customerorder', [customerorderEditController::class, 'customerorder']);
 
 
 Route::get('/Setting/{accountId}', [BaseController::class, 'getBase'])->name('getBase');
