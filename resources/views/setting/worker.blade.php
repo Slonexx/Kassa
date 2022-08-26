@@ -47,9 +47,9 @@
                     <div class="mx-1 row mt-2">
                         <div class="col-1 mx-3 mt-1">
                             {{$id}}
-                            @if ($security[$id] == 'admin') <i class="mx-2 fa-solid fa-user-tie text-success "></i>@endif
-                            @if($security[$id] == 'individual') <i class="mx-2 fa-solid fa-user-gear text-primary"></i>@endif
-                            @if($security[$id] == 'cashier') <i class="mx-2 fa-solid fa-user-tag text-info"></i>@endif
+                            @if ($security[$item->id] == 'admin') <i class="mx-2 fa-solid fa-user-tie text-success "></i>@endif
+                            @if($security[$item->id] == 'individual') <i class="mx-2 fa-solid fa-user-gear text-primary"></i>@endif
+                            @if($security[$item->id] == 'cashier') <i class="mx-2 fa-solid fa-user-tag text-info"></i>@endif
 
                         </div>
                         <div class="col-5 mt-1">

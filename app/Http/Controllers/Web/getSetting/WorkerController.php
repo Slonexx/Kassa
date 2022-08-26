@@ -34,7 +34,7 @@ class WorkerController extends Controller
         foreach ($Body_employee as $id=>$item){
             $url_security = $url_employee.'/'.$item->id.'/security';
             $Body_security = $Client->get($url_security)->role;
-            $security[$id] = mb_substr ($Body_security->meta->href, 53);
+            $security[$item->id] = mb_substr ($Body_security->meta->href, 53);
         }
 
         return view('setting.worker', [
