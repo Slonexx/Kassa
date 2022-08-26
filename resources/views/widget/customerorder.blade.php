@@ -14,6 +14,13 @@
 
             if (receivedMessage.name === 'Open') {
 
+                var sendingMessage = {
+                    name: "OpenFeedback",
+                    correlationId: receivedMessage.messageId
+                };
+                logSendingMessage(sendingMessage);
+                hostWindow.postMessage(sendingMessage, '*');
+
                 var oReq = new XMLHttpRequest();
                 oReq.addEventListener("load", function() {
 
@@ -25,7 +32,9 @@
         });
 
         function fiscalization(){
+            logSendingMessage(sendingMessage);
             Global_messageId++;
+            console.log('Global objectId = ' + GlobalobjectId);
             var sendingMessage = {
                 name: "ShowPopupRequest",
                 messageId: Global_messageId,
@@ -33,6 +42,12 @@
                 popupParameters: GlobalobjectId,
             };
             hostWindow.postMessage(sendingMessage, '*');
+        }
+
+
+        function logSendingMessage(msg) {
+            var messageAsString = JSON.stringify(msg);
+            console.log("← Sending" + " message: " + messageAsString);
         }
 
     </script>
