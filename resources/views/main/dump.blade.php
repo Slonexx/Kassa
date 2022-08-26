@@ -1,24 +1,33 @@
 <!doctype html>
 <html lang="en">
 @include('head')
-<body style="background-color:#dcdcdc;">
+ <style>
+     html {
+         background: url('https://www.impactplus.com/hubfs/404-error-page-examples-best.jpg') ;
+         -webkit-background-size: cover;
+         -moz-background-size: cover;
+         -o-background-size: cover;
+         background-size: cover;
+     }
+ </style>
+<body class="">
 
 <div class="row gradient rounded p-2">
     <div class="col-12 text-center">
-        <div class="mx-2"> <img src="https://app.rekassa.kz/static/logo.png" width="35" height="35"  alt="">
+        <div class="mx-2"> <img src="https://app.rekassa.kz/static/logo.png" width="50" height="50"  alt="">
             <span class="text-white"> Данная интеграция находиться в МоемСкладе </span>
         </div>
     </div>
 </div>
-    <img src="https://user-images.githubusercontent.com/12296880/55642768-b6502d80-57d1-11e9-8a63-716464637ffe.png" alt="">
+
 <style>
 
 
     body {
         font-family: 'Helvetica', 'Arial', sans-serif;
         color: #444444;
-        font-size: 14pt;
-        background-color: #FAFAFA;
+        font-size: 18pt;
+        background-color: #ffffff;
     }
 
     .gradient{
