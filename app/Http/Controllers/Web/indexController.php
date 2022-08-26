@@ -10,10 +10,15 @@ class indexController extends Controller
 {
     public function Index(Request $request){
 
-        $contextKey = $request->contextKey;
-        $vendorAPI = new VendorApiController();
-        $employee = $vendorAPI->context($contextKey);
-        $accountId = $employee->accountId;
+
+            $contextKey = $request->contextKey;
+            if ($contextKey == null) {
+                return view("main.dump");
+            }
+            $vendorAPI = new VendorApiController();
+            $employee = $vendorAPI->context($contextKey);
+            $accountId = $employee->accountId;
+
         //$isAdmin = $employee->permissions->admin->view;
 
         return redirect()->route('main', [

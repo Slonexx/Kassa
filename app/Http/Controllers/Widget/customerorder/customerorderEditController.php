@@ -19,11 +19,10 @@ class customerorderEditController extends Controller
 
         $entity = 'counterparty';
 
-        $getObjectUrl = $cfg->appBaseUrl . "CounterpartyObject/$accountId/$entity/";
+        $getObjectUrl = "";
 
         return view( 'widget.customerorder', [
             'accountId' => $accountId,
-
             'getObjectUrl' => $getObjectUrl,
         ] );
     }
