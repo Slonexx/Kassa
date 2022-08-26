@@ -63,7 +63,7 @@ class postDeviceController extends Controller
          }*/
         $message = [
             'alert' => ' alert alert-success alert-dismissible fade show in text-center ',
-            'message' => ' Настройки сохранились, настройки доступ для сотрудников в настройки &#8594; сотрудники ',
+            'message' => ' Настройки сохранились, настройки доступ для сотрудников в настройки →  сотрудники ',
         ];
         $Devices = new getDevices($accountId);
         return view('setting.device', [
