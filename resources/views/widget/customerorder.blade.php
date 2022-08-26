@@ -1,5 +1,5 @@
 
-@extends('widgets.widget')
+@extends('widget.widget')
 
 @section('content')
 
