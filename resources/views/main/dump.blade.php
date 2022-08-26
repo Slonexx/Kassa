@@ -3,7 +3,7 @@
 @include('head')
  <style>
      html {
-         background: url('https://www.impactplus.com/hubfs/404-error-page-examples-best.jpg') ;
+         background: url('https://colorlib.com/wp/wp-content/uploads/sites/2/404-error-template-18.png') ;
          -webkit-background-size: cover;
          -moz-background-size: cover;
          -o-background-size: cover;
