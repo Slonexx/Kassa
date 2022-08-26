@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Config\DeleteVendorApiController;
 use App\Http\Controllers\deleteData\deleteDevice;
+use App\Http\Controllers\Popup\fiscalizationController;
 use App\Http\Controllers\Web\getSetting\BaseController;
 use App\Http\Controllers\Web\getSetting\DeviceController;
 use App\Http\Controllers\Web\getSetting\WorkerController;
@@ -20,6 +21,8 @@ Route::get('/{accountId}/', [indexController::class, 'indexShow'])->name('main')
 
 
 Route::get('/widget/customerorder', [customerorderEditController::class, 'customerorder']);
+
+Route::get('/fiscalizationPopup/customerorder', [fiscalizationController::class, 'fiscalizationPopup']);
 
 
 Route::get('/Setting/{accountId}', [BaseController::class, 'getBase'])->name('getBase');

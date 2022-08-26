@@ -22,7 +22,16 @@
             }
 
         });
-        //Доделать потом обновление кнопка
+
+        function fiscalization(){
+            var sendingMessage = {
+                name: "ShowPopupRequest",
+                messageId: 1,
+                popupName: "fiscalizationPopup"
+            };
+            hostWindow.postMessage(sendingMessage, '*');
+        }
+
     </script>
 
 
@@ -38,7 +47,7 @@
         </div>
         <div class="row mt-4 rounded bg-white">
             <div class="col-1"></div>
-            <button onclick="" class="col-10 btn btn-warning text-black rounded-pill"> Фискализация </button>
+            <button onclick="fiscalization()" class="col-10 btn btn-warning text-black rounded-pill"> Фискализация </button>
         </div>
 
 
