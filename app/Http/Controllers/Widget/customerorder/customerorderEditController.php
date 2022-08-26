@@ -16,7 +16,7 @@ class customerorderEditController extends Controller
         $vendorAPI = new VendorApiController();
         $employee = $vendorAPI->context($contextKey);
         $accountId = $employee->accountId;
-        dd($accountId);
+
         $entity = 'counterparty';
 
         $getObjectUrl = $cfg->appBaseUrl . "CounterpartyObject/$accountId/$entity/";
