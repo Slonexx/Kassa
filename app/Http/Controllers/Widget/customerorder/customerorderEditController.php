@@ -11,13 +11,13 @@ class customerorderEditController extends Controller
 {
     public function customerorder(Request $request){
         $cfg = new cfg();
-
-        $contextKey = $request->contextKey;
+        $accountId = '1dd5bd55-d141-11ec-0a80-055600047495';
+       /* $contextKey = $request->contextKey;
         $vendorAPI = new VendorApiController();
         $employee = $vendorAPI->context($contextKey);
         $accountId = $employee->accountId;
 
-        $entity = 'counterparty';
+        $entity = 'counterparty';*/
 
         $getObjectUrl = "";
 

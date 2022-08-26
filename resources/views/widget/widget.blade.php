@@ -2,15 +2,9 @@
 <html lang="en">
 @include('head')
 
-<body>
-
-    <div>
+<body class="bg-white bg-white text-Black rounded">
 
         @yield('content')
-
-    </div>
-
-
 
 <style>
     body {
