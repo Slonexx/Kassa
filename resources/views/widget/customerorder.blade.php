@@ -5,6 +5,7 @@
 
     <script>
         var hostWindow = window.parent;
+        var Global_messageId = 0;
         var GlobalobjectId;
 
         window.addEventListener("message", function(event) {
@@ -24,10 +25,12 @@
         });
 
         function fiscalization(){
+            Global_messageId++;
             var sendingMessage = {
                 name: "ShowPopupRequest",
-                messageId: 1,
-                popupName: "fiscalizationPopup"
+                messageId: Global_messageId,
+                popupName: "fiscalizationPopup",
+                popupParameters: GlobalobjectId,
             };
             hostWindow.postMessage(sendingMessage, '*');
         }
