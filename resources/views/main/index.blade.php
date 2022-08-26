@@ -8,6 +8,12 @@
 
     </form>--}}
 
+    @php
+    $max = random_int(1, 1000);
+    for ( $i = 1; $i<=$max; $i++ ){
+    echo $i. " ";
+    }
 
+    @endphp
 @endsection
 

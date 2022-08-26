@@ -25,7 +25,7 @@
                     <div class="dropdown-container">
                         <a href="/Setting/{{$accountId}}"> Основная </a>
                         <a href="/Setting/Device/{{$accountId}}"> Кассовый аппарат </a>
-                        <a href=""> Сотрудники </a>
+                        <a href="/Setting/Worker/{{$accountId}}"> Сотрудники </a>
                     </div>
                 </div>
 
