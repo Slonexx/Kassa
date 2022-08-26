@@ -43,12 +43,7 @@ class AppInstanceContoller
     }
 
     function persist() {
-        @mkdir('data');
         file_put_contents($this->filename(), serialize($this));
-    }
-
-    function delete() {
-        @unlink($this->filename());
     }
 
     private function filename() {
