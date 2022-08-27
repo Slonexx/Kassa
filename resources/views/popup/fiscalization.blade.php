@@ -152,13 +152,13 @@
                     <div class="col-12">
                         <div class="row">
                             <div class="col-1 text-success">№</div>
-                            <div class="col-4 text-success">Наименование</div>
+                            <div class="col-5 text-success">Наименование</div>
                             <div class="col-1 text-success">Кол-во</div>
                             <div class="col-1 text-success">Цена</div>
                             <div class="col-1 text-success">НДС</div>
                             <div class="col-1 text-success">Скидка</div>
                             <div class="col-1 text-success">Сумма</div>
-                            <div class="col-2 text-success">Учитывать </div>
+                            <div class="col-1 text-success">Учитывать </div>
                             <hr class="mt-1 text-success" style="background-color: #0c7d70; height: 3px; border: 0;">
                         </div>
                     </div>
@@ -167,13 +167,13 @@
                             <div id="{{ $i }}" class="row mt-2" style="display:block;">
                                 <div class="row">
                                     <div class="col-1">{{ $i + 1 }}</div>
-                                    <div id="{{ 'productName_'.$i }}"  class="col-4"></div>
+                                    <div id="{{ 'productName_'.$i }}"  class="col-5"></div>
                                     <div id="{{ 'productQuantity_'.$i }}"  class="col-1"></div>
                                     <div id="{{ 'productPrice_'.$i }}"  class="col-1"></div>
                                     <div id="{{ 'productVat_'.$i }}"  class="col-1 text-center"></div>
                                     <div id="{{ 'productDiscount_'.$i }}"  class="col-1 text-center"></div>
                                     <div id="{{ 'productFinal_'.$i }}"  class="col-1 text-center"></div>
-                                    <div class="col-2 ">
+                                    <div class="col-1 ">
                                         <button onclick="deleteBTNClick( {{ $i }} )" class="btn btn-danger">Убрать</button>
                                     </div>
                                 </div>

@@ -65,7 +65,7 @@ class fiscalizationController extends Controller
             $vat = [
                 'vatEnabled' => $Body->vatEnabled,
                 'vatIncluded' => $Body->vatIncluded,
-                'vatSum' => $Body->vatSum,
+                'vatSum' => $Body->vatSum / 100 ,
             ];
         };
         return [
