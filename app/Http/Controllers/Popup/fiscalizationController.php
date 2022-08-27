@@ -39,12 +39,14 @@ class fiscalizationController extends Controller
 
         foreach ($positions as $id=>$item){
 
+            $final = $item->price / 100 * $item->quantity;
+
             if ($vatEnabled == true) {
                 if ($Body->vatIncluded == false) {
                     $final = $item->price / 100 * $item->quantity;
                     $final = $final + ( $final * ($item->vat/100) );
                 }
-            } else $final = $item->price / 100 * $item->quantity;
+            }
 
 
             $products[$id] = [
