@@ -68,9 +68,11 @@
 
                     window.document.getElementById("getKKM").style.display = "none";
                     window.document.getElementById("ShowCheck").style.display = "none";
+                    window.document.getElementById("refundCheck").style.display = "none";
                     if (json.attributes != null){
                         if (json.attributes.ticket_id != null){
                             window.document.getElementById("ShowCheck").style.display = "block";
+                            window.document.getElementById("refundCheck").style.display = "block";
                         } else {
                             window.document.getElementById("getKKM").style.display = "block";
                         }
@@ -235,7 +237,7 @@
 
                 </div>
                 <div class="col-2">
-
+                    <button id="refundCheck" class="mx-3 btn btn-danger">возврат</button>
                 </div>
                 <div class="col-2">
                     <button id="ShowCheck" class="mx-3 btn btn-success">Показать чек</button>
