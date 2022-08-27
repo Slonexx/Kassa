@@ -59,6 +59,7 @@
 
 
                     window.document.getElementById("numberOrder").innerHTML = json.name;
+                    window.document.getElementById("cash").innerHTML = json.sum;
                     window.document.getElementById("sum").innerHTML = json.sum;
                     if (json.vat == null) window.document.getElementById("vat").innerHTML = "0";
                     else window.document.getElementById("vat").innerHTML = json.vat.vatSum;
@@ -179,7 +180,7 @@
                             </div>
                         @endfor
                     </div>
-                    <div class="col-12">
+                    <div class="col-12 mt-5">
                         <div class="row">
                           <div class="col-8"></div>
                           <div class="col-2">
