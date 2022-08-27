@@ -23,21 +23,26 @@ class TicketController extends Controller
             "accountId" => "required|string",
             "id_entity" => "required||string",
             "entity_type" => "required|string",
-            "position" => "required|integer",
+            "pay_type" => "required|string",
+            "money_type" => "required|string",
         ]);
 
-        $this->ticketService->createTicket($data);
+        return response(
+            $this->ticketService->createTicket($data)
+        );
+
     }
 
     public function cancelTicket(Request $request){
-        $data = $request->validate([
+      /*  $data = $request->validate([
             "accountId" => "required|string",
             "id_entity" => "required||string",
             "entity_type" => "required|string",
-            "position" => "required|integer",
         ]);
-
-        $this->ticketService->cancelTicket($data);
+        //"position" => "required|integer",
+        return response(
+            $this->ticketService->cancelTicket($data)
+        );*/
     }
 
 }
