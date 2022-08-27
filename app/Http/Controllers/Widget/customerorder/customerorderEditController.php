@@ -21,7 +21,7 @@ class customerorderEditController extends Controller
         $Workers = new getWorkerID($employee->id);
 
         if ($Workers->access == null or $Workers->access == 0){
-
+            return view('widget.error');
         }
 
         $entity = 'counterparty';

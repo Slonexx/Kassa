@@ -7,7 +7,7 @@
     <div class="row gradient rounded p-2">
         <div class="col-10">
             <div class="mx-2"> <img src="https://app.rekassa.kz/static/logo.png" width="35" height="35"  alt="">
-                <span class="text-white"> РеКасса 3.0 </span>
+                <span class="text-white"> re:Kassa </span>
             </div>
         </div>
         <div class="col-2 ">
