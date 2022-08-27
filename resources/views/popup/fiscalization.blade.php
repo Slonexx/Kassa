@@ -108,7 +108,7 @@
 
                 let vatId = document.getElementById("productVat_" + Object).innerHTML;
                 let vat = window.document.getElementById("vat").innerHTML;
-                if (vat === vatId) window.document.getElementById("vat").innerHTML = 0;
+                if (vat === vatId) window.document.getElementById("vat").innerHTML = "0";
                 else window.document.getElementById("vat").innerHTML = vat-vatId;
 
                 window.document.getElementById('productName_' + Object).innerHTML = '';
