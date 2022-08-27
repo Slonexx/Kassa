@@ -32,7 +32,7 @@
                 };
                 let final = url + formatParams(params);
 
-                console.log(final);
+                console.log(final);//dwawdawwa
 
                 let xmlHttpRequest = new XMLHttpRequest();
                 xmlHttpRequest.addEventListener("load", function () {
