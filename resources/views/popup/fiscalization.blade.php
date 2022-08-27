@@ -11,6 +11,15 @@
 
         window.addEventListener("message", function(event) {
             var receivedMessage = event.data;
+            var child = document.getElementById("products");
+            parent.removeChild(child);
+
+            let divchild= document.createElement('div');
+            divchild.setAttribute('id', 'products');
+            divchild.setAttribute('class', 'col-12 text-black');
+            document.getElementById('products').appendChild(divchild);
+
+
             if (receivedMessage.name === 'OpenPopup') {
                 let params = {
                     object_Id: receivedMessage.popupParameters.object_Id,
