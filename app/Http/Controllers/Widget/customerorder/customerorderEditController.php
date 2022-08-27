@@ -19,7 +19,7 @@ class customerorderEditController extends Controller
         $accountId = $employee->accountId;
 
         $Workers = new getWorkerID($employee->id);
-
+        dd($Workers->access);
         if ($Workers->access == null or $Workers->access == 0){
             return view('widget.error');
         }
