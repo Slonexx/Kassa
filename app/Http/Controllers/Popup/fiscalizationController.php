@@ -33,7 +33,7 @@ class fiscalizationController extends Controller
         $Body = $Client->get($url);
         $positions = $Client->get($Body->positions->meta->href)->rows;
         $attributes = null;
-        if (array_key_exists('attributes', $Body)){
+        if (property_exists($Body, 'attributes')){
             foreach ($Body->attributes as $item){
                 if ($item->name == 'id-билета (ReKassa)'){
                     $attributes[] = ['id-билета (ReKassa)'=> $item->value,];
