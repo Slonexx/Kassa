@@ -6,7 +6,6 @@
     <script>
 
         //const url = 'http://rekassa/Popup/customerorder/show';
-        import {forEach} from "lodash";
 
         const url = 'https://smartrekassa.kz/Popup/customerorder/show';
 
