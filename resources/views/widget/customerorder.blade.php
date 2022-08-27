@@ -7,10 +7,9 @@
         const hostWindow = window.parent;
         let Global_messageId = 0;
         let Global_accountId = "{{$accountId}}";
-        let Global_employeeId = "{{$employeeId}}";
         let Global_object_Id;
 
-        window.addEventListener("message", function(event) {
+        //window.addEventListener("message", function(event) {
             const receivedMessage = event.data;
             workerAccess();
             if (receivedMessage.name === 'Open') {
@@ -33,7 +32,7 @@
                 xmlHttpRequest.send();
             }
 
-        });
+        //});
 
         function fiscalization(){
 
@@ -46,7 +45,6 @@
                 popupParameters: {
                     object_Id:Global_object_Id,
                     accountId:Global_accountId,
-                    employeeId:Global_employeeId,
                 },
             };
             logSendingMessage(sendingMessage);
@@ -94,7 +92,7 @@
                 <div class="text-center">
                     <div class="p-3 mb-2 bg-danger text-white">
                         <i class="fa-solid fa-user-gear"></i>
-                            У вас нет доступа к данному виджету, сообщите администратору, чтоб он предоставил вам доступ
+                            У вас нет доступа к данному виджету, сообщите администратору, чтобы он предоставил вам доступ
                         <i class="fa-solid fa-ban "></i>
                     </div>
                 </div>
