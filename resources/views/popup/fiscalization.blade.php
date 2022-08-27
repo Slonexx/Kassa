@@ -13,10 +13,10 @@
             var receivedMessage = event.data;
             document.getElementById("products").remove();
 
-            let divchild = document.createElement('div');
-            divchild.setAttribute('id', 'products');
-            divchild.setAttribute('class', 'col-12 text-black');
-            document.getElementById('products').appendChild(divchild);
+            let child = document.createElement('div');
+            child.setAttribute('id', 'products');
+            child.setAttribute('class', 'col-12 text-black');
+            document.getElementById('main').appendChild(child);
 
 
             if (receivedMessage.name === 'OpenPopup') {
@@ -122,7 +122,7 @@
         </div>
     </div>
     <div class=" rounded bg-white">
-        <div class="row p-3">
+        <div id="main" class="row p-3">
             <div class="col-12">
                 <div class="row">
                     <div class="col-1 text-success">№</div>
