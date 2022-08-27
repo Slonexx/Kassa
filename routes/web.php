@@ -23,6 +23,7 @@ Route::get('/{accountId}/', [indexController::class, 'indexShow'])->name('main')
 Route::get('/widget/customerorder', [customerorderEditController::class, 'customerorder']);
 
 Route::get('/Popup/customerorder', [fiscalizationController::class, 'fiscalizationPopup']);
+Route::get('/Popup/customerorder/show/{popupParameters}', [fiscalizationController::class, 'ShowFiscalizationPopup']);
 
 
 Route::get('/Setting/{accountId}', [BaseController::class, 'getBase'])->name('getBase');

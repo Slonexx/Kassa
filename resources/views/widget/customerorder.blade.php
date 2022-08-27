@@ -41,7 +41,10 @@
                 name: "ShowPopupRequest",
                 messageId: Global_messageId,
                 popupName: "fiscalizationPopup",
-                popupParameters: Global_object_Id,
+                popupParameters: {
+                    object_Id:Global_object_Id,
+                    accountId:{{$accountId}},
+                },
             };
             logSendingMessage(sendingMessage);
             hostWindow.postMessage(sendingMessage, '*');

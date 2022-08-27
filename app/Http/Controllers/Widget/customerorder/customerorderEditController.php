@@ -10,20 +10,19 @@ use Illuminate\Http\Request;
 class customerorderEditController extends Controller
 {
     public function customerorder(Request $request){
-        $cfg = new cfg();
 
         $contextKey = $request->contextKey;
         $vendorAPI = new VendorApiController();
         $employee = $vendorAPI->context($contextKey);
         $accountId = $employee->accountId;
-
+        dd($employee);
         $entity = 'counterparty';
 
-        $getObjectUrl = "";
+
 
         return view( 'widget.customerorder', [
             'accountId' => $accountId,
-            'getObjectUrl' => $getObjectUrl,
+            'entity' => $entity,
         ] );
     }
 }
