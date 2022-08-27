@@ -94,7 +94,7 @@
                 <div class="text-center">
                     <div class="p-3 mb-2 bg-danger text-white">
                         <i class="fa-solid fa-user-gear"></i>
-                        У вас нет доступа к данному виджету, сообщите администратору, чтоб он вам предоставил доступ
+                            У вас нет доступа к данному виджету, сообщите администратору, чтоб он предоставил вам доступ
                         <i class="fa-solid fa-ban "></i>
                     </div>
                 </div>
