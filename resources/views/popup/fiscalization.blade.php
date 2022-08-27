@@ -168,8 +168,8 @@
                                 <div class="row">
                                     <div class="col-1">{{ $i + 1 }}</div>
                                     <div id="{{ 'productName_'.$i }}"  class="col-5"></div>
-                                    <div id="{{ 'productQuantity_'.$i }}"  class="col-1"></div>
-                                    <div id="{{ 'productPrice_'.$i }}"  class="col-1"></div>
+                                    <div id="{{ 'productQuantity_'.$i }}"  class="col-1 text-center"></div>
+                                    <div id="{{ 'productPrice_'.$i }}"  class="col-1 text-center"></div>
                                     <div id="{{ 'productVat_'.$i }}"  class="col-1 text-center"></div>
                                     <div id="{{ 'productDiscount_'.$i }}"  class="col-1 text-center"></div>
                                     <div id="{{ 'productFinal_'.$i }}"  class="col-1 text-center"></div>
