@@ -41,7 +41,7 @@
 
                         let productNumber = document.createElement('div');
                         productNumber.setAttribute('class', 'col-1');
-                        productNumber.innerText = i;
+                        productNumber.innerText = i + 1;
                         document.getElementById(products[i].position).appendChild(productNumber);
 
                         let productName = document.createElement('div');
