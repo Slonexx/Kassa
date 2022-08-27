@@ -106,11 +106,12 @@
                 let final = document.getElementById('productFinal_' + Object).innerHTML;
                 window.document.getElementById("sum").innerHTML = sum-final;
 
-                let vatId = document.getElementById("productVat_" + Object).innerHTML;
-
+                let price = document.getElementById("productPrice_" + Object).innerHTML;
+                let vatProsent = document.getElementById("productVat_" + Object).innerHTML;
+                let vatId = price / 100 * vatId.replace(/%/g, '');
                 let vat = window.document.getElementById("vat").innerHTML;
 
-                window.document.getElementById("vat").innerHTML = vat - vatId.replace(/%/g, '');
+                window.document.getElementById("vat").innerHTML = vat - vatId;
 
                 window.document.getElementById('productName_' + Object).innerHTML = '';
                 window.document.getElementById('productQuantity_' + Object).innerHTML = '';
