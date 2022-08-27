@@ -15,7 +15,7 @@ class customerorderEditController extends Controller
         $vendorAPI = new VendorApiController();
         $employee = $vendorAPI->context($contextKey);
         $accountId = $employee->accountId;
-        dd($employee);
+
         $entity = 'counterparty';
 
 
@@ -23,6 +23,7 @@ class customerorderEditController extends Controller
         return view( 'widget.customerorder', [
             'accountId' => $accountId,
             'entity' => $entity,
+            'employee' => $employee,
         ] );
     }
 }
