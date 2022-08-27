@@ -9,7 +9,7 @@
         let Global_accountId = "{{$accountId}}";
         let Global_object_Id;
 
-        //window.addEventListener("message", function(event) {
+        window.addEventListener("message", function(event) {
             const receivedMessage = event.data;
             workerAccess();
             if (receivedMessage.name === 'Open') {
@@ -32,7 +32,7 @@
                 xmlHttpRequest.send();
             }
 
-        //});
+        });
 
         function fiscalization(){
 

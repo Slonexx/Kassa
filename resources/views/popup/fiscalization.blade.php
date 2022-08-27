@@ -6,16 +6,8 @@
     <script>
 
         const url = 'http://rekassa/Popup/customerorder/show';
-        //window.addEventListener("message", function(event) {
-            var receivedMessage = {
-                "name":"OpenPopup",
-                "messageId":1,
-                "popupName":"fiscalizationPopup",
-                "popupParameters":{
-                    "object_Id":"75035b22-243a-11ed-0a80-07600015e5d3",
-                    "accountId":"1dd5bd55-d141-11ec-0a80-055600047495",
-                  }
-            };/*event.data;*/
+        window.addEventListener("message", function(event) {
+            var receivedMessage = event.data;
             if (receivedMessage.name === 'OpenPopup') {
                 let params = {
                     object_Id: receivedMessage.popupParameters.object_Id,
