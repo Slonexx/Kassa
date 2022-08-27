@@ -6,6 +6,8 @@
     <script>
         const hostWindow = window.parent;
         let Global_messageId = 0;
+        let Global_accountId = {{$accountId}};
+        let Global_employeeId = {{$employeeId}};
         let Global_object_Id;
 
         window.addEventListener("message", function(event) {
@@ -43,8 +45,8 @@
                 popupName: "fiscalizationPopup",
                 popupParameters: {
                     object_Id:Global_object_Id,
-                    accountId:{{$accountId}},
-                    employeeId:{{$employeeId}},
+                    accountId:Global_accountId,
+                    employeeId:Global_employeeId,
                 },
             };
             logSendingMessage(sendingMessage);
