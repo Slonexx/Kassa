@@ -6,8 +6,8 @@
     <script>
         const hostWindow = window.parent;
         let Global_messageId = 0;
-        let Global_accountId = {{$accountId}};
-        let Global_employeeId = {{$employeeId}};
+        let Global_accountId = "{{$accountId}}";
+        let Global_employeeId = "{{$employeeId}}";
         let Global_object_Id;
 
         window.addEventListener("message", function(event) {
