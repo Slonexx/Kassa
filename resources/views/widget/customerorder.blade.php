@@ -62,11 +62,11 @@
         function workerAccess(){
             let worker = {{$worker}};
             if (worker === 1){
-                $('workerAccess_yes').show();
-                $('workerAccess_no').hide();
+                $('#workerAccess_yes').show();
+                $('#workerAccess_no').hide();
             } else {
-                $('workerAccess_yes').hide();
-                $('workerAccess_no').show();
+                $('#workerAccess_yes').hide();
+                $('#workerAccess_no').show();
             }
 
         }
