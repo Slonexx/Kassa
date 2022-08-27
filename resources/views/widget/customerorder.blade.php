@@ -12,7 +12,7 @@
 
         window.addEventListener("message", function(event) {
             const receivedMessage = event.data;
-
+            workerAccess();
             if (receivedMessage.name === 'Open') {
 
                 console.log('Global_object_Id = ' + receivedMessage.objectId );
