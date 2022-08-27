@@ -71,7 +71,7 @@ class fiscalizationController extends Controller
         return [
             'id' => $Body->id,
             'name' => $Body->name,
-            'sum' => $Body->sum,
+            'sum' => $Body->sum / 100,
             'vat' => $vat,
             'products' => $products,
         ];

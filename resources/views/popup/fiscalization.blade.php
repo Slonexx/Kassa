@@ -12,7 +12,8 @@
         window.addEventListener("message", function(event) {
             //var receivedMessage = {"name":"OpenPopup","messageId":10,"popupName":"fiscalizationPopup","popupParameters":{"object_Id":"75035b22-243a-11ed-0a80-07600015e5d3","accountId":"1dd5bd55-d141-11ec-0a80-055600047495"}}; /*event.data;*/
             var receivedMessage = event.data;
-
+            window.document.getElementById("sum").innerHTML = '';
+            window.document.getElementById("vat").innerHTML = "";
 
             for (var i = 0; i < 20; i++) {
                 window.document.getElementById(i).style.display = "none";
@@ -23,7 +24,6 @@
                 window.document.getElementById('productDiscount_' + i).innerHTML = '';
                 window.document.getElementById('productFinal_' + i).innerHTML = '';
             }
-
 
             if (receivedMessage.name === 'OpenPopup') {
                 let params = {
@@ -59,7 +59,9 @@
 
 
                     window.document.getElementById("numberOrder").innerHTML = json.name;
-                    window.document.getElementById("cash").innerHTML = "";
+                    window.document.getElementById("sum").innerHTML = json.sum;
+                    if (json.vat == null) window.document.getElementById("vat").innerHTML = "0";
+                    else window.document.getElementById("vat").innerHTML = json.vat.vatSum;
 
 
                 });
@@ -176,6 +178,19 @@
                                 </div>
                             </div>
                         @endfor
+                    </div>
+                    <div class="col-12">
+                        <div class="row">
+                          <div class="col-8"></div>
+                          <div class="col-2">
+                              <h4>Итого: </h4>
+                              <h6>НДС: </h6>
+                          </div>
+                            <div class="col-2 float-right">
+                                <h4 id="sum"></h4>
+                                <h6 id="vat"></h6>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
