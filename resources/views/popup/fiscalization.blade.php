@@ -6,6 +6,8 @@
     <script>
 
         //const url = 'http://rekassa/Popup/customerorder/show';
+        import {forEach} from "lodash";
+
         const url = 'https://smartrekassa.kz/Popup/customerorder/show';
 
 
@@ -64,6 +66,12 @@
                     if (json.vat == null) window.document.getElementById("vat").innerHTML = "0";
                     else window.document.getElementById("vat").innerHTML = json.vat.vatSum;
 
+                    if (json.attributes != null){
+                        json.attributes.forEach(showandhide);
+                    } else {
+                        window.document.getElementById("ShowCheck").style.display = "none";
+                        window.document.getElementById("getKKM").style.display = "block";
+                    }
 
                 });
                 xmlHttpRequest.open("GET", final);
@@ -91,6 +99,9 @@
                 document.getElementById(Object).remove();
             }
 
+            function showandhide(item, index, arr){
+                if (arr[index] === ){}
+            }
 
         function isNumberKeyCash(evt){
             var charCode = (evt.which) ? evt.which : event.keyCode
@@ -215,10 +226,10 @@
 
                 </div>
                 <div class="col-2">
-                    <button class="mx-3 btn btn-success">Показать чек</button>
+                    <button id="ShowCheck" class="mx-3 btn btn-success">Показать чек</button>
                 </div>
                 <div class="col-2">
-                    <button class="mx-3 btn btn-success">Отправить в ККМ</button>
+                    <button id="getKKM" class="mx-3 btn btn-success">Отправить в ККМ</button>
                 </div>
             </div>
 
