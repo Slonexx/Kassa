@@ -27,7 +27,6 @@ class customerorderEditController extends Controller
         return view( 'widget.customerorder', [
             'accountId' => $accountId,
             'entity' => $entity,
-            'employeeId' => $employee->id,
             'worker' => $Workers->access,
         ] );
     }

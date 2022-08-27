@@ -4,8 +4,9 @@
 @section('content')
 
     <script>
+
         const url = 'http://rekassa/Popup/customerorder/show';
-        window.addEventListener("message", function(event) {
+        //window.addEventListener("message", function(event) {
             var receivedMessage = {
                 "name":"OpenPopup",
                 "messageId":1,
@@ -13,27 +14,80 @@
                 "popupParameters":{
                     "object_Id":"75035b22-243a-11ed-0a80-07600015e5d3",
                     "accountId":"1dd5bd55-d141-11ec-0a80-055600047495",
-                    "employeeId":"e793faeb-e63a-11ec-0a80-0b4800079eb3"}
+                  }
             };/*event.data;*/
-            if (receivedMessage.name === 'OpenPopup' && receivedMessage.popupName === 'fiscalizationPopup') {
-
-                var params = {
+            if (receivedMessage.name === 'OpenPopup') {
+                let params = {
                     object_Id: receivedMessage.popupParameters.object_Id,
                     accountId: receivedMessage.popupParameters.accountId,
-                    employeeId: receivedMessage.popupParameters.employeeId
                 };
-                var final = url + formatParams(params);
-                console.log('final = ' + final);
+                let final = url + formatParams(params);
 
-                var oReq = new XMLHttpRequest();
-                oReq.addEventListener("load", function() {
+                let xmlHttpRequest = new XMLHttpRequest();
+                xmlHttpRequest.addEventListener("load", function() {
+
+                    let json = JSON.parse( this.responseText );
+                    let products = json.products;
+
+                    logReceivedMessage(products);
+                    for (var i = 0; i<products.length; i++){
+                        let divRow = document.createElement('div');
+                        divRow.setAttribute('id', products[i].position);
+                        divRow.setAttribute('class', 'row');
+                        document.getElementById('products').appendChild(divRow);
+
+                        let productNumber = document.createElement('div');
+                        productNumber.setAttribute('class', 'col-1');
+                        productNumber.innerText = i;
+                        document.getElementById(products[i].position).appendChild(productNumber);
+
+                        let productName = document.createElement('div');
+                        productName.setAttribute('class', 'col-6 mt-1');
+                        productName.innerText = products[i].name;
+                        document.getElementById(products[i].position).appendChild(productName);
+
+                        let productQuantity = document.createElement('div');
+                        productQuantity.setAttribute('class', 'col-1');
+                        productQuantity.innerText = products[i].quantity;
+                        document.getElementById(products[i].position).appendChild(productQuantity);
+
+                        let productPrice = document.createElement('div');
+                        productPrice.setAttribute('class', 'col-1');
+                        productPrice.innerText = products[i].price;
+                        document.getElementById(products[i].position).appendChild(productPrice);
+
+                        let productVat = document.createElement('div');
+                        productVat.setAttribute('class', 'col-1');
+                        let procent = products[i].vat;
+                        if (procent === 0) productVat.innerText = 'без НДС';
+                        else productVat.innerText = products[i].vat + '%';
+                        document.getElementById(products[i].position).appendChild(productVat);
+
+                        let productDiscount = document.createElement('div');
+                        productDiscount.setAttribute('class', 'col-1');
+                        productDiscount.innerText = products[i].discount + '%';
+                        document.getElementById(products[i].position).appendChild(productDiscount);
+
+                        let productFinal = document.createElement('div');
+                        productFinal.setAttribute('class', 'col-1');
+                        productFinal.innerText = products[i].final ;
+                        document.getElementById(products[i].position).appendChild(productFinal);
+
+                    }
+
+                    window.document.getElementById("numberOrder").innerHTML = json.name;
+
+
+
+
+
 
                 });
-                oReq.open("GET", "");
-                oReq.send();
+                xmlHttpRequest.open("GET", final);
+                xmlHttpRequest.send();
             }
 
-        });
+       // });
 
         function logReceivedMessage(msg) {
             var messageAsString = JSON.stringify(msg);
@@ -48,7 +102,8 @@
                 })
                 .join("&")
         }
-        //Доделать потом обновление кнопка
+
+
     </script>
 
 
@@ -57,6 +112,8 @@
         <div class="col-11">
             <div class="mx-2"> <img src="https://app.rekassa.kz/static/logo.png" width="35" height="35"  alt="">
                 <span class="text-white"> re:Kassa </span>
+                <span class="mx-5 text-white">Заказ покупателя №</span>
+                <span id="numberOrder" class="text-white"></span>
             </div>
         </div>
         <div class="col-1 ">
@@ -76,7 +133,8 @@
                     <div class="col-1 text-success">Сумма</div>
                     <hr class="mt-1 text-success" style="background-color: #0c7d70; height: 3px; border: 0;">
                 </div>
-
+            </div>
+            <div id="products" class="col-12 text-black">
 
             </div>
         </div>
