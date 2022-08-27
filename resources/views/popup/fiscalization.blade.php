@@ -8,7 +8,7 @@
         const url = 'http://rekassa/Popup/customerorder/show';
         window.addEventListener("message", function(event) {
             var receivedMessage = event.data;
-            if (receivedMessage.name === 'OpenPopup') {
+            if (receivedMessage.name === 'fiscalizationPopup') {
                 let params = {
                     object_Id: receivedMessage.popupParameters.object_Id,
                     accountId: receivedMessage.popupParameters.accountId,
