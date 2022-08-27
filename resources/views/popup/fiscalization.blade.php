@@ -100,7 +100,11 @@
             }
 
             function showandhide(item, index, arr){
-                if (arr[index] === ){}
+                if (index === 'ticket_id'){
+                    if (arr[index] != null ){
+
+                    }
+                }
             }
 
         function isNumberKeyCash(evt){
