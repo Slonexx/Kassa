@@ -116,7 +116,7 @@
             </div>
             <div id="products" class="col-12 text-black">
                 @for( $i=0; $i<20; $i++)
-                    <div id="{{ $i }}" class="row mt-2" style="display:none;">
+                    <div id="{{ $i }}" class="row mt-2" style="display:block;">
                         <div class="row">
                             <div class="col-1">{{ $i + 1 }}</div>
                             <div id="{{ 'productName_'.$i }}"  class="col-4"></div>
