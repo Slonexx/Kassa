@@ -36,13 +36,11 @@ class fiscalizationController extends Controller
         if (property_exists($Body, 'attributes')){
             $attributes = [
                 'ticket_id' => null,
-                'fiscalization' => null,
             ];
             foreach ($Body->attributes as $item){
                 if ($item->name == 'id-билета (ReKassa)'){
                     $attributes['ticket_id'] =  $item->value;
-                } else if ($item->name == 'Фискализация (ReKassa)'){
-                    $attributes['fiscalization'] = $item->value;
+                    break;
                 }
             }
         }

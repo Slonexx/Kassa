@@ -69,12 +69,11 @@
                     window.document.getElementById("getKKM").style.display = "none";
                     window.document.getElementById("ShowCheck").style.display = "none";
                     if (json.attributes != null){
-                        $.each(json.attributes , function(index, value) {
-                            alert('value = ' + value + ' index = '+index);
-                        });
-                    } else {
-                        window.document.getElementById("ShowCheck").style.display = "none";
-                        window.document.getElementById("getKKM").style.display = "block";
+                        if (json.attributes.ticket_id != null){
+                            window.document.getElementById("ShowCheck").style.display = "block";
+                        } else {
+                            window.document.getElementById("getKKM").style.display = "block";
+                        }
                     }
 
                 });
