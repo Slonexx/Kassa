@@ -35,12 +35,12 @@
         function fiscalization(){
 
             Global_messageId++;
-            console.log('Global objectId = ' + GlobalobjectId);
+            console.log('Global objectId = ' + Global_object_Id);
             var sendingMessage = {
                 name: "ShowPopupRequest",
                 messageId: Global_messageId,
                 popupName: "fiscalizationPopup",
-                popupParameters: GlobalobjectId,
+                popupParameters: Global_object_Id,
             };
             logSendingMessage(sendingMessage);
             hostWindow.postMessage(sendingMessage, '*');
