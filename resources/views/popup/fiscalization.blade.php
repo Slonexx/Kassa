@@ -5,7 +5,7 @@
 
     <script>
 
-        const url = 'http://rekassa/Popup/customerorder/show';
+        const url = 'https://smartrekassa.kz/Popup/customerorder/show';
 
 
 
