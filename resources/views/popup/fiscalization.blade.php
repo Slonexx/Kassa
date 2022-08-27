@@ -11,10 +11,9 @@
 
         window.addEventListener("message", function(event) {
             var receivedMessage = event.data;
-            var child = document.getElementById("products");
-            parent.removeChild(child);
+            document.getElementById("products").remove();
 
-            let divchild= document.createElement('div');
+            let divchild = document.createElement('div');
             divchild.setAttribute('id', 'products');
             divchild.setAttribute('class', 'col-12 text-black');
             document.getElementById('products').appendChild(divchild);
