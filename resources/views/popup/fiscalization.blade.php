@@ -9,7 +9,7 @@
             var receivedMessage = event.data;
 
             if (receivedMessage.name === 'OpenPopup' && receivedMessage.popupName === 'fiscalizationPopup') {
-
+                logReceivedMessage(receivedMessage)''
                 var oReq = new XMLHttpRequest();
                 oReq.addEventListener("load", function() {
 

@@ -23,7 +23,7 @@ class customerorderEditController extends Controller
         return view( 'widget.customerorder', [
             'accountId' => $accountId,
             'entity' => $entity,
-            'employee' => $employee,
+            'employeeId' => $employee->id,
         ] );
     }
 }
