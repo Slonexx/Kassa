@@ -13,12 +13,12 @@
         window.addEventListener("message", function(event) {
             //var receivedMessage = {"name":"OpenPopup","messageId":10,"popupName":"fiscalizationPopup","popupParameters":{"object_Id":"75035b22-243a-11ed-0a80-07600015e5d3","accountId":"1dd5bd55-d141-11ec-0a80-055600047495"}}; /*event.data;*/
             var receivedMessage = event.data;
-            document.getElementById("products").remove();
+           /* document.getElementById("products").remove();
 
             let child = document.createElement('div');
             child.setAttribute('id', 'products');
             child.setAttribute('class', 'col-12 text-black');
-            document.getElementById('main').appendChild(child);
+            document.getElementById('main').appendChild(child);*/
 
 
             if (receivedMessage.name === 'OpenPopup') {
