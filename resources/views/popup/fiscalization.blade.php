@@ -6,6 +6,9 @@
     <script>
 
         const url = 'http://rekassa/Popup/customerorder/show';
+
+
+
         window.addEventListener("message", function(event) {
             var receivedMessage = event.data;
             if (receivedMessage.name === 'fiscalizationPopup') {
@@ -16,13 +19,13 @@
                 let final = url + formatParams(params);
 
                 let xmlHttpRequest = new XMLHttpRequest();
-                xmlHttpRequest.addEventListener("load", function() {
+                xmlHttpRequest.addEventListener("load", function () {
 
-                    let json = JSON.parse( this.responseText );
+                    let json = JSON.parse(this.responseText);
                     let products = json.products;
 
                     logReceivedMessage(products);
-                    for (var i = 0; i<products.length; i++){
+                    for (var i = 0; i < products.length; i++) {
                         let divRow = document.createElement('div');
                         divRow.setAttribute('id', products[i].position);
                         divRow.setAttribute('class', 'row');
@@ -62,7 +65,7 @@
 
                         let productFinal = document.createElement('div');
                         productFinal.setAttribute('class', 'col-1');
-                        productFinal.innerText = products[i].final ;
+                        productFinal.innerText = products[i].final;
                         document.getElementById(products[i].position).appendChild(productFinal);
 
                     }
@@ -70,30 +73,28 @@
                     window.document.getElementById("numberOrder").innerHTML = json.name;
 
 
-
-
-
-
                 });
                 xmlHttpRequest.open("GET", final);
                 xmlHttpRequest.send();
             }
 
-       // });
+             });
 
-        function logReceivedMessage(msg) {
-            var messageAsString = JSON.stringify(msg);
-            console.log("→ Received" + " message: " + messageAsString);
-        }
+            function logReceivedMessage(msg) {
+                var messageAsString = JSON.stringify(msg);
+                console.log("→ Received" + " message: " + messageAsString);
+            }
 
-        function formatParams( params ){
-            return "?" + Object
-                .keys(params)
-                .map(function(key){
-                    return key+"="+encodeURIComponent(params[key])
-                })
-                .join("&")
-        }
+            function formatParams(params) {
+                return "?" + Object
+                    .keys(params)
+                    .map(function (key) {
+                        return key + "=" + encodeURIComponent(params[key])
+                    })
+                    .join("&")
+            }
+
+
 
 
     </script>
