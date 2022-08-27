@@ -10,8 +10,8 @@
         window.addEventListener("message", function(event) {
             var receivedMessage = event.data;
             GlobalobjectId = receivedMessage.objectId;
-
-            if (receivedMessage.name === 'Open') {
+            logReceivedMessage(receivedMessage);
+            if (receivedMessage.name === 'ShowPopupResponse') {
 
                 var oReq = new XMLHttpRequest();
                 oReq.addEventListener("load", function() {
@@ -23,8 +23,9 @@
 
         });
 
-        function fiscalization(){
-
+        function logReceivedMessage(msg) {
+            var messageAsString = JSON.stringify(msg);
+            console.log("← Sending" + " message: " + messageAsString);
         }
 
         //Доделать потом обновление кнопка
@@ -42,9 +43,23 @@
             <button type="submit" onclick="" class="myButton btn "> <i class="fa-solid fa-arrow-rotate-right"></i> </button>
         </div>
     </div>
-    <div class="row mt-4 rounded bg-white">
-        <div class="col-1"></div>
-        <div class="col-10 bg-success"> dawdaw </div>
+    <div class=" rounded bg-white">
+        <div class="row p-3">
+            <div class="col-12">
+                <div class="row">
+                    <div class="col-1 text-success">№</div>
+                    <div class="col-6 text-success">Наименование</div>
+                    <div class="col-1 text-success">Кол-во</div>
+                    <div class="col-1 text-success">Цена</div>
+                    <div class="col-1 text-success">НДС</div>
+                    <div class="col-1 text-success">Скидка</div>
+                    <div class="col-1 text-success">Сумма</div>
+                    <hr class="mt-1 text-success" style="background-color: #0c7d70; height: 3px; border: 0;">
+                </div>
+
+
+            </div>
+        </div>
     </div>
 
 
