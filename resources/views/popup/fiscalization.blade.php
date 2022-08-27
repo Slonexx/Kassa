@@ -5,18 +5,18 @@
 
     <script>
 
-        const url = 'https://smartrekassa.kz/Popup/customerorder/show';
+        const url = 'http://rekassa/Popup/customerorder/show';
 
 
 
-        window.addEventListener("message", function(event) {
-            var receivedMessage = event.data;
-            document.getElementById("products").remove();
+        //window.addEventListener("message", function(event) {
+            var receivedMessage = {"name":"OpenPopup","messageId":10,"popupName":"fiscalizationPopup","popupParameters":{"object_Id":"75035b22-243a-11ed-0a80-07600015e5d3","accountId":"1dd5bd55-d141-11ec-0a80-055600047495"}}; /*event.data;*/
+           // document.getElementById("products").remove();
 
-            let child = document.createElement('div');
+           /* let child = document.createElement('div');
             child.setAttribute('id', 'products');
             child.setAttribute('class', 'col-12 text-black');
-            document.getElementById('main').appendChild(child);
+            document.getElementById('main').appendChild(child);*/
 
 
             if (receivedMessage.name === 'OpenPopup') {
@@ -33,50 +33,22 @@
                     let products = json.products;
 
                     logReceivedMessage(products);
+
                     for (var i = 0; i < products.length; i++) {
-                        let divRow = document.createElement('div');
-                        divRow.setAttribute('id', products[i].position);
-                        divRow.setAttribute('class', 'row');
-                        document.getElementById('products').appendChild(divRow);
+                        window.document.getElementById('productName_' + i).innerHTML = products[i].name;
+                        window.document.getElementById('productQuantity_' + i).innerHTML = products[i].quantity;
+                        window.document.getElementById('productPrice_' + i).innerHTML = products[i].price;
+                        if (products[i].vat === 0)  window.document.getElementById('productVat_' + i).innerHTML = "без НДС";
+                        else window.document.getElementById('productVat_' + i).innerHTML = products[i].vat + '%';
+                        window.document.getElementById('productDiscount_' + i).innerHTML = products[i].discount + '%';
+                        window.document.getElementById('productFinal_' + i).innerHTML = products[i].final;
 
-                        let productNumber = document.createElement('div');
-                        productNumber.setAttribute('class', 'col-1');
-                        productNumber.innerText = i + 1;
-                        document.getElementById(products[i].position).appendChild(productNumber);
 
-                        let productName = document.createElement('div');
-                        productName.setAttribute('class', 'col-6 mt-1');
-                        productName.innerText = products[i].name;
-                        document.getElementById(products[i].position).appendChild(productName);
 
-                        let productQuantity = document.createElement('div');
-                        productQuantity.setAttribute('class', 'col-1');
-                        productQuantity.innerText = products[i].quantity;
-                        document.getElementById(products[i].position).appendChild(productQuantity);
-
-                        let productPrice = document.createElement('div');
-                        productPrice.setAttribute('class', 'col-1');
-                        productPrice.innerText = products[i].price;
-                        document.getElementById(products[i].position).appendChild(productPrice);
-
-                        let productVat = document.createElement('div');
-                        productVat.setAttribute('class', 'col-1');
-                        let procent = products[i].vat;
-                        if (procent === 0) productVat.innerText = 'без НДС';
-                        else productVat.innerText = products[i].vat + '%';
-                        document.getElementById(products[i].position).appendChild(productVat);
-
-                        let productDiscount = document.createElement('div');
-                        productDiscount.setAttribute('class', 'col-1');
-                        productDiscount.innerText = products[i].discount + '%';
-                        document.getElementById(products[i].position).appendChild(productDiscount);
-
-                        let productFinal = document.createElement('div');
-                        productFinal.setAttribute('class', 'col-1');
-                        productFinal.innerText = products[i].final;
-                        document.getElementById(products[i].position).appendChild(productFinal);
-
+                        window.document.getElementById(i).style.display = "block";
                     }
+
+
 
                     window.document.getElementById("numberOrder").innerHTML = json.name;
 
@@ -86,7 +58,7 @@
                 xmlHttpRequest.send();
             }
 
-             });
+            // });
 
             function logReceivedMessage(msg) {
                 var messageAsString = JSON.stringify(msg);
@@ -102,6 +74,10 @@
                     .join("&")
             }
 
+            function deleteBTNClick(Object){
+                //Object.remove();
+                document.getElementById(Object).remove();
+            }
 
 
 
@@ -126,17 +102,33 @@
             <div class="col-12">
                 <div class="row">
                     <div class="col-1 text-success">№</div>
-                    <div class="col-6 text-success">Наименование</div>
+                    <div class="col-4 text-success">Наименование</div>
                     <div class="col-1 text-success">Кол-во</div>
                     <div class="col-1 text-success">Цена</div>
                     <div class="col-1 text-success">НДС</div>
                     <div class="col-1 text-success">Скидка</div>
                     <div class="col-1 text-success">Сумма</div>
+                    <div class="col-2 text-success">Фискализировать </div>
                     <hr class="mt-1 text-success" style="background-color: #0c7d70; height: 3px; border: 0;">
                 </div>
             </div>
             <div id="products" class="col-12 text-black">
-
+                @for( $i=0; $i<20; $i++)
+                    <div id="{{ $i }}" class="row mt-2" style="display:none;">
+                        <div class="row">
+                            <div class="col-1">{{ $i + 1 }}</div>
+                            <div id="{{ 'productName_'.$i }}"  class="col-4"></div>
+                            <div id="{{ 'productQuantity_'.$i }}"  class="col-1"></div>
+                            <div id="{{ 'productPrice_'.$i }}"  class="col-1"></div>
+                            <div id="{{ 'productVat_'.$i }}"  class="col-1 text-center"></div>
+                            <div id="{{ 'productDiscount_'.$i }}"  class="col-1 text-center"></div>
+                            <div id="{{ 'productFinal_'.$i }}"  class="col-1 text-center"></div>
+                            <div class="col-2 ">
+                                <button onclick="deleteBTNClick( {{ $i }} )" class="btn btn-danger">Убрать</button>
+                            </div>
+                        </div>
+                    </div>
+                @endfor
             </div>
         </div>
     </div>
@@ -170,161 +162,60 @@
     }
 </style>
 
-{{--
-<div id="object">
-    <form id="popup-form">
-        <h2>Формирование чека</h2>
-        <table class="ui-table">
-            <thead>
-            <tr>
-                <th>Наименование</th>
-                <th>Кол-во</th>
-                <th>Цена</th>
-                <th>НДС</th>
-                <th>Скидка</th>
-                <th>Сумма</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td>Зелье единорога</td>
-                <td>1</td>
-                <td>1300</td>
-                <td>без НДС</td>
-                <td>0</td>
-                <td>1300</td>
-            </tr>
-            <tr>
-                <td>Бумажная-тонкая веревка</td>
-                <td>1</td>
-                <td>220</td>
-                <td>без НДС</td>
-                <td>0</td>
-                <td>220</td>
-            </tr>
-            <tr>
-                <td> </td>
-                <td> </td>
-                <td> </td>
-                <td> </td>
-                <td> </td>
-                <td style="font-size: 200%;">1520</td>
-            </tr>
-            </tbody>
-            <tbody>
+<script>
+   /* for (var i = 0; i < products.length; i++) {
+        let divRow = document.createElement('div');
+        divRow.setAttribute('id', products[i].position);
+        divRow.setAttribute('class', 'row');
+        document.getElementById('products').appendChild(divRow);
 
-            </tbody>
-        </table>
-        <div style="display: inline-block; width: 200px;vertical-align: top;">
-            Тип оплаты:
-            <br>
-            <label>
-                <input type="radio" name="pay-type" value="cash" checked="">
-                Наличными</label>
-            <label>
-                <input type="radio" name="pay-type" value="card">
-                Безналичными</label>
-            <br>
-        </div>
-        <div style="display: inline-block; width: 200px;vertical-align: top;">
-            Тип чека:
-            <br>
-            <select name="check-type">
-                <option value="4" selected="">Полный расчет</option>
-                <option value="-1">Полный возврат</option>
-            </select>
-        </div>
-        <div style="display: inline-block; width: 200px;vertical-align: top;">
-            <button class="button button--success" onclick="RegisterCheck();return false;" id="button-register-check">
-                Напечатать чек</button>
-        </div>
-        <div style="display: inline-block; width: 300px;vertical-align: top;">
-            <button class="button" onclick="ExecuteKkm({Command: 'OpenShift'});return false;">Открыть смену</button>
-            <button class="button" onclick="ExecuteKkm({Command: 'CloseShift'});return false;">Закрыть смену</button>
-            <button class="button" onclick="ExecuteKkm({Command: 'XReport'});return false;">X отчет</button>
-        </div>
-        <script>
-            var ObjectData = atob("eyJDb21tYW5kIjoiUmVnaXN0ZXJDaGVjayIsIklzRmlzY2FsQ2hlY2siOnRydWUsIlR5cGVDaGVjayI6MCwiQ2hlY2tTdHJpbmdzIjpbeyJSZWdpc3RlciI6eyJOYW1lIjoiXHUwNDE3XHUwNDM1XHUwNDNiXHUwNDRjXHUwNDM1IFx1MDQzNVx1MDQzNFx1MDQzOFx1MDQzZFx1MDQzZVx1MDQ0MFx1MDQzZVx1MDQzM1x1MDQzMCIsIlF1YW50aXR5IjoxLCJQcmljZSI6MTMwMCwiQW1vdW50IjoxMzAwLCJUYXgiOi0xLCJTaWduTWV0aG9kQ2FsY3VsYXRpb24iOjQsIlNpZ25DYWxjdWxhdGlvbk9iamVjdCI6MX19LHsiUmVnaXN0ZXIiOnsiTmFtZSI6Ilx1MDQxMVx1MDQ0M1x1MDQzY1x1MDQzMFx1MDQzNlx1MDQzZFx1MDQzMFx1MDQ0Zi1cdTA0NDJcdTA0M2VcdTA0M2RcdTA0M2FcdTA0MzBcdTA0NGYgXHUwNDMyXHUwNDM1XHUwNDQwXHUwNDM1XHUwNDMyXHUwNDNhXHUwNDMwIiwiUXVhbnRpdHkiOjEsIlByaWNlIjoyMjAsIkFtb3VudCI6MjIwLCJUYXgiOi0xLCJTaWduTWV0aG9kQ2FsY3VsYXRpb24iOjQsIlNpZ25DYWxjdWxhdGlvbk9iamVjdCI6MX19XSwiTVNfc3VtIjoxNTIwfQ==");</script>
-        <script>
-            var Data = {};
+        let productNumber = document.createElement('div');
+        productNumber.setAttribute('class', 'col-1');
+        productNumber.innerText = i + 1;
+        document.getElementById(products[i].position).appendChild(productNumber);
 
-            function finishExecution(Result) {
-                let message = "";
-                const serviceCommandsArray = ["OpenShift", "CloseShift", "XReport"];
-                if (Result.Command == "RegisterCheck" && typeof(Result.CheckNumber) == "number" && Result.Error === "") {
-                    message = "Чек успешно напечатан! Смена " + Result.SessionNumber + ", чек " + Result.CheckNumber + ".";
-                    message += "<br><a href='" + Result.URL + "'>Ссылка на чек на сайте вашего ОФД</a>."
-                } else if (serviceCommandsArray.includes(Result.Command) && Result.Error === "") {
-                    switch (Result.Command) {
-                        case "OpenShift":
-                            message += "Смена открыта. Номер смены: " + Result.SessionNumber + ".";
-                            break;
-                        case "CloseShift":
-                            message += "Смена закрыта. Номер смены: " + Result.SessionNumber + ".";
-                            break;
-                        case "XReport":
-                            message += "X отчет напечатан.";
-                            break;
-                    }
-                } else {
-                    if (Result.Error === "Unknown error.") {
-                        message = "Произошла ошибка! <br>ККТ не подключена, не настроено расширение KkmServer.<br>Обратитесь к руководству пользователя для настройки.";
-                    } else {
-                        message = "Произошла ошибка! <br>Текст ошибки: " + Result.Error;
-                    }
-                }
-                document.getElementById("result").innerHTML = message;
-            }
+        let productName = document.createElement('div');
+        productName.setAttribute('class', 'col-4 mt-1');
+        productName.innerText = products[i].name;
+        document.getElementById(products[i].position).appendChild(productName);
 
-            window.addEventListener("message", function(event) {
-                var receivedMessage = event.data;
-                if (receivedMessage.name === 'KkmExecutionResult') {
-                    finishExecution(receivedMessage.Result);
-                }
-            });
+        let productQuantity = document.createElement('div');
+        productQuantity.setAttribute('class', 'col-1');
+        productQuantity.innerText = products[i].quantity;
+        document.getElementById(products[i].position).appendChild(productQuantity);
 
-            function ExecuteKkm(DataParametr) {
-                window.Data = DataParametr;
-                window.open('../kassa/KkmExecute.php','_blank');
-            }
-            function RegisterCheck() {
-                // block button
-                $("#button-register-check").prop('disabled', true).removeClass("button--success");
-                // unpack ObjectData if necessary
-                if (typeof (ObjectData) == "string") {
-                    ObjectData = JSON.parse(ObjectData);
-                }
-                // apply pay type
-                let payType = $("[name=pay-type]:checked").val();
-                if (payType == 'cash') {
-                    ObjectData.Cash = ObjectData.MS_sum;
-                } else {
-                    ObjectData.ElectronicPayment = ObjectData.MS_sum;
-                }
+        let productPrice = document.createElement('div');
+        productPrice.setAttribute('class', 'col-1');
+        productPrice.innerText = products[i].price;
+        document.getElementById(products[i].position).appendChild(productPrice);
 
-                // apply check type
-                let checkType = $("[name=check-type]").val();
-                if (checkType == '-1') {
-                    ObjectData.TypeCheck = 1;
-                } else {
-                    ObjectData.TypeCheck = 0;
-                }
+        let productVat = document.createElement('div');
+        productVat.setAttribute('class', 'col-1');
+        let procent = products[i].vat;
+        if (procent === 0) productVat.innerText = 'без НДС';
+        else productVat.innerText = products[i].vat + '%';
+        document.getElementById(products[i].position).appendChild(productVat);
 
-                // console.log(ObjectData);
+        let productDiscount = document.createElement('div');
+        productDiscount.setAttribute('class', 'col-1');
+        productDiscount.innerText = products[i].discount + '%';
+        document.getElementById(products[i].position).appendChild(productDiscount);
 
-                // send data
-                ExecuteKkm(window.ObjectData);
-            }
+        let productFinal = document.createElement('div');
+        productFinal.setAttribute('class', 'col-1');
+        productFinal.innerText = products[i].final;
+        document.getElementById(products[i].position).appendChild(productFinal);
 
-            $(".buttons-container").hide();
-        </script>
-        <br>
-        <div id="result" style="font-size: 200%;">
+        let productCheck = document.createElement('dir');
+        productCheck.setAttribute('class', 'col-2');
+        productCheck.setAttribute('id', 'btn_'+products[i].position);
+        document.getElementById(products[i].position).appendChild(productCheck);
 
-        </div>
-        <div class="buttons-container" style="display: none;">
-            <button class="button button--success" onclick="ClosePopup(true);return false;">Отправить</button>
-            <button class="button" onclick="ClosePopup();return false;">Отмена</button>
-        </div>
-    </form>
-</div>--}}
+        let DeleteCheck = document.createElement('button');
+        DeleteCheck.setAttribute('class', ' btn btn-danger');
+        DeleteCheck.setAttribute('onclick', 'deleteBTNClick('+ products[i].position.toString() +')');
+        DeleteCheck.innerText = "Убрать";
+        document.getElementById('btn_'+products[i].position).appendChild(DeleteCheck);
+
+    }*/
+</script>
