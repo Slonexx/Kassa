@@ -20,10 +20,6 @@ class customerorderEditController extends Controller
 
         $Workers = new getWorkerID($employee->id);
 
-        if ($Workers->access == 1){
-            return view('widget.errorCustomOrder');
-        }
-
         $entity = 'counterparty';
 
 
@@ -32,6 +28,7 @@ class customerorderEditController extends Controller
             'accountId' => $accountId,
             'entity' => $entity,
             'employeeId' => $employee->id,
+            'worker' => $Workers->access,
         ] );
     }
 }
