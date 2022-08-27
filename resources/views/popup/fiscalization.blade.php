@@ -11,7 +11,7 @@
 
         window.addEventListener("message", function(event) {
             var receivedMessage = event.data;
-            if (receivedMessage.name === 'fiscalizationPopup') {
+            if (receivedMessage.name === 'OpenPopup') {
                 let params = {
                     object_Id: receivedMessage.popupParameters.object_Id,
                     accountId: receivedMessage.popupParameters.accountId,
