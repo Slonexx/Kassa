@@ -106,7 +106,7 @@
                 let final = document.getElementById('productFinal_' + Object).innerHTML;
                 window.document.getElementById("sum").innerHTML = sum-final;
 
-                let quantity = window.document.getElementById('productQuantity_' + i).innerHTML;
+                let quantity = document.getElementById('productQuantity_' + i).innerHTML;
                 let price = document.getElementById("productPrice_" + Object).innerHTML;
                 let vatProsent = document.getElementById("productVat_" + Object).innerHTML;
                 let vatId = price * quantity / 100 * vatProsent.replace(/%/g, '');
