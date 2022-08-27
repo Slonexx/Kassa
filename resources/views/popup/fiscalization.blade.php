@@ -109,6 +109,7 @@
                 let price = document.getElementById("productPrice_" + Object).innerHTML;
                 let vatProsent = document.getElementById("productVat_" + Object).innerHTML;
                 let vatId = price / 100 * vatProsent.replace(/%/g, '');
+                console.log('vatId = ' + vatId);
                 let vat = window.document.getElementById("vat").innerHTML;
 
                 window.document.getElementById("vat").innerHTML = vat - vatId;
