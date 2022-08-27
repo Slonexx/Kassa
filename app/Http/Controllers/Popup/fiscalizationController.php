@@ -56,7 +56,7 @@ class fiscalizationController extends Controller
                 'price' => $item->price / 100 ?: 0,
                 'vatEnabled' => $item->vatEnabled,
                 'vat' => $item->vat,
-                'discount' => $item->discount,
+                'discount' => round($item->discount, 2),
                 'final' => $final - ( $final * ($item->discount/100) ),
             ];
         }
