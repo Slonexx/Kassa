@@ -100,22 +100,21 @@
             }
 
             function deleteBTNClick(Object){
-                //Object.remove();
-                document.getElementById(Object).remove();
+
+
+                let sum = document.getElementById("sum").innerHTML;
+                let final = document.getElementById('productFinal_' + Object).innerHTML;
+                window.document.getElementById("sum").innerHTML = sum-final;
+
+                window.document.getElementById('productName_' + Object).innerHTML = '';
+                window.document.getElementById('productQuantity_' + Object).innerHTML = '';
+                window.document.getElementById('productPrice_' + Object).innerHTML = '';
+                window.document.getElementById('productVat_' + Object).innerHTML = '';
+                window.document.getElementById('productDiscount_' + Object).innerHTML = '';
+                window.document.getElementById('productFinal_' + Object).innerHTML = '';
+                window.document.getElementById(Object).style.display = "none";
             }
 
-            function showandhide(item, index, arr){
-                if (index === 'ticket_id'){
-                    if (item != null ){
-                        window.document.getElementById("ShowCheck").style.display = "block";
-                    }
-                }
-                if (index === 'fiscalization'){
-                    if (item != null ){
-                        window.document.getElementById("ShowCheck").style.display = "block";
-                    }
-                }
-            }
 
         function isNumberKeyCash(evt){
             var charCode = (evt.which) ? evt.which : event.keyCode
