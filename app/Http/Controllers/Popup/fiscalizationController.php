@@ -34,14 +34,15 @@ class fiscalizationController extends Controller
         $positions = $Client->get($Body->positions->meta->href)->rows;
         $attributes = null;
         if (property_exists($Body, 'attributes')){
+            $attributes = [
+                'ticket_id' => null,
+                'fiscalization' => null,
+            ];
             foreach ($Body->attributes as $item){
                 if ($item->name == 'id-билета (ReKassa)'){
-                    $attributes['ticket_id']=  $item->value;
+                    $attributes['ticket_id'] =  $item->value;
                 } else if ($item->name == 'Фискализация (ReKassa)'){
                     $attributes['fiscalization'] = $item->value;
-                } else {
-                    $attributes['ticket_id'] =  null;
-                    $attributes['fiscalization'] = null;
                 }
             }
         }
