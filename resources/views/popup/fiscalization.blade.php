@@ -44,7 +44,7 @@
     </div>
     <div class="row mt-4 rounded bg-white">
         <div class="col-1"></div>
-        <div class="col-10 bg-success"></div>
+        <div class="col-10 bg-success"> dawdaw </div>
     </div>
 
 
