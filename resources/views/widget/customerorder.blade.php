@@ -10,10 +10,11 @@
 
         window.addEventListener("message", function(event) {
             const receivedMessage = event.data;
-            console.log('Global_object_Id = ' + receivedMessage.objectId );
-            Global_object_Id = receivedMessage.objectId;
 
             if (receivedMessage.name === 'Open') {
+
+                console.log('Global_object_Id = ' + receivedMessage.objectId );
+                Global_object_Id = receivedMessage.objectId;
 
                 var sendingMessage = {
                     name: "OpenFeedback",
