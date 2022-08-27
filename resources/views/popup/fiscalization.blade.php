@@ -20,6 +20,16 @@
             child.setAttribute('class', 'col-12 text-black');
             document.getElementById('main').appendChild(child);*/
 
+            for (var i = 0; i < 20; i++) {
+                window.document.getElementById(i).style.display = "none";
+                window.document.getElementById('productName_' + i).innerHTML = '';
+                window.document.getElementById('productQuantity_' + i).innerHTML = '';
+                window.document.getElementById('productPrice_' + i).innerHTML = '';
+                window.document.getElementById('productVat_' + i).innerHTML = '';
+                window.document.getElementById('productDiscount_' + i).innerHTML = '';
+                window.document.getElementById('productFinal_' + i).innerHTML = '';
+            }
+
 
             if (receivedMessage.name === 'OpenPopup') {
                 let params = {
