@@ -66,6 +66,9 @@
                     if (json.vat == null) window.document.getElementById("vat").innerHTML = "0";
                     else window.document.getElementById("vat").innerHTML = json.vat.vatSum;
 
+
+                    window.document.getElementById("getKKM").style.display = "none";
+                    window.document.getElementById("ShowCheck").style.display = "none";
                     if (json.attributes != null){
                         json.attributes.forEach(showandhide);
                     } else {
@@ -101,8 +104,13 @@
 
             function showandhide(item, index, arr){
                 if (index === 'ticket_id'){
-                    if (arr[index] != null ){
-
+                    if (item != null ){
+                        window.document.getElementById("ShowCheck").style.display = "block";
+                    }
+                }
+                if (index === 'fiscalization'){
+                    if (item != null ){
+                        window.document.getElementById("ShowCheck").style.display = "block";
                     }
                 }
             }
