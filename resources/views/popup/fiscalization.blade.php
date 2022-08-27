@@ -43,7 +43,8 @@
         </div>
     </div>
     <div class="row mt-4 rounded bg-white">
-      Кастомный попап
+        <div class="col-1"></div>
+        <div class="col-10 bg-success"></div>
     </div>
 
 
