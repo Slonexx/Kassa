@@ -4,12 +4,27 @@
 @section('content')
 
     <script>
-        const url = 'https://smartrekassa.kz/';
+        const url = 'http://rekassa/Popup/customerorder/show';
         window.addEventListener("message", function(event) {
-            var receivedMessage = event.data;
-
+            var receivedMessage = {
+                "name":"OpenPopup",
+                "messageId":1,
+                "popupName":"fiscalizationPopup",
+                "popupParameters":{
+                    "object_Id":"75035b22-243a-11ed-0a80-07600015e5d3",
+                    "accountId":"1dd5bd55-d141-11ec-0a80-055600047495",
+                    "employeeId":"e793faeb-e63a-11ec-0a80-0b4800079eb3"}
+            };/*event.data;*/
             if (receivedMessage.name === 'OpenPopup' && receivedMessage.popupName === 'fiscalizationPopup') {
-                logReceivedMessage(receivedMessage)''
+
+                var params = {
+                    object_Id: receivedMessage.popupParameters.object_Id,
+                    accountId: receivedMessage.popupParameters.accountId,
+                    employeeId: receivedMessage.popupParameters.employeeId
+                };
+                var final = url + formatParams(params);
+                console.log('final = ' + final);
+
                 var oReq = new XMLHttpRequest();
                 oReq.addEventListener("load", function() {
 
@@ -25,6 +40,14 @@
             console.log("→ Received" + " message: " + messageAsString);
         }
 
+        function formatParams( params ){
+            return "?" + Object
+                .keys(params)
+                .map(function(key){
+                    return key+"="+encodeURIComponent(params[key])
+                })
+                .join("&")
+        }
         //Доделать потом обновление кнопка
     </script>
 
