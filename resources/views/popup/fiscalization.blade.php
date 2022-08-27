@@ -14,7 +14,7 @@
             var receivedMessage = event.data;
 
 
-           /* for (var i = 0; i < 20; i++) {
+            for (var i = 0; i < 20; i++) {
                 window.document.getElementById(i).style.display = "none";
                 window.document.getElementById('productName_' + i).innerHTML = '';
                 window.document.getElementById('productQuantity_' + i).innerHTML = '';
@@ -22,7 +22,7 @@
                 window.document.getElementById('productVat_' + i).innerHTML = '';
                 window.document.getElementById('productDiscount_' + i).innerHTML = '';
                 window.document.getElementById('productFinal_' + i).innerHTML = '';
-            }*/
+            }
 
 
             if (receivedMessage.name === 'OpenPopup') {
@@ -31,6 +31,8 @@
                     accountId: receivedMessage.popupParameters.accountId,
                 };
                 let final = url + formatParams(params);
+
+                console.log(final);
 
                 let xmlHttpRequest = new XMLHttpRequest();
                 xmlHttpRequest.addEventListener("load", function () {
@@ -57,6 +59,7 @@
 
 
                     window.document.getElementById("numberOrder").innerHTML = json.name;
+                    window.document.getElementById("cash").innerHTML = "";
 
 
                 });
@@ -86,7 +89,44 @@
             }
 
 
-
+        function isNumberKeyCash(evt){
+            var charCode = (evt.which) ? evt.which : event.keyCode
+            if (charCode == 46){
+                var inputValue = $("#cash").val();
+                var count = (inputValue.match(/'.'/g) || []).length;
+                if(count<1){
+                    if (inputValue.indexOf('.') < 1){
+                        return true;
+                    }
+                    return false;
+                }else{
+                    return false;
+                }
+            }
+            if (charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57)){
+                return false;
+            }
+            return true;
+        }
+        function isNumberKeyCard(evt){
+            var charCode = (evt.which) ? evt.which : event.keyCode
+            if (charCode == 46){
+                var inputValue = $("#card").val();
+                var count = (inputValue.match(/'.'/g) || []).length;
+                if(count<1){
+                    if (inputValue.indexOf('.') < 1){
+                        return true;
+                    }
+                    return false;
+                }else{
+                    return false;
+                }
+            }
+            if (charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57)){
+                return false;
+            }
+            return true;
+        }
     </script>
 
 
@@ -115,7 +155,7 @@
                             <div class="col-1 text-success">НДС</div>
                             <div class="col-1 text-success">Скидка</div>
                             <div class="col-1 text-success">Сумма</div>
-                            <div class="col-2 text-success">Фискализировать </div>
+                            <div class="col-2 text-success">Учитывать </div>
                             <hr class="mt-1 text-success" style="background-color: #0c7d70; height: 3px; border: 0;">
                         </div>
                     </div>
@@ -141,8 +181,31 @@
             </div>
         </div>
         <div class="buttons-container">
-            <button class="button button--success">Сохранить</button>
-            <button class="button">Отмена</button>
+            <div class="row">
+                <div class="col-2">
+                    <div class="mx-2">
+                        <input id="cash" type="number" step="0.1" placeholder="Сумма наличных"  onkeypress="return isNumberKeyCash(event)"
+                               class="form-control float" required maxlength="255" value="">
+                    </div>
+                </div>
+                <div class="col-2">
+                    <input id="card" type="number" step="0.1"  placeholder="Сумма картой" onkeypress="return isNumberKeyCard(event)"
+                           class="form-control float" required maxlength="255" value="">
+                </div>
+                <div class="col-2">
+
+                </div>
+                <div class="col-2">
+
+                </div>
+                <div class="col-2">
+                    <button class="mx-3 btn btn-success">Показать чек</button>
+                </div>
+                <div class="col-2">
+                    <button class="mx-3 btn btn-success">Отправить в ККМ</button>
+                </div>
+            </div>
+
         </div>
     </div>
 
@@ -160,7 +223,8 @@
         height: 100vh;
     }
     .content-container {
-        overflow: auto;
+        overflow-y: auto;
+        overflow-x: hidden;
         flex-grow: 1;
     }
     .buttons-container {
