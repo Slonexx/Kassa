@@ -9,18 +9,12 @@
         const url = 'https://smartrekassa.kz/Popup/customerorder/show';
 
 
-
         window.addEventListener("message", function(event) {
             //var receivedMessage = {"name":"OpenPopup","messageId":10,"popupName":"fiscalizationPopup","popupParameters":{"object_Id":"75035b22-243a-11ed-0a80-07600015e5d3","accountId":"1dd5bd55-d141-11ec-0a80-055600047495"}}; /*event.data;*/
             var receivedMessage = event.data;
-           /* document.getElementById("products").remove();
 
-            let child = document.createElement('div');
-            child.setAttribute('id', 'products');
-            child.setAttribute('class', 'col-12 text-black');
-            document.getElementById('main').appendChild(child);*/
 
-            for (var i = 0; i < 20; i++) {
+           /* for (var i = 0; i < 20; i++) {
                 window.document.getElementById(i).style.display = "none";
                 window.document.getElementById('productName_' + i).innerHTML = '';
                 window.document.getElementById('productQuantity_' + i).innerHTML = '';
@@ -28,7 +22,7 @@
                 window.document.getElementById('productVat_' + i).innerHTML = '';
                 window.document.getElementById('productDiscount_' + i).innerHTML = '';
                 window.document.getElementById('productFinal_' + i).innerHTML = '';
-            }
+            }*/
 
 
             if (receivedMessage.name === 'OpenPopup') {
@@ -96,63 +90,84 @@
     </script>
 
 
-
-    <div class="row gradient rounded p-2">
-        <div class="col-11">
-            <div class="mx-2"> <img src="https://app.rekassa.kz/static/logo.png" width="35" height="35"  alt="">
-                <span class="text-white"> re:Kassa </span>
-                <span class="mx-5 text-white">Заказ покупателя №</span>
-                <span id="numberOrder" class="text-white"></span>
-            </div>
-        </div>
-        <div class="col-1 ">
-            <button type="submit" onclick="" class="myButton btn "> <i class="fa-solid fa-arrow-rotate-right"></i> </button>
-        </div>
-    </div>
-    <div class=" rounded bg-white">
-        <div id="main" class="row p-3">
-            <div class="col-12">
-                <div class="row">
-                    <div class="col-1 text-success">№</div>
-                    <div class="col-4 text-success">Наименование</div>
-                    <div class="col-1 text-success">Кол-во</div>
-                    <div class="col-1 text-success">Цена</div>
-                    <div class="col-1 text-success">НДС</div>
-                    <div class="col-1 text-success">Скидка</div>
-                    <div class="col-1 text-success">Сумма</div>
-                    <div class="col-2 text-success">Фискализировать </div>
-                    <hr class="mt-1 text-success" style="background-color: #0c7d70; height: 3px; border: 0;">
+    <div class="main-container">
+        <div class="row gradient rounded p-2">
+            <div class="col-11">
+                <div class="mx-2"> <img src="https://app.rekassa.kz/static/logo.png" width="35" height="35"  alt="">
+                    <span class="text-white"> re:Kassa </span>
+                    <span class="mx-5 text-white">Заказ покупателя №</span>
+                    <span id="numberOrder" class="text-white"></span>
                 </div>
             </div>
-            <div id="products" class="col-12 text-black">
-                @for( $i=0; $i<20; $i++)
-                    <div id="{{ $i }}" class="row mt-2" style="display:block;">
-                        <div class="row">
-                            <div class="col-1">{{ $i + 1 }}</div>
-                            <div id="{{ 'productName_'.$i }}"  class="col-4"></div>
-                            <div id="{{ 'productQuantity_'.$i }}"  class="col-1"></div>
-                            <div id="{{ 'productPrice_'.$i }}"  class="col-1"></div>
-                            <div id="{{ 'productVat_'.$i }}"  class="col-1 text-center"></div>
-                            <div id="{{ 'productDiscount_'.$i }}"  class="col-1 text-center"></div>
-                            <div id="{{ 'productFinal_'.$i }}"  class="col-1 text-center"></div>
-                            <div class="col-2 ">
-                                <button onclick="deleteBTNClick( {{ $i }} )" class="btn btn-danger">Убрать</button>
-                            </div>
-                        </div>
-                    </div>
-                @endfor
+            <div class="col-1 ">
+                <button type="submit" onclick="" class="myButton btn "> <i class="fa-solid fa-arrow-rotate-right"></i> </button>
             </div>
         </div>
+        <div class="content-container">
+            <div class=" rounded bg-white">
+                <div id="main" class="row p-3">
+                    <div class="col-12">
+                        <div class="row">
+                            <div class="col-1 text-success">№</div>
+                            <div class="col-4 text-success">Наименование</div>
+                            <div class="col-1 text-success">Кол-во</div>
+                            <div class="col-1 text-success">Цена</div>
+                            <div class="col-1 text-success">НДС</div>
+                            <div class="col-1 text-success">Скидка</div>
+                            <div class="col-1 text-success">Сумма</div>
+                            <div class="col-2 text-success">Фискализировать </div>
+                            <hr class="mt-1 text-success" style="background-color: #0c7d70; height: 3px; border: 0;">
+                        </div>
+                    </div>
+                    <div id="products" class="col-12 text-black">
+                        @for( $i=0; $i<20; $i++)
+                            <div id="{{ $i }}" class="row mt-2" style="display:block;">
+                                <div class="row">
+                                    <div class="col-1">{{ $i + 1 }}</div>
+                                    <div id="{{ 'productName_'.$i }}"  class="col-4"></div>
+                                    <div id="{{ 'productQuantity_'.$i }}"  class="col-1"></div>
+                                    <div id="{{ 'productPrice_'.$i }}"  class="col-1"></div>
+                                    <div id="{{ 'productVat_'.$i }}"  class="col-1 text-center"></div>
+                                    <div id="{{ 'productDiscount_'.$i }}"  class="col-1 text-center"></div>
+                                    <div id="{{ 'productFinal_'.$i }}"  class="col-1 text-center"></div>
+                                    <div class="col-2 ">
+                                        <button onclick="deleteBTNClick( {{ $i }} )" class="btn btn-danger">Убрать</button>
+                                    </div>
+                                </div>
+                            </div>
+                        @endfor
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="buttons-container">
+            <button class="button button--success">Сохранить</button>
+            <button class="button">Отмена</button>
+        </div>
     </div>
-
-
-
-
 
 
 @endsection
 
 <style>
+
+    body {
+        overflow: hidden;
+    }
+    .main-container {
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+    }
+    .content-container {
+        overflow: auto;
+        flex-grow: 1;
+    }
+    .buttons-container {
+        padding-top: 15px;
+        min-height: 55px;
+    }
+
     .myButton {
         box-shadow: 0px 4px 5px 0px #5d5d5d !important;
         background-image: radial-gradient( circle farthest-corner at 10% 20%,  rgba(14,174,87,1) 0%, rgba(12,116,117,1) 90% ) !important;
