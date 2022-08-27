@@ -69,7 +69,21 @@
                     window.document.getElementById("getKKM").style.display = "none";
                     window.document.getElementById("ShowCheck").style.display = "none";
                     if (json.attributes != null){
-                        json.attributes.forEach(showandhide);
+                        $.each(json.attributes , function(index, value) {
+                            if (index === 'ticket_id'){
+                                if (value != null ){
+                                    window.document.getElementById("ShowCheck").style.display = "block";
+                                }
+                            }
+                            if (index === 'fiscalization'){
+                                if (value != null ){
+                                    window.document.getElementById("ShowCheck").style.display = "block";
+                                }
+                            }
+                            else {
+                                window.document.getElementById("getKKM").style.display = "block";
+                            }
+                        });
                     } else {
                         window.document.getElementById("ShowCheck").style.display = "none";
                         window.document.getElementById("getKKM").style.display = "block";
