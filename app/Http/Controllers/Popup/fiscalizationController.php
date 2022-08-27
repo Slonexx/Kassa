@@ -32,7 +32,17 @@ class fiscalizationController extends Controller
         $Client = new MsClient($Setting->tokenMs);
         $Body = $Client->get($url);
         $positions = $Client->get($Body->positions->meta->href)->rows;
-
+        $attributes = null;
+        if (array_key_exists('attributes', $Body)){
+            foreach ($Body->attributes as $item){
+                if ($item->name == 'id-билета (ReKassa)'){
+                    $attributes[] = ['id-билета (ReKassa)'=> $item->value,];
+                }
+                if ($item->name == 'Фискализация (ReKassa)'){
+                    $attributes[] = ['Фискализация (ReKassa)'=> $item->value,];
+                }
+            }
+        }
         $vatEnabled = $Body->vatEnabled;
         $vat = null;
         $products = [];
@@ -73,6 +83,7 @@ class fiscalizationController extends Controller
             'name' => $Body->name,
             'sum' => $Body->sum / 100,
             'vat' => $vat,
+            'attributes' => $attributes,
             'products' => $products,
         ];
     }
