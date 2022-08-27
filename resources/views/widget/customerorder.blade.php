@@ -4,13 +4,14 @@
 @section('content')
 
     <script>
-        var hostWindow = window.parent;
-        var Global_messageId = 0;
-        var GlobalobjectId;
+        const hostWindow = window.parent;
+        let Global_messageId = 0;
+        let Global_object_Id;
 
         window.addEventListener("message", function(event) {
-            var receivedMessage = event.data;
-            GlobalobjectId = receivedMessage.objectId;
+            const receivedMessage = event.data;
+            console.log('Global_object_Id = ' + receivedMessage.objectId );
+            Global_object_Id = receivedMessage.objectId;
 
             if (receivedMessage.name === 'Open') {
 
@@ -21,18 +22,18 @@
                 logSendingMessage(sendingMessage);
                 hostWindow.postMessage(sendingMessage, '*');
 
-                var oReq = new XMLHttpRequest();
-                oReq.addEventListener("load", function() {
+                const xmlHttpRequest = new XMLHttpRequest();
+                xmlHttpRequest.addEventListener("load", function() {
 
                 });
-                oReq.open("GET", "");
-                oReq.send();
+                xmlHttpRequest.open("GET", "");
+                xmlHttpRequest.send();
             }
 
         });
 
         function fiscalization(){
-            logSendingMessage(sendingMessage);
+
             Global_messageId++;
             console.log('Global objectId = ' + GlobalobjectId);
             var sendingMessage = {
@@ -41,6 +42,7 @@
                 popupName: "fiscalizationPopup",
                 popupParameters: GlobalobjectId,
             };
+            logSendingMessage(sendingMessage);
             hostWindow.postMessage(sendingMessage, '*');
         }
 
