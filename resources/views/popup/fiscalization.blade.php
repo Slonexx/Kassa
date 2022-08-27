@@ -4,14 +4,13 @@
 @section('content')
 
     <script>
-        var hostWindow = window.parent;
-        var GlobalobjectId;
 
         window.addEventListener("message", function(event) {
             var receivedMessage = event.data;
-            GlobalobjectId = receivedMessage.objectId;
             logReceivedMessage(receivedMessage);
-            if (receivedMessage.name === 'ShowPopupResponse') {
+
+            if (receivedMessage.name === 'ShowPopupResponse' && receivedMessage.popupName === 'fiscalizationPopup') {
+                logReceivedMessage(receivedMessage);
 
                 var oReq = new XMLHttpRequest();
                 oReq.addEventListener("load", function() {
