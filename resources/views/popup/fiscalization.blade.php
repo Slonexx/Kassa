@@ -47,7 +47,7 @@
                     logReceivedMessage(products);
 
                     for (var i = 0; i < products.length; i++) {
-                        window.document.getElementById('productId_' + i).id = products[i].position;
+                        window.document.getElementById('productId_' + i).innerHTML = products[i].position;
                         window.document.getElementById('productName_' + i).innerHTML = products[i].name;
                         window.document.getElementById('productQuantity_' + i).innerHTML = products[i].quantity;
                         window.document.getElementById('productPrice_' + i).innerHTML = products[i].price;
@@ -260,7 +260,8 @@
                         @for( $i=0; $i<20; $i++)
                             <div id="{{ $i }}" class="row mt-2" style="display:block;">
                                 <div class="row">
-                                    <div id="{{'productId_'.$i}}"  class="col-1">{{ $i + 1 }}</div>
+                                    <div class="col-1">{{ $i + 1 }}</div>
+                                    <div id="{{'productId_'.$i}}" style="display:none;"></div>
                                     <div id="{{ 'productName_'.$i }}"  class="col-5"></div>
                                     <div id="{{ 'productQuantity_'.$i }}"  class="col-1 text-center"></div>
                                     <div id="{{ 'productPrice_'.$i }}"  class="col-1 text-center"></div>
