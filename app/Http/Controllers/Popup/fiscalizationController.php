@@ -92,7 +92,14 @@ class fiscalizationController extends Controller
 
 
     public function SendFiscalizationPopup(Request $request){
-        dd($request);
+        $accountId = $request->accountId;
+        $object_Id = $request->object_Id;
+        $entity_type = $request->entity_type;
+        $money_card = $request->money_card;
+        $money_cash = $request->money_cash;
+        $position = $request->position;
+        $position = json_encode($position);
+        dd(json_decode($position));
         return response()->json();
     }
 
