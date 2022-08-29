@@ -117,7 +117,7 @@ class fiscalizationController extends Controller
         $Client = new Client();
         $url = 'https://smartrekassa.kz/api/ticket';
         try {
-            $Client->request('POST', $url, [
+            $tmp = $Client->request('POST', $url, [
                 'headers' => ['Content-Type' => 'application/json',],
                 'body' => json_encode($body),
             ]);
@@ -125,7 +125,7 @@ class fiscalizationController extends Controller
             dd($e->getMessage());
         }
 
-
+        dd($tmp);
 
 
         return response()->json($body);
