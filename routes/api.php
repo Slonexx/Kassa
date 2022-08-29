@@ -21,6 +21,6 @@ Route::post('webhook/{accountId}/customerorder',[WebHookController::class,'newOr
 Route::post('webhook/{accountId}/demand',[WebHookController::class,'newDemand']);
 
 Route::get('printer',function (){
-    return view();
+    return view('printer/print');
 });
 
