@@ -34,8 +34,9 @@ class ShiftService
                'Authorization' => 'Bearer '.$kassClient->getNewJwtToken()->token,
                'cash-register-password' => $pincode,
            ]);
-           dd($response);
+           return $response;
         }
+        return [];
     }
 
 

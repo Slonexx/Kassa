@@ -29,13 +29,21 @@ class TicketService
     }
 
     // Create ticket
-    public function createTicket($data){
+    public function createTicket($data) {
         $accountId = $data['accountId'];
         $id_entity = $data['id_entity'];
         $entity_type = $data['entity_type'];
-        //$positionDevice = $data['position'];
+        $positions = $data['positions'];
+        $money_card = $data['money_card'];
+        $money_cash = $data['money_cash'];
         $payType = $data['pay_type'];
-        $moneyType = $data['money_type'];
+
+        $tookSum = $money_card+$money_cash;
+
+        if ($money_card <= 0 && $money_cash <= 0 )
+            return [
+                "message" => "Please enter money!",
+            ];
 
         //$setting = new getSetting($accountId);
         //$setting->tokenMs;
@@ -54,34 +62,60 @@ class TicketService
 
         //dd($jsonEntity);
 
-        $sumOrder = $jsonEntity->sum / 100;
+        //$sumOrder = $jsonEntity->sum / 100;
 
         if (property_exists($jsonEntity,'positions')){
+
+            $totalSum = $this->getTotalSum($positions,$urlEntity,$jsonEntity,$apiKeyMs);
+
+            if ($tookSum < $totalSum){
+                return [
+                    "message" => "Don't have enough money to complete the transaction",
+                ];
+            }
+
+            $change = $tookSum - $totalSum;
+
             $items = $this->getItemsByHrefPositions($jsonEntity->positions->meta->href,$jsonEntity,$apiKeyMs);
             if (count($items) > 0 ){
-                $payments = [
-                    0 => [
-                        "type" => $this->getMoneyType($moneyType),
+
+                $payments = [];
+
+                if (intval($money_cash) > 0 ){
+                    $payments [] = [
+                        "type" => $this->getMoneyType("Наличные"),
                         "sum" => [
-                            "bills" => intval($sumOrder),
-                            "coins" => intval(round(floatval($sumOrder)-intval($sumOrder),2)*100),
+                            "bills" => intval($money_cash),
+                            "coins" => intval(round(floatval($money_cash)-intval($money_cash),2)*100),
                         ],
-                    ]
-                ];
+                    ];
+                }
+
+                if (intval($money_card) > 0 ){
+                    $payments[] =  [
+                        "type" => $this->getMoneyType("Банковская карта"),
+                        "sum" => [
+                            "bills" => intval($money_card),
+                            "coins" => intval(round(floatval($money_card)-intval($money_card),2)*100),
+                        ],
+                    ];
+                }
+
                 $amounts = [
                     "total" => [
-                        "bills" => intval($sumOrder),
-                        "coins" => intval(round(floatval($sumOrder)-intval($sumOrder),2)*100),
+                        "bills" => intval($totalSum),
+                        "coins" => intval(round(floatval($totalSum)-intval($totalSum),2)*100),
                         ],
                     "taken" => [
-                            "bills" => intval($sumOrder),
-                            "coins" => intval(round(floatval($sumOrder)-intval($sumOrder),2)*100),
+                            "bills" => intval($tookSum),
+                            "coins" => intval(round(floatval($tookSum)-intval($tookSum),2)*100),
                     ],
                     "change" => [
-                            "bills" => "0",
-                            "coins" => 0,
+                            "bills" => intval($change),
+                            "coins" => intval(round(floatval($change)-intval($change),2)*100),
                     ],
                 ];
+
                 $clientK = new KassClient($numKassa,$password,$apiKey);
                 $id = $clientK->getNewJwtToken()->id;
                 $body = [
@@ -118,7 +152,8 @@ class TicketService
                     }
                     //dd($response);
                     return [
-                        "message" => "Ticket created!"
+                        "message" => "Ticket created!",
+                        "response" => $response,
                     ];
                 } catch (ClientException $exception){
                     return [
@@ -185,14 +220,14 @@ class TicketService
 
                     $position["commodity"]["taxes"] = [
                         0 => [
-                            "taxType" => 100,
-                            "taxation_type" => 100,
-                            "percent" => $row->vat * 1000,
                             "sum" => [
                                 "bills" => "".intval($sumVat),
                                 "coins" => intval(round(floatval($sumVat)-intval($sumVat),2)*100),
                             ],
-                            "is_in_total_sum" => $jsonEntity->vatIncluded,
+                            "percent" => $row->vat * 1000,
+                            "taxType" => 100,
+                            "isInTotalSum" => $jsonEntity->vatIncluded,
+                            "taxationType" => 100,
                         ],
                     ];
                 }
@@ -307,6 +342,34 @@ class TicketService
         return $typeKass;
     }
 
+    private function getTotalSum($positions, $urlEntity, $jsonEntity,$apiKeyMs): float|int
+    {
+        $total = 0;
+        $urlEntityWithPositions = $urlEntity.'/positions';
+        $client = new MsClient($apiKeyMs);
+        $jsonPositions = $client->get($urlEntityWithPositions);
+
+        foreach ($jsonPositions->rows as $position){
+            if (in_array($position->id, $positions)){
+                $discount = $position->discount;
+                $positionPrice = $position->price / 100;
+                $sumPrice = $positionPrice - ( $positionPrice * ($discount/100) ) ;
+
+                if (property_exists($jsonEntity,'vatIncluded')){
+                    if ($jsonEntity->vatIncluded){
+                        $sumVat = $sumPrice * ( $position->vat / (100+$position->vat) ); //Цена включает НДС
+                    }else {
+                        $sumVat = $sumPrice * ($position->vat / 100); //Цена выключает НДС
+                        $sumPrice += $sumVat;
+                    }
+                }
+
+                $total += $sumPrice;
+            }
+        }
+        return $total;
+    }
+
     //Cancel ticket
     /*public function cancelTicket($data){
         $accountId = $data['accountId'];
@@ -355,5 +418,4 @@ class TicketService
         }
         return [];
     }*/
-
 }
