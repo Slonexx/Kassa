@@ -202,8 +202,13 @@
             let money_card = window.document.getElementById('card').value;
             let money_cash = window.document.getElementById('cash').value;
 
-            console.log('money_card = ' + money_card);
-            console.log('money_cash = ' + money_cash);
+            if (money_card) {
+                console.log('money_card = ' + money_card);
+            }
+            if (money_cash) {
+                console.log('money_cash = ' + money_cash);
+            }
+
 
             let params = {
                 accountId: accountId,
