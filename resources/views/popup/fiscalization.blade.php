@@ -67,6 +67,7 @@
                     else if (json.vat.vatIncluded === true) {
                         window.document.getElementById("vat").innerHTML = "";
                         window.document.getElementById("vat").style.display = "none";
+                        window.document.getElementById("vatIncluded").style.display = "block";
                     } else window.document.getElementById("vat").innerHTML = json.vat.vatSum;
 
 
@@ -229,6 +230,7 @@
                             <div class="col-2 float-right">
                                 <h4 id="sum"></h4>
                                 <h6 id="vat"></h6>
+                                <span id="vatIncluded">Цена включает НДС</span>
                             </div>
                         </div>
                     </div>
