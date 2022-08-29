@@ -268,7 +268,7 @@
                                     <div id="{{ 'productVat_'.$i }}"  class="col-1 text-center"></div>
                                     <div id="{{ 'productDiscount_'.$i }}"  class="col-1 text-center"></div>
                                     <div id="{{ 'productFinal_'.$i }}"  class="col-1 text-center"></div>
-                                    <div class="col-1 ">
+                                    <div class="col-1 text-center">
                                         <button onclick="deleteBTNClick( {{ $i }} )" class="btn btn-danger">Убрать</button>
                                     </div>
                                 </div>
@@ -293,32 +293,30 @@
             </div>
         </div>
         <div class="buttons-container">
-            <form action="">
-                <div class="row">
-                    <div class="col-2">
+            <div class="row">
+                <div class="col-2">
                         <div class="mx-2">
                             <input id="cash" type="number" step="0.1" placeholder="Сумма наличных"  onkeypress="return isNumberKeyCash(event)"
                                    class="form-control float" required maxlength="255" value="">
                         </div>
                     </div>
-                    <div class="col-2">
+                <div class="col-2">
                         <input id="card" type="number" step="0.1"  placeholder="Сумма картой" onkeypress="return isNumberKeyCard(event)"
                                class="form-control float" required maxlength="255" value="">
                     </div>
-                    <div class="col-2">
+                <div class="col-2">
 
                     </div>
-                    <div class="col-2">
+                <div class="col-2">
                         <button id="refundCheck" class="mx-3 btn btn-danger">возврат</button>
                     </div>
-                    <div class="col-2">
+                <div class="col-2">
                         <button id="ShowCheck" class="mx-3 btn btn-success">Показать чек</button>
                     </div>
-                    <div class="col-2">
-                        <button onclick="sendKKM('sell')" id="getKKM" class="mx-3 btn btn-success">Отправить в ККМ</button>
-                    </div>
+                <div class="col-2">
+                    <button onclick="sendKKM('sell')" id="getKKM" class="mx-3 btn btn-success">Отправить в ККМ</button>
                 </div>
-            </form>
+            </div>
         </div>
     </div>
 
