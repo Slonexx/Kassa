@@ -98,7 +98,7 @@ class fiscalizationController extends Controller
         $money_card = $request->money_card;
         $money_cash = $request->money_cash;
         $position = $request->position;
-        $position = json_encode($position);
+        $position = $position;
         dd(json_decode($position));
         return response()->json();
     }
