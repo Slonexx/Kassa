@@ -52,24 +52,34 @@ class TicketService
         $client = new MsClient($apiKeyMs);
         $jsonEntity = $client->get($urlEntity);
 
+        //dd($jsonEntity);
+
         $sumOrder = $jsonEntity->sum / 100;
 
         if (property_exists($jsonEntity,'positions')){
-            $items = $this->getItemsByHrefPositions($jsonEntity->positions->meta->href,$apiKeyMs);
+            $items = $this->getItemsByHrefPositions($jsonEntity->positions->meta->href,$jsonEntity,$apiKeyMs);
             if (count($items) > 0 ){
                 $payments = [
                     0 => [
                         "type" => $this->getMoneyType($moneyType),
                         "sum" => [
                             "bills" => intval($sumOrder),
-                            "coins" => ($jsonEntity->sum % 100),
+                            "coins" => intval(round(floatval($sumOrder)-intval($sumOrder),2)*100),
                         ],
                     ]
                 ];
                 $amounts = [
                     "total" => [
                         "bills" => intval($sumOrder),
-                        "coins" => ($jsonEntity->sum % 100),
+                        "coins" => intval(round(floatval($sumOrder)-intval($sumOrder),2)*100),
+                        ],
+                    "taken" => [
+                            "bills" => intval($sumOrder),
+                            "coins" => intval(round(floatval($sumOrder)-intval($sumOrder),2)*100),
+                    ],
+                    "change" => [
+                            "bills" => "0",
+                            "coins" => 0,
                     ],
                 ];
                 $clientK = new KassClient($numKassa,$password,$apiKey);
@@ -80,6 +90,12 @@ class TicketService
                     "payments" => $payments,
                     "amounts" => $amounts,
                 ];
+
+/*                if (property_exists($jsonEntity,'vatSum')){
+                }*/
+
+                //dd($body);
+
                 $isPayIn = null;
                 if ($payType == "sell"){
                     $body["operation"] = "OPERATION_SELL";
@@ -121,7 +137,7 @@ class TicketService
         return [];
     }
 
-    private function getItemsByHrefPositions($href,$apiKeyMs){
+    private function getItemsByHrefPositions($href,$jsonEntity,$apiKeyMs){
         $positions = [];
         $client = new MsClient($apiKeyMs);
         $jsonPositions = $client->get($href);
@@ -131,10 +147,10 @@ class TicketService
             $discount = $row->discount;
 
             $positionPrice = $row->price / 100;
-            $positionPriceCoins = $row->price;
+            //$positionPriceCoins = $row->price;
 
             $sumPrice = $positionPrice - ( $positionPrice * ($discount/100) ) ;
-            $sumPriceCoins = $row->price - ( $row->price * ($discount/100) ) ;
+            //$sumPriceCoins = $row->price - ( $row->price * ($discount/100) ) ;
 
             $product = $this->getProductByAssortMeta($row->assortment->meta->href,$apiKeyMs);
 
@@ -146,11 +162,11 @@ class TicketService
                     "quantity" => 1000,
                     "price" => [
                         "bills" => "".intval($positionPrice),
-                        "coins" => ($positionPriceCoins % 100),
+                        "coins" => intval(round(floatval($positionPrice)-intval($positionPrice),2)*100),
                     ],
                     "sum" => [
                         "bills" => "".intval($sumPrice),
-                        "coins" => ($sumPriceCoins % 100),
+                        "coins" => intval(round(floatval($sumPrice)-intval($sumPrice),2)*100),
                     ],
                     "measureUnitCode" => $this->getUomCode($product->uom->meta->href,$apiKeyMs),
                 ];
@@ -159,9 +175,32 @@ class TicketService
                     $position["commodity"]["excise_stamp"] = $row->trackingCodes[$i-1]->cis;
                 }
 
+                if (property_exists($row,'vat')){
+
+                    if ($jsonEntity->vatIncluded){
+                        $sumVat = $sumPrice * ( $row->vat / (100+$row->vat) ); //Цена включает НДС
+                    }else {
+                        $sumVat = $sumPrice * ($row->vat / 100); //Цена выключает НДС
+                    }
+
+                    $position["commodity"]["taxes"] = [
+                        0 => [
+                            "taxType" => 100,
+                            "taxation_type" => 100,
+                            "percent" => $row->vat * 1000,
+                            "sum" => [
+                                "bills" => "".intval($sumVat),
+                                "coins" => intval(round(floatval($sumVat)-intval($sumVat),2)*100),
+                            ],
+                            "is_in_total_sum" => $jsonEntity->vatIncluded,
+                        ],
+                    ];
+                }
+
                 $positions [] = $position;
             }
 
+            //dd(json_decode(json_encode($positions)));
         }
         return $positions;
     }
