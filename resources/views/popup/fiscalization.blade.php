@@ -64,8 +64,7 @@
 
 
                     window.document.getElementById("numberOrder").innerHTML = json.name;
-                    window.document.getElementById("cash").innerHTML = json.sum;
-                    window.document.getElementById("sum").innerHTML = json.sum;
+                    window.document.getElementById("cash").value = '';
 
 
 
