@@ -8,6 +8,9 @@
         //const url = 'http://rekassa/Popup/customerorder/show';
 
         const url = 'https://smartrekassa.kz/Popup/customerorder/show';
+        let object_Id = '';
+        let accountId = '';
+        let entity_type = 'customerorder';
 
 
         window.addEventListener("message", function(event) {
@@ -27,9 +30,11 @@
             }
 
             if (receivedMessage.name === 'OpenPopup') {
+                object_Id = receivedMessage.popupParameters.object_Id;
+                accountId = receivedMessage.popupParameters.accountId;
                 let params = {
-                    object_Id: receivedMessage.popupParameters.object_Id,
-                    accountId: receivedMessage.popupParameters.accountId,
+                    object_Id: object_Id,
+                    accountId: accountId,
                 };
                 let final = url + formatParams(params);
 
@@ -42,6 +47,7 @@
                     logReceivedMessage(products);
 
                     for (var i = 0; i < products.length; i++) {
+                        window.document.getElementById('productId_' + i).id = products[i].position;
                         window.document.getElementById('productName_' + i).innerHTML = products[i].name;
                         window.document.getElementById('productQuantity_' + i).innerHTML = products[i].quantity;
                         window.document.getElementById('productPrice_' + i).innerHTML = products[i].price;
@@ -60,6 +66,9 @@
                     window.document.getElementById("numberOrder").innerHTML = json.name;
                     window.document.getElementById("cash").innerHTML = json.sum;
                     window.document.getElementById("sum").innerHTML = json.sum;
+
+
+
                     if (json.vat == null) {
                         window.document.getElementById("vat").innerHTML = "";
                         window.document.getElementById("vat").style.display = "none";
@@ -176,6 +185,45 @@
             }
             return true;
         }
+
+        function sendKKM(pay_type){
+            //let url = 'http://rekassa/Popup/customerorder/send';
+            let url = 'https://smartrekassa.kz/Popup/customerorder/send';
+
+            let products = [];
+
+            for (let i = 0; i < 20; i++) {
+                if ( window.document.getElementById(i).style.display === 'block' ) {
+                    products = [{
+                        i: window.document.getElementById('productId_'+i).innerText
+                    }];
+                }
+            }
+
+            let money_card = window.document.getElementById('card').innerText;
+            let money_cash = window.document.getElementById('cash').innerText;
+
+            let params = {
+                accountId: accountId,
+                object_Id: object_Id,
+                entity_type: entity_type,
+                money_card: money_card,
+                money_cash: money_cash,
+                position: products,
+            };
+            let final = url + formatParams(params);
+
+            console.log(final);
+
+            let xmlHttpRequest = new XMLHttpRequest();
+            xmlHttpRequest.addEventListener("load", function () {
+
+            });
+            xmlHttpRequest.open("GET", final);
+            xmlHttpRequest.send();
+
+        }
+
     </script>
 
 
@@ -212,7 +260,7 @@
                         @for( $i=0; $i<20; $i++)
                             <div id="{{ $i }}" class="row mt-2" style="display:block;">
                                 <div class="row">
-                                    <div class="col-1">{{ $i + 1 }}</div>
+                                    <div id="{{'productId_'.$i}}"  class="col-1">{{ $i + 1 }}</div>
                                     <div id="{{ 'productName_'.$i }}"  class="col-5"></div>
                                     <div id="{{ 'productQuantity_'.$i }}"  class="col-1 text-center"></div>
                                     <div id="{{ 'productPrice_'.$i }}"  class="col-1 text-center"></div>
@@ -244,31 +292,32 @@
             </div>
         </div>
         <div class="buttons-container">
-            <div class="row">
-                <div class="col-2">
-                    <div class="mx-2">
-                        <input id="cash" type="number" step="0.1" placeholder="Сумма наличных"  onkeypress="return isNumberKeyCash(event)"
+            <form>
+                <div class="row">
+                    <div class="col-2">
+                        <div class="mx-2">
+                            <input id="cash" type="number" step="0.1" placeholder="Сумма наличных"  onkeypress="return isNumberKeyCash(event)"
+                                   class="form-control float" required maxlength="255" value="">
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <input id="card" type="number" step="0.1"  placeholder="Сумма картой" onkeypress="return isNumberKeyCard(event)"
                                class="form-control float" required maxlength="255" value="">
                     </div>
-                </div>
-                <div class="col-2">
-                    <input id="card" type="number" step="0.1"  placeholder="Сумма картой" onkeypress="return isNumberKeyCard(event)"
-                           class="form-control float" required maxlength="255" value="">
-                </div>
-                <div class="col-2">
+                    <div class="col-2">
 
+                    </div>
+                    <div class="col-2">
+                        <button id="refundCheck" class="mx-3 btn btn-danger">возврат</button>
+                    </div>
+                    <div class="col-2">
+                        <button id="ShowCheck" class="mx-3 btn btn-success">Показать чек</button>
+                    </div>
+                    <div class="col-2">
+                        <button onclick="sendKKM('sell')" id="getKKM" class="mx-3 btn btn-success">Отправить в ККМ</button>
+                    </div>
                 </div>
-                <div class="col-2">
-                    <button id="refundCheck" class="mx-3 btn btn-danger">возврат</button>
-                </div>
-                <div class="col-2">
-                    <button id="ShowCheck" class="mx-3 btn btn-success">Показать чек</button>
-                </div>
-                <div class="col-2">
-                    <button id="getKKM" class="mx-3 btn btn-success">Отправить в ККМ</button>
-                </div>
-            </div>
-
+            </form>
         </div>
     </div>
 
