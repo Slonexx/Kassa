@@ -198,8 +198,8 @@
                 }
             }
             logReceivedMessage(products);
-            let money_card = window.document.getElementById('card').innerText;
-            let money_cash = window.document.getElementById('cash').innerText;
+            let money_card = window.document.getElementById('card').value;
+            let money_cash = window.document.getElementById('cash').value;
 
             let params = {
                 accountId: accountId,
