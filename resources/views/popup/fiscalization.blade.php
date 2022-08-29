@@ -18,6 +18,7 @@
             var receivedMessage = event.data;
             window.document.getElementById("sum").innerHTML = '';
             window.document.getElementById("vat").innerHTML = "";
+            window.document.getElementById("message").style.display = "none";
 
             for (var i = 0; i < 20; i++) {
                 window.document.getElementById(i).style.display = "none";
@@ -201,6 +202,9 @@
             let money_card = window.document.getElementById('card').value;
             let money_cash = window.document.getElementById('cash').value;
 
+            console.log('money_card = ' + money_card);
+            console.log('money_cash = ' + money_cash);
+
             let params = {
                 accountId: accountId,
                 object_Id: object_Id,
@@ -237,6 +241,12 @@
             </div>
             <div class="col-1 ">
                 <button type="submit" onclick="" class="myButton btn "> <i class="fa-solid fa-arrow-rotate-right"></i> </button>
+            </div>
+        </div>
+        <div id="message" class="mt-2 row" style="display:none;" >
+            <div class="col-12">
+                <div id="messageAlert" class=" mx-3 p-2 alert alert-danger text-center ">
+                </div>
             </div>
         </div>
         <div class="content-container">
