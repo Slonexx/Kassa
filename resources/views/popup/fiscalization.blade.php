@@ -237,6 +237,28 @@
 
         }
 
+        function closeShift(){
+
+            let pinCode = window.document.getElementById('pin_code').value;
+
+            let params = {
+                accountId: accountId,
+                pincode: pinCode,
+            };
+            let url = 'http://rekassa/Popup/customerorder/closeShift';
+            //let url = 'https://smartrekassa.kz/Popup/customerorder/closeShift';
+            let final = url + formatParams(params);
+
+            console.log("final = " + final);
+
+            let xmlHttpRequest = new XMLHttpRequest();
+            xmlHttpRequest.addEventListener("load", function () {
+
+            });
+            xmlHttpRequest.open("GET", final);
+            xmlHttpRequest.send();
+        }
+
     </script>
 
 
@@ -324,8 +346,9 @@
                                class="form-control float" required maxlength="255" value="">
                     </div>
                 <div class="col-2">
-
-                    </div>
+                    <button type="button" class=" mx-3 btn btn-danger"
+                            data-bs-toggle="modal" data-bs-target="#modal" >Закрыть смену</button>
+                </div>
                 <div class="col-2">
                         <button id="refundCheck" class="mx-3 btn btn-danger">возврат</button>
                     </div>
@@ -339,6 +362,37 @@
         </div>
     </div>
 
+
+    <div class="modal fade" id="modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"> Закрытие смены
+                        <i class="fa-solid fa-circle-question text-danger"></i>
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <label> Введите пин код для закрытия смены</label>
+                        <div class="row mt-2">
+                            <div class="col-1"></div>
+                            <div class="col-10">
+
+                                <input id="pin_code" type="number" placeholder="PIN code"
+                                  class="form-control float" required maxlength="10" value="">
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button  onclick="closeShift()" id="closeShift"
+                             data-bs-dismiss="modal" class="btn btn-danger">Закрыть смену</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 @endsection
 

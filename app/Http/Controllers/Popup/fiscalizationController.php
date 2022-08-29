@@ -117,4 +117,10 @@ class fiscalizationController extends Controller
         return response()->json($body);
     }
 
+    public function closeShiftPopup(Request $request){
+        $accountId = $request->accountId;
+        $pincode = $request->pincode;
+        dd($request->request);
+    }
+
 }

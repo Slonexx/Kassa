@@ -25,6 +25,7 @@ Route::get('/widget/customerorder', [customerorderEditController::class, 'custom
 Route::get('/Popup/customerorder', [fiscalizationController::class, 'fiscalizationPopup']);
 Route::get('/Popup/customerorder/show', [fiscalizationController::class, 'ShowFiscalizationPopup']);
 Route::get('/Popup/customerorder/send', [fiscalizationController::class, 'SendFiscalizationPopup']);
+Route::get('/Popup/customerorder/closeShift', [fiscalizationController::class, 'closeShiftPopup']);
 
 
 Route::get('/Setting/{accountId}', [BaseController::class, 'getBase'])->name('getBase');
