@@ -202,13 +202,6 @@
             let money_card = window.document.getElementById('card').value;
             let money_cash = window.document.getElementById('cash').value;
 
-            if (money_card) {
-                console.log('money_card = ' + money_card);
-            }
-            if (money_cash) {
-                console.log('money_cash = ' + money_cash);
-            }
-
 
             let params = {
                 accountId: accountId,
@@ -227,8 +220,20 @@
             xmlHttpRequest.addEventListener("load", function () {
 
             });
-            xmlHttpRequest.open("GET", final);
-            xmlHttpRequest.send();
+
+
+            if (money_card) {
+                xmlHttpRequest.open("GET", final);
+                xmlHttpRequest.send();
+            }
+            if (money_cash) {
+                xmlHttpRequest.open("GET", final);
+                xmlHttpRequest.send();
+            }
+            if (!money_card && !money_cash){
+                window.document.getElementById('messageAlert').innerText = 'Вы не ввели сумму';
+                window.document.getElementById('message').style.display = "block";
+            }
 
         }
 
