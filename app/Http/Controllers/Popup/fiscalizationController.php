@@ -6,6 +6,7 @@ use App\Clients\MsClient;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\getData\getSetting;
 use App\Http\Controllers\getData\getWorkerID;
+use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 
 class fiscalizationController extends Controller
@@ -106,13 +107,26 @@ class fiscalizationController extends Controller
 
         $body = [
             'accountId' => $accountId,
-            'object_Id' => $object_Id,
+            'id_entity' => $object_Id,
             'entity_type' => $entity_type,
             'money_card' => $money_card,
             'money_cash' => $money_cash,
             'pay_type' => $pay_type,
-            'position' => $position,
+            'positions' => $position,
         ];
+        $Client = new Client();
+        $url = 'https://smartrekassa.kz/api/ticket';
+        try {
+            $Client->request('POST', $url, [
+                'headers' => ['Content-Type' => 'application/json',],
+                'body' => json_encode($body),
+            ]);
+        } catch (\Throwable $e){
+            dd($e->getMessage());
+        }
+
+
+
 
         return response()->json($body);
     }
