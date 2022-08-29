@@ -33,8 +33,6 @@
                 };
                 let final = url + formatParams(params);
 
-                console.log(final);//dwawdawwa
-
                 let xmlHttpRequest = new XMLHttpRequest();
                 xmlHttpRequest.addEventListener("load", function () {
 
@@ -62,8 +60,14 @@
                     window.document.getElementById("numberOrder").innerHTML = json.name;
                     window.document.getElementById("cash").innerHTML = json.sum;
                     window.document.getElementById("sum").innerHTML = json.sum;
-                    if (json.vat == null) window.document.getElementById("vat").innerHTML = "0";
-                    else window.document.getElementById("vat").innerHTML = json.vat.vatSum;
+                    if (json.vat == null) {
+                        window.document.getElementById("vat").innerHTML = "";
+                        window.document.getElementById("vat").style.display = "none";
+                    }
+                    else if (json.vat.vatIncluded === true) {
+                        window.document.getElementById("vat").innerHTML = "";
+                        window.document.getElementById("vat").style.display = "none";
+                    } else window.document.getElementById("vat").innerHTML = json.vat.vatSum;
 
 
                     window.document.getElementById("getKKM").style.display = "none";
@@ -76,7 +80,7 @@
                         } else {
                             window.document.getElementById("getKKM").style.display = "block";
                         }
-                    }
+                    } else  window.document.getElementById("getKKM").style.display = "block";
 
                 });
                 xmlHttpRequest.open("GET", final);
@@ -106,14 +110,16 @@
                 let final = document.getElementById('productFinal_' + Object).innerHTML;
                 window.document.getElementById("sum").innerHTML = sum-final;
 
-                let quantity = document.getElementById('productQuantity_' + Object).innerHTML;
-                let price = document.getElementById("productPrice_" + Object).innerHTML;
-                let vatProsent = document.getElementById("productVat_" + Object).innerHTML;
-                let vatId = price * quantity / 100 * vatProsent.replace(/%/g, '');
-                console.log('vatId = ' + vatId);
-                let vat = window.document.getElementById("vat").innerHTML;
+                if (window.document.getElementById("vat").style.display === 'block')  {
+                    let quantity = document.getElementById('productQuantity_' + Object).innerHTML;
+                    let price = document.getElementById("productPrice_" + Object).innerHTML;
+                    let vatProsent = document.getElementById("productVat_" + Object).innerHTML;
+                    let vatId = price * quantity / 100 * vatProsent.replace(/%/g, '');
+                    let vat = window.document.getElementById("vat").innerHTML;
 
-                window.document.getElementById("vat").innerHTML = vat - vatId;
+                    window.document.getElementById("vat").innerHTML = vat - vatId;
+                }
+
 
                 window.document.getElementById('productName_' + Object).innerHTML = '';
                 window.document.getElementById('productQuantity_' + Object).innerHTML = '';
