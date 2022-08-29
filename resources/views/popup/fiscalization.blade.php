@@ -373,18 +373,18 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <div class="row">
-                        <label> Введите пин код для закрытия смены</label>
+
+
                         <div class="row mt-2">
                             <div class="col-1"></div>
                             <div class="col-10">
-
+                                <label> Введите пин код для закрытия смены</label>
                                 <input id="pin_code" type="number" placeholder="PIN code"
                                   class="form-control float" required maxlength="10" value="">
                             </div>
                         </div>
 
-                    </div>
+
                 </div>
                 <div class="modal-footer">
                     <button  onclick="closeShift()" id="closeShift"
