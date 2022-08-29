@@ -194,9 +194,9 @@
 
             for (let i = 0; i < 20; i++) {
                 if ( window.document.getElementById(i).style.display === 'block' ) {
-                    products = [{
+                    products = {
                         i: window.document.getElementById('productId_'+i).innerText
-                    }];
+                    };
                 }
             }
             logReceivedMessage(products);
