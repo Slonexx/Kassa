@@ -199,7 +199,7 @@
                     }];
                 }
             }
-
+            logReceivedMessage(products);
             let money_card = window.document.getElementById('card').innerText;
             let money_cash = window.document.getElementById('cash').innerText;
 
@@ -209,7 +209,7 @@
                 entity_type: entity_type,
                 money_card: money_card,
                 money_cash: money_cash,
-                position: products,
+                position: JSON.stringify(products),
             };
             let final = url + formatParams(params);
 
