@@ -63,12 +63,18 @@
                     if (json.vat == null) {
                         window.document.getElementById("vat").innerHTML = "";
                         window.document.getElementById("vat").style.display = "none";
+                        window.document.getElementById("vatIncluded").style.display = "none";
                     }
                     else if (json.vat.vatIncluded === true) {
                         window.document.getElementById("vat").innerHTML = "";
                         window.document.getElementById("vat").style.display = "none";
                         window.document.getElementById("vatIncluded").style.display = "block";
-                    } else window.document.getElementById("vat").innerHTML = json.vat.vatSum;
+                    } else {
+                        window.document.getElementById("vat").style.display = "block";
+                        window.document.getElementById("vat").innerHTML = json.vat.vatSum;
+                        window.document.getElementById("vatIncluded").style.display = "none";
+                    }
+
 
 
                     window.document.getElementById("getKKM").style.display = "none";
