@@ -104,9 +104,7 @@ class fiscalizationController extends Controller
         $pay_type = $request->pay_type;
         $position = json_decode($request->position);
 
-
-
-        return response()->json([
+        $body = [
             'accountId' => $accountId,
             'object_Id' => $object_Id,
             'entity_type' => $entity_type,
@@ -114,7 +112,9 @@ class fiscalizationController extends Controller
             'money_cash' => $money_cash,
             'pay_type' => $pay_type,
             'position' => $position,
-        ]);
+        ];
+
+        return response()->json($body);
     }
 
 }
