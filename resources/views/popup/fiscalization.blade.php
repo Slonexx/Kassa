@@ -194,7 +194,7 @@
 
             for (let i = 0; i < 20; i++) {
                 if ( window.document.getElementById(i).style.display === 'block' ) {
-                    products[100] = window.document.getElementById('productId_'+i).innerText
+                    products[i] = window.document.getElementById('productId_'+i).innerText
                 }
             }
             logReceivedMessage(products);
@@ -207,6 +207,7 @@
                 entity_type: entity_type,
                 money_card: money_card,
                 money_cash: money_cash,
+                pay_type: pay_type,
                 position: JSON.stringify(products),
             };
             let final = url + formatParams(params);

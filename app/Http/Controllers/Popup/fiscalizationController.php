@@ -95,12 +95,26 @@ class fiscalizationController extends Controller
         $accountId = $request->accountId;
         $object_Id = $request->object_Id;
         $entity_type = $request->entity_type;
-        $money_card = $request->money_card;
-        $money_cash = $request->money_cash;
-        $position = $request->position;
-        $position = $position;
-        dd(json_decode($position));
-        return response()->json();
+        if ($request->money_card === null) $money_card = 0;
+        else $money_card = $request->money_card;
+
+        if ($request->money_cash === null) $money_cash = 0;
+        else $money_cash = $request->money_cash;
+
+        $pay_type = $request->pay_type;
+        $position = json_decode($request->position);
+
+
+
+        return response()->json([
+            'accountId' => $accountId,
+            'object_Id' => $object_Id,
+            'entity_type' => $entity_type,
+            'money_card' => $money_card,
+            'money_cash' => $money_cash,
+            'pay_type' => $pay_type,
+            'position' => $position,
+        ]);
     }
 
 }
