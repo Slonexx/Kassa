@@ -292,7 +292,7 @@
             </div>
         </div>
         <div class="buttons-container">
-            <form>
+            <form action="">
                 <div class="row">
                     <div class="col-2">
                         <div class="mx-2">
