@@ -88,7 +88,7 @@ class TicketService
 
             $change = $tookSum - $totalSum;
 
-            $items = $this->getItemsByHrefPositions($jsonEntity->positions->meta->href,$jsonEntity,$apiKeyMs);
+            $items = $this->getItemsByHrefPositions($jsonEntity->positions->meta->href,$positions,$jsonEntity,$apiKeyMs);
             if (count($items) > 0 ){
 
                 $payments = [];
@@ -193,13 +193,16 @@ class TicketService
         return [];
     }
 
-    private function getItemsByHrefPositions($href,$jsonEntity,$apiKeyMs){
+    private function getItemsByHrefPositions($href,$positionsEntity,$jsonEntity,$apiKeyMs){
         $positions = [];
         $client = new MsClient($apiKeyMs);
         $jsonPositions = $client->get($href);
         //$count = 1;
         //dd($jsonPositions);
         foreach ($jsonPositions->rows as $row){
+
+            if (!in_array($row->id,$positionsEntity)) continue;
+
             $discount = $row->discount;
 
             $positionPrice = $row->price / 100;
