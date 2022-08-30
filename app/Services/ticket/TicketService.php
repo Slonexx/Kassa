@@ -4,6 +4,8 @@ namespace App\Services\ticket;
 
 use App\Clients\KassClient;
 use App\Clients\MsClient;
+use App\Http\Controllers\getData\getDeviceFirst;
+use App\Http\Controllers\getData\getDevices;
 use App\Http\Controllers\getData\getSetting;
 use App\Services\AdditionalServices\DocumentService;
 use App\Services\MetaServices\MetaHook\AttributeHook;
@@ -57,10 +59,18 @@ class TicketService
         //$setting = new getSetting($accountId);
         //$setting->tokenMs;
         //take settings by accountId
-        $apiKeyMs = "f59a9e8d8011257f92f13ac0ad12a2d25c1e668f";
-        $paymentOption = 2;
 
-        $apiKey = "f5ac6559-b5cd-4e0e-89e5-7fd32a6d60a5";
+        $Setting = new getSetting($accountId);
+
+        $apiKeyMs = $Setting->tokenMs;
+        $paymentOption = $Setting->paymentDocument;
+
+        $apiKey = $Setting->apiKey;
+
+        $Device = new getDevices($accountId);
+        $znm = $Device->devices[0]['znm'];
+        $Device = new getDeviceFirst($znm);
+        dd($Device);
         $numKassa = "VTH5DEV4-AQM";
         $password = "Qi1_CS0y5weXk09Lg3erA4*72dMuqYFM";
 
