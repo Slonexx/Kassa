@@ -279,7 +279,6 @@
             let final = url + formatParams(params);
             let xmlHttpRequest = new XMLHttpRequest();
             xmlHttpRequest.addEventListener("load", function () {
-                console.log('responseText = ' + this.responseText)
                 window.open(urlrekassa + this.responseText);
             });
             xmlHttpRequest.open("GET", final);
