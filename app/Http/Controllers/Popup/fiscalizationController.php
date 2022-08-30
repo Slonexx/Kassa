@@ -122,7 +122,6 @@ class fiscalizationController extends Controller
             'positions' => $positions,
         ];
 
-
         $Client = new Client();
         $url = 'https://smartrekassa.kz/api/ticket';
         //$url = 'http://rekassa/api/ticket';
@@ -138,7 +137,7 @@ class fiscalizationController extends Controller
             return response()->json($ClinetPost->getBody());
 
         } catch (\Throwable $e){
-            return $e->getMessage();
+            return response()->json($e->getMessage());
         }
     }
 
