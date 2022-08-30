@@ -134,7 +134,9 @@ class fiscalizationController extends Controller
                 'form_params' => $body,
             ]);
 
-            return response()->json($ClinetPost->getBody());
+            $res = json_decode($ClinetPost->getBody());
+
+            return response()->json($res);
 
         } catch (\Throwable $e){
             return response()->json($e->getMessage());
