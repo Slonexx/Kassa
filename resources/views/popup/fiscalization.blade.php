@@ -358,7 +358,7 @@
                             data-bs-toggle="modal" data-bs-target="#modal" >Закрыть смену</button>
                 </div>
                 <div class="col-2">
-                        <button id="refundCheck" class="mx-3 btn btn-danger">возврат</button>
+                        <button onclick="sendKKM('return')" id="refundCheck" class="mx-3 btn btn-danger">возврат</button>
                     </div>
                 <div class="col-2">
                         <button id="ShowCheck" class="mx-3 btn btn-success">Показать чек</button>
