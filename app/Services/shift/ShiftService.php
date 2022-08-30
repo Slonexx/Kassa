@@ -39,7 +39,10 @@ class ShiftService
                "code" => 200,
            ];
         }
-        return [];
+        return [
+            "res" => "Don't have opened shift!",
+            "code" => 200,
+        ];
     }
 
 
