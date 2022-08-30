@@ -279,13 +279,10 @@
             let final = url + formatParams(params);
             let xmlHttpRequest = new XMLHttpRequest();
             xmlHttpRequest.addEventListener("load", function () {
-                let json = JSON.parse(this.responseText);
-                window.open(url+json);
+                window.open(urlrekassa+this.responseText);
             });
             xmlHttpRequest.open("GET", final);
             xmlHttpRequest.send();
-
-
         }
 
     </script>
