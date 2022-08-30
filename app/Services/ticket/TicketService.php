@@ -68,11 +68,12 @@ class TicketService
         $apiKey = $Setting->apiKey;
 
         $Device = new getDevices($accountId);
-        $znm = $Device->devices[0]['znm'];
+
+        $znm = $Device->devices[0]->znm;
         $Device = new getDeviceFirst($znm);
-        dd($Device);
-        $numKassa = "VTH5DEV4-AQM";
-        $password = "Qi1_CS0y5weXk09Lg3erA4*72dMuqYFM";
+
+        $numKassa = $Device->znm;
+        $password = $Device->password;
 
         //take positions from entity
         $urlEntity = $this->getUrlEntity($entity_type,$id_entity);
