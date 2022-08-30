@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Storage;
 Route::post('attributes',[AttributeController::class,'setAllAttributes']);
 
 Route::post('ticket',[TicketController::class,'initTicket']);
+
+Route::get('ticket',[TicketController::class,'getUrlTicket']);
 //Route::post('cancelTicket',[TicketController::class,'cancelTicket']);
 
 Route::post('closeShift',[ShiftController::class,'closeShift']);

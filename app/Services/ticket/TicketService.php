@@ -394,6 +394,21 @@ class TicketService
         return $total;
     }
 
+    public function showTicket($data){
+        $accountId = $data['accountId'];
+        $idTicket = $data['id_ticket'];
+
+        $apiKey = "f5ac6559-b5cd-4e0e-89e5-7fd32a6d60a5";
+        $numKassa = "VTH5DEV4-AQM";
+        $password = "Qi1_CS0y5weXk09Lg3erA4*72dMuqYFM";
+
+        $client = new KassClient($numKassa,$password,$apiKey);
+
+        $idKassa = $client->getNewJwtToken()->id;
+
+        return "print/".$idKassa."/".$idTicket;
+    }
+
     //Cancel ticket
     /*public function cancelTicket($data){
         $accountId = $data['accountId'];

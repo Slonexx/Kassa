@@ -35,6 +35,16 @@ class TicketController extends Controller
 
     }
 
+    public function getUrlTicket(Request $request){
+        $data = $request->validate([
+            "accountId" => "required|string",
+            "id_ticket" => "required||string",
+        ]);
+
+        $res = $this->ticketService->showTicket($data);
+        return response($res);
+    }
+
     public function cancelTicket(Request $request){
       /*  $data = $request->validate([
             "accountId" => "required|string",
