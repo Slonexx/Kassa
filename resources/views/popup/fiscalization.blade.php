@@ -11,6 +11,7 @@
         let object_Id = '';
         let accountId = '';
         let entity_type = 'customerorder';
+        let id_ticket = '';
 
 
         window.addEventListener("message", function(event) {
@@ -44,7 +45,7 @@
 
                     let json = JSON.parse(this.responseText);
                     let products = json.products;
-
+                    id_ticket = json.attributes.ticket_id;
                     logReceivedMessage(products);
 
                     for (var i = 0; i < products.length; i++) {
@@ -245,8 +246,8 @@
                 accountId: accountId,
                 pincode: pinCode,
             };
-            let url = 'http://rekassa/Popup/customerorder/closeShift';
-            //let url = 'https://smartrekassa.kz/Popup/customerorder/closeShift';
+            //let url = 'http://rekassa/Popup/customerorder/closeShift';
+            let url = 'https://smartrekassa.kz/Popup/customerorder/closeShift';
             let final = url + formatParams(params);
 
             console.log("final = " + final);
@@ -265,6 +266,26 @@
             });
             xmlHttpRequest.open("GET", final);
             xmlHttpRequest.send();
+        }
+
+        function ShowCheck(){
+            let urlrekassa = 'https://app-test.rekassa.kz/'
+            //let url = 'http://rekassa/Popup/customerorder/closeShift';
+            let url = 'https://smartrekassa.kz/api/ticket';
+            let params = {
+                accountId: accountId,
+                id_ticket: id_ticket,
+            };
+            let final = url + formatParams(params);
+            let xmlHttpRequest = new XMLHttpRequest();
+            xmlHttpRequest.addEventListener("load", function () {
+                let json = JSON.parse(this.responseText);
+                window.open(url+json);
+            });
+            xmlHttpRequest.open("GET", final);
+            xmlHttpRequest.send();
+
+
         }
 
     </script>
@@ -361,7 +382,7 @@
                         <button onclick="sendKKM('return')" id="refundCheck" class="mx-3 btn btn-danger">возврат</button>
                     </div>
                 <div class="col-2">
-                        <button id="ShowCheck" class="mx-3 btn btn-success">Показать чек</button>
+                        <button onclick="ShowCheck()" id="ShowCheck" class="mx-3 btn btn-success">Показать чек</button>
                     </div>
                 <div class="col-2">
                     <button onclick="sendKKM('sell')" id="getKKM" class="mx-3 btn btn-success">Отправить в ККМ</button>
@@ -381,8 +402,6 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-
-
                         <div class="row mt-2">
                             <div class="col-1"></div>
                             <div class="col-10">
@@ -391,8 +410,6 @@
                                   class="form-control float" required maxlength="10" value="">
                             </div>
                         </div>
-
-
                 </div>
                 <div class="modal-footer">
                     <button  onclick="closeShift()" id="closeShift"

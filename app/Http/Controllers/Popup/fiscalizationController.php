@@ -41,7 +41,7 @@ class fiscalizationController extends Controller
             ];
             foreach ($Body->attributes as $item){
                 if ($item->name == 'id-билета (ReKassa)'){
-                    $attributes['ticket_id'] =  $item->value;
+                    $attributes['ticket_id'] = $item->value;
                     break;
                 }
             }

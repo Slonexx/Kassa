@@ -409,9 +409,17 @@ class TicketService
         $accountId = $data['accountId'];
         $idTicket = $data['id_ticket'];
 
-        $apiKey = "f5ac6559-b5cd-4e0e-89e5-7fd32a6d60a5";
-        $numKassa = "VTH5DEV4-AQM";
-        $password = "Qi1_CS0y5weXk09Lg3erA4*72dMuqYFM";
+
+        $Setting = new getSetting($accountId);
+        $apiKey = $Setting->apiKey;
+
+        $Device = new getDevices($accountId);
+
+        $znm = $Device->devices[0]->znm;
+        $Device = new getDeviceFirst($znm);
+
+        $numKassa = $Device->znm;
+        $password = $Device->password;
 
         $client = new KassClient($numKassa,$password,$apiKey);
 
