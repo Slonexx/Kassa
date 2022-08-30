@@ -120,20 +120,19 @@ class fiscalizationController extends Controller
         $url = 'https://smartrekassa.kz/api/ticket';
         //$url = 'http://rekassa/api/ticket';
         try {
-            $tmp = $Client->request('POST', $url, [
+            $ClinetPost = $Client->post( $url, [
                 'headers' => [
                     'Accept' => 'application/json',
                     'http_errors' => false,
                     ],
                 'form_params' => $body,
             ]);
+
+            return response()->json($ClinetPost->getBody());
+
         } catch (\Throwable $e){
-            dd($e->getMessage());
+            return $e->getMessage();
         }
-
-
-
-        return response()->json($tmp->getBody());
     }
 
     public function closeShiftPopup(Request $request){
