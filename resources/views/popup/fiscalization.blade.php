@@ -253,7 +253,15 @@
 
             let xmlHttpRequest = new XMLHttpRequest();
             xmlHttpRequest.addEventListener("load", function () {
-
+                let json = JSON.parse(this.responseText);
+                if (json.statusCode === 200){
+                    window.document.getElementById('messageAlert').innerText = json.message;
+                    window.document.getElementById('message').style.display = "block";
+                } else {
+                    console.log(' Error = ' + url + ' message = ' + JSON.stringify(json.message))
+                    window.document.getElementById('messageAlert').innerText = "ошибка";
+                    window.document.getElementById('message').style.display = "block";
+                }
             });
             xmlHttpRequest.open("GET", final);
             xmlHttpRequest.send();

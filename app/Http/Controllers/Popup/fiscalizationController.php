@@ -6,6 +6,7 @@ use App\Clients\MsClient;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\getData\getSetting;
 use App\Http\Controllers\getData\getWorkerID;
+use App\Http\Controllers\TicketController;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 
@@ -114,27 +115,58 @@ class fiscalizationController extends Controller
             'pay_type' => $pay_type,
             'positions' => $position,
         ];
+
         $Client = new Client();
         $url = 'https://smartrekassa.kz/api/ticket';
+        //$url = 'http://rekassa/api/ticket';
         try {
             $tmp = $Client->request('POST', $url, [
-                'headers' => ['Content-Type' => 'application/json',],
-                'body' => json_encode($body),
+                'headers' => [
+                    'Accept' => 'application/json',
+                    'http_errors' => false,
+                    ],
+                'form_params' => $body,
             ]);
         } catch (\Throwable $e){
             dd($e->getMessage());
         }
 
-        dd($tmp);
 
 
-        return response()->json($body);
+        return response()->json($tmp->getBody());
     }
 
     public function closeShiftPopup(Request $request){
         $accountId = $request->accountId;
         $pincode = $request->pincode;
-        dd($request->request);
+
+        $body = [
+            'accountId' => $accountId,
+            'pincode' => $pincode,
+        ];
+
+        $Client = new Client();
+        //$url = 'http://rekassa/api/closeShift';
+        $url = 'https://smartrekassa.kz/api/closeShift';
+        try {
+            $tmp = $Client->post( $url, [
+                'headers' => [
+                    'Accept' => 'application/json',
+                    'http_errors' => false,
+                ],
+                'form_params' => $body,
+            ]);
+        } catch (\Throwable $e){
+            return [
+                'statusCode' => $e->getCode(),
+                'message' => $e->getMessage(),
+            ];
+        }
+
+       return [
+           'statusCode' => 200,
+           'message' => 'Смена закрыта',
+       ];
     }
 
 }
