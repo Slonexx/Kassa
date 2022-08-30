@@ -29,9 +29,9 @@ class TicketController extends Controller
             "positions" => "required|array",
         ]);
 
-        return response(
-            $this->ticketService->createTicket($data)
-        );
+        $serviceRes =  $this->ticketService->createTicket($data);
+
+        return response($serviceRes["res"],$serviceRes["code"]);
 
     }
 

@@ -11,6 +11,7 @@ use Carbon\Carbon;
 use Dflydev\DotAccessData\Data;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\GuzzleException;
+use function PHPUnit\Framework\isNull;
 
 class TicketService
 {
@@ -40,9 +41,17 @@ class TicketService
 
         $tookSum = $money_card+$money_cash;
 
+        if (is_null($money_card)) $money_card = 0;
+        if (is_null($money_cash)) $money_cash = 0;
+
+        //dd($data);
+
         if ($money_card <= 0 && $money_cash <= 0 )
             return [
-                "message" => "Please enter money!",
+                "res" => [
+                    "message" => "Please enter money!",
+                ],
+                "code" => 400
             ];
 
         //$setting = new getSetting($accountId);
@@ -70,7 +79,10 @@ class TicketService
 
             if ($tookSum < $totalSum){
                 return [
-                    "message" => "Don't have enough money to complete the transaction",
+                    "res" => [
+                        "message" => "Don't have enough money to complete the transaction",
+                    ],
+                    "code" => 400
                 ];
             }
 
@@ -152,13 +164,19 @@ class TicketService
                     }
                     //dd($response);
                     return [
-                        "message" => "Ticket created!",
-                        "response" => $response,
+                        "res" => [
+                            "message" => "Ticket created!",
+                            "response" => $response,
+                        ],
+                        "code" => 200,
                     ];
                 } catch (ClientException $exception){
                     return [
-                        "message" => "Ticket not created!",
-                        "error" => json_decode($exception->getResponse()->getBody()),
+                        "res" => [
+                            "message" => "Ticket not created!",
+                            "error" => json_decode($exception->getResponse()->getBody()),
+                        ],
+                        "code" => 400,
                     ];
                     //dd($exception->getMessage());
                 }
@@ -166,7 +184,10 @@ class TicketService
         }
         else {
             return [
-                "message" => "Entity haven't got positions!",
+                "res" => [
+                    "message" => "Entity haven't got positions!",
+                ],
+                "code" => 400,
             ];
         }
         return [];
@@ -210,7 +231,7 @@ class TicketService
                     $position["commodity"]["excise_stamp"] = $row->trackingCodes[$i-1]->cis;
                 }
 
-                if (property_exists($row,'vat')){
+                if (property_exists($row,'vat') && property_exists($jsonEntity,'vatIncluded')){
 
                     if ($jsonEntity->vatIncluded){
                         $sumVat = $sumPrice * ( $row->vat / (100+$row->vat) ); //Цена включает НДС

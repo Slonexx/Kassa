@@ -23,7 +23,8 @@ class ShiftController extends Controller
             "pincode" => "required|string",
         ]);
 
-        $this->shiftService->closeShift($data);
+        $serviceRes = $this->shiftService->closeShift($data);
+        return response($serviceRes["res"],$serviceRes["code"]);
     }
 
 }
