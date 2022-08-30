@@ -105,6 +105,12 @@ class fiscalizationController extends Controller
 
         $pay_type = $request->pay_type;
         $position = json_decode($request->position);
+        $positions = [];
+        foreach ($position as $item){
+            if ($item != null){
+                $positions[] = $item;
+            }
+        }
 
         $body = [
             'accountId' => $accountId,
@@ -113,8 +119,9 @@ class fiscalizationController extends Controller
             'money_card' => $money_card,
             'money_cash' => $money_cash,
             'pay_type' => $pay_type,
-            'positions' => $position,
+            'positions' => $positions,
         ];
+
 
         $Client = new Client();
         $url = 'https://smartrekassa.kz/api/ticket';
