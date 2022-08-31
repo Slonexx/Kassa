@@ -72,7 +72,7 @@
                             window.document.getElementById("sum").innerHTML = sum + products[i].final;
                             window.document.getElementById(i).style.display = "block";
                         } else {
-                            window.document.getElementById("messageAlert").innerText = "Позиции у которых нету ед. изм. не добавились ";
+                            window.document.getElementById("messageAlert").innerText = "Позиции у которых нет ед. изм. не добавились ";
                             window.document.getElementById("message").style.display = "block";
                         }
                     }
@@ -221,7 +221,7 @@
                 entity_type: entity_type,
                 money_card: money_card,
                 money_cash: money_cash,
-                pay_type: pay_type,
+                pay_type: pay_type.toString,
                 position: JSON.stringify(products),
             };
             let final = url + formatParams(params);
