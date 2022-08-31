@@ -120,7 +120,6 @@
                 var messageAsString = JSON.stringify(msg);
                 console.log("→ Received" + " message: " + messageAsString);
             }
-
             function formatParams(params) {
                 return "?" + Object
                     .keys(params)
@@ -129,7 +128,6 @@
                     })
                     .join("&")
             }
-
             function deleteBTNClick(Object){
 
 
@@ -214,7 +212,6 @@
             let money_card = window.document.getElementById('card').value;
             let money_cash = window.document.getElementById('cash').value;
 
-
             let params = {
                 accountId: accountId,
                 object_Id: object_Id,
@@ -252,15 +249,16 @@
             if (money_card) {
                 xmlHttpRequest.open("GET", final);
                 xmlHttpRequest.send();
+                $('#downL').modal('hide');
             }
             if (money_cash) {
                 xmlHttpRequest.open("GET", final);
                 xmlHttpRequest.send();
+                $('#downL').modal('hide');
             }
             if (!money_card && !money_cash){
                 window.document.getElementById('messageAlert').innerText = 'Вы не ввели сумму';
                 window.document.getElementById('message').style.display = "block";
-                window.document.getElementById("getKKM").style.display = "block";
                 $('#downL').modal('hide');
             }
 
@@ -295,7 +293,6 @@
             xmlHttpRequest.open("GET", final);
             xmlHttpRequest.send();
         }
-
         function ShowCheck(){
             let urlrekassa = 'https://app-test.rekassa.kz/'
             //let url = 'http://rekassa/Popup/customerorder/closeShift';
@@ -347,7 +344,6 @@
             }
 
         }
-
         function openDown(){
             $('#lDown').modal('show');
         }
