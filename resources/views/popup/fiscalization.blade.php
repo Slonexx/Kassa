@@ -45,7 +45,7 @@
                 let xmlHttpRequest = new XMLHttpRequest();
                 xmlHttpRequest.addEventListener("load", function () {
 
-                    window.document.getElementById("closeButtonId").style.display = "none";
+                    window.document.getElementById("closeButtonId").style.display = "block";
                     document.getElementById('Visibility_Cash').style.display = 'block';
                     document.getElementById('Visibility_Card').style.display = 'none';
                     window.document.getElementById("getKKM").style.display = "none";
@@ -227,6 +227,7 @@
 
             let xmlHttpRequest = new XMLHttpRequest();
             xmlHttpRequest.addEventListener("load", function () {
+                console.log('message = ' + this.responseText);
                 if (this.responseText.message === 'Ticket created!'){
                     window.document.getElementById("messageGood").innerText = "Чек создан";
                     window.document.getElementById("messageGood").style.display = "block";
