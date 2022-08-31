@@ -69,7 +69,7 @@
                             window.document.getElementById('productFinal_' + i).innerHTML = products[i].final;
 
                             let sum = window.document.getElementById("sum").innerHTML;
-                            window.document.getElementById("sum").innerHTML = sum + products[i].final;
+                            window.document.getElementById("sum").innerHTML = parseFloat(sum) + parseFloat(products[i].final);
                             window.document.getElementById(i).style.display = "block";
                         } else {
                             window.document.getElementById("messageAlert").innerText = "Позиции у которых нет ед. изм. не добавились ";
@@ -273,6 +273,7 @@
                 xmlHttpRequest.send();
                 modalShowHide = 'hide';
             }
+            else window.document.getElementById("getKKM").style.display = "block";
 
         }
 
