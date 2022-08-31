@@ -228,7 +228,8 @@
             let xmlHttpRequest = new XMLHttpRequest();
             xmlHttpRequest.addEventListener("load", function () {
                 console.log('message = ' + this.responseText);
-                if (this.responseText.message === 'Ticket created!'){
+                let json = JSON.parse(this.responseText);
+                if (json.message === 'Ticket created!'){
                     window.document.getElementById("messageGood").innerText = "Чек создан";
                     window.document.getElementById("messageGood").style.display = "block";
                     updatePopup();
@@ -480,10 +481,10 @@
             <div class="row">
                 <div class="col-3">
                     <div class="row">
-                        <div class="col-4">
+                        <div class="col-5">
                             <div class="mx-1 mt-1 bg-warning p-1 rounded ">Тип оплаты</div>
                         </div>
-                        <div class="col-8">
+                        <div class="col-7">
                             <select onchange="SelectorSum(valueSelector)" id="valueSelector" class="form-select">
                                 <option selected value="0">Наличными</option>
                                 <option value="1">Картой</option>
