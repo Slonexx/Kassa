@@ -79,6 +79,7 @@
 
                     window.document.getElementById("numberOrder").innerHTML = json.name;
                     window.document.getElementById("cash").value = '';
+                    window.document.getElementById("card").value = '';
 
 
 
@@ -206,6 +207,7 @@
             console.log('option = ' + option.value);
             if (option.value == 0){
                 if (!money_cash) {
+                    console.log('Вы не ввели сумму наличных')
                     window.document.getElementById('messageAlert').innerText = 'Вы не ввели сумму';
                     window.document.getElementById('message').style.display = "block";
                     $('#downL').modal('hide');
@@ -213,6 +215,7 @@
             }
             if (option.value == 1){
                 if (!money_card) {
+                    console.log('Вы не ввели сумму карт')
                     window.document.getElementById('messageAlert').innerText = 'Вы не ввели сумму';
                     window.document.getElementById('message').style.display = "block";
                     $('#downL').modal('hide');
@@ -220,12 +223,13 @@
             }
             if (option.value == 2){
                 if (!money_card && !money_cash){
+                    console.log('Вы не ввели сумму наличных и карт')
                     window.document.getElementById('messageAlert').innerText = 'Вы не ввели сумму';
                     window.document.getElementById('message').style.display = "block";
                     $('#downL').modal('hide');
                 }
             }
-
+            console.log('прошел проверки')
 
             //let url = 'http://rekassa/Popup/customerorder/send';
             let url = 'https://smartrekassa.kz/Popup/customerorder/send';
