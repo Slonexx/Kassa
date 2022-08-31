@@ -199,7 +199,6 @@
         function sendKKM(pay_type){
             window.document.getElementById("getKKM").style.display = "none";
             let modalShowHide = 'show';
-            $('#downL').modal(modalShowHide);
 
             let money_card = window.document.getElementById('card').value;
             let money_cash = window.document.getElementById('cash').value;
