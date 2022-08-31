@@ -204,21 +204,21 @@
             let SelectorInfo = document.getElementById('valueSelector');
             let option = SelectorInfo.options[SelectorInfo.selectedIndex];
             console.log('option = ' + option.value);
-            if (option.value === 0){
+            if (option.value == 0){
                 if (!money_cash) {
                     window.document.getElementById('messageAlert').innerText = 'Вы не ввели сумму';
                     window.document.getElementById('message').style.display = "block";
                     $('#downL').modal('hide');
                 }
             }
-            if (option.value === 1){
+            if (option.value == 1){
                 if (!money_card) {
                     window.document.getElementById('messageAlert').innerText = 'Вы не ввели сумму';
                     window.document.getElementById('message').style.display = "block";
                     $('#downL').modal('hide');
                 }
             }
-            if (option.value === 2){
+            if (option.value == 2){
                 if (!money_card && !money_cash){
                     window.document.getElementById('messageAlert').innerText = 'Вы не ввели сумму';
                     window.document.getElementById('message').style.display = "block";
