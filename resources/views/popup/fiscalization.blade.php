@@ -209,6 +209,10 @@
             }
             let money_card = window.document.getElementById('card').value;
             let money_cash = window.document.getElementById('cash').value;
+
+            console.log('card = ' + money_card);
+            console.log('cash = ' + money_cash);
+
                 if (!money_card && !money_cash){
                     window.document.getElementById('messageAlert').innerText = 'Вы не ввели сумму';
                     window.document.getElementById('message').style.display = "block";
@@ -225,7 +229,7 @@
                 position: JSON.stringify(products),
             };
             let final = url + formatParams(params);
-            console.log('final' + final);
+            console.log('final = ' + final);
 
             let xmlHttpRequest = new XMLHttpRequest();
             xmlHttpRequest.addEventListener("load", function () {
