@@ -68,6 +68,8 @@
                             window.document.getElementById('productDiscount_' + i).innerHTML = products[i].discount + '%';
                             window.document.getElementById('productFinal_' + i).innerHTML = products[i].final;
 
+                            let sum = window.document.getElementById("sum").innerHTML;
+                            window.document.getElementById("sum").innerHTML = sum + products[i].final;
                             window.document.getElementById(i).style.display = "block";
                         } else {
                             window.document.getElementById("messageAlert").innerText = "Позиции у которых нету ед. изм. не добавились ";
@@ -77,7 +79,7 @@
 
                     window.document.getElementById("numberOrder").innerHTML = json.name;
                     window.document.getElementById("cash").value = '';
-                    window.document.getElementById("sum").innerHTML = json.sum;
+
 
 
 
