@@ -21,6 +21,7 @@
             window.document.getElementById("vat").innerHTML = "";
             window.document.getElementById("message").style.display = "none";
             window.document.getElementById("messageGood").style.display = "none";
+            window.document.getElementById("closeButtonId").style.display = "none";
 
             for (var i = 0; i < 20; i++) {
                 window.document.getElementById(i).style.display = "none";
@@ -44,6 +45,13 @@
                 let xmlHttpRequest = new XMLHttpRequest();
                 xmlHttpRequest.addEventListener("load", function () {
 
+                    window.document.getElementById("closeButtonId").style.display = "none";
+                    document.getElementById('Visibility_Cash').style.display = 'block';
+                    document.getElementById('Visibility_Card').style.display = 'none';
+                    window.document.getElementById("getKKM").style.display = "none";
+                    window.document.getElementById("ShowCheck").style.display = "none";
+                    window.document.getElementById("refundCheck").style.display = "none";
+
                     let json = JSON.parse(this.responseText);
                     let products = json.products;
                     id_ticket = json.attributes.ticket_id;
@@ -62,10 +70,11 @@
                             window.document.getElementById('productFinal_' + i).innerHTML = products[i].final;
 
                             window.document.getElementById(i).style.display = "block";
+                        } else {
+                            window.document.getElementById("message").innerText = "У некоторых позиций нету ед. изм.";
+                            window.document.getElementById("message").style.display = "block";
                         }
                     }
-
-
 
                     window.document.getElementById("numberOrder").innerHTML = json.name;
                     window.document.getElementById("cash").value = '';
@@ -90,9 +99,6 @@
 
 
 
-                    window.document.getElementById("getKKM").style.display = "none";
-                    window.document.getElementById("ShowCheck").style.display = "none";
-                    window.document.getElementById("refundCheck").style.display = "none";
                     if (json.attributes != null){
                         if (json.attributes.ticket_id != null){
                             window.document.getElementById("ShowCheck").style.display = "block";
@@ -364,20 +370,45 @@
             xmlHttpRequest.send();
         }
 
+        function SelectorSum(Selector){
+            let option = Selector.options[Selector.selectedIndex];
+            if (option.value === "0") {
+                document.getElementById('Visibility_Cash').style.display = 'block';
+                document.getElementById('Visibility_Card').style.display = 'none';
+            }
+            if (option.value === "1") {
+                document.getElementById('Visibility_Card').style.display = 'block';
+                document.getElementById('Visibility_Cash').style.display = 'none';
+            }
+            if (option.value === "2") {
+                document.getElementById('Visibility_Cash').style.display = 'block';
+                document.getElementById('Visibility_Card').style.display = 'block';
+            }
+
+        }
+
     </script>
 
 
     <div class="main-container">
         <div class="row gradient rounded p-2">
-            <div class="col-11">
+            <div class="col-9">
                 <div class="mx-2"> <img src="https://app.rekassa.kz/static/logo.png" width="35" height="35"  alt="">
                     <span class="text-white"> re:Kassa </span>
                     <span class="mx-5 text-white">Заказ покупателя №</span>
                     <span id="numberOrder" class="text-white"></span>
                 </div>
             </div>
-            <div class="col-1 ">
-                <button type="submit" onclick="updatePopup()" class="myButton btn "> <i class="fa-solid fa-arrow-rotate-right"></i> </button>
+            <div class="col-3">
+                <div class="row">
+                    <div class="col-9 text-center">
+                        <button id="closeButtonId" type="button" class=" mx-3 btn btn-danger"
+                                data-bs-toggle="modal" data-bs-target="#modal" >Закрыть смену</button>
+                    </div>
+                    <div class="col-3">
+                        <button type="submit" onclick="updatePopup()" class="myButton btn "> <i class="fa-solid fa-arrow-rotate-right"></i> </button>
+                    </div>
+                </div>
             </div>
         </div>
         <div id="message" class="mt-2 row" style="display:none;" >
@@ -446,21 +477,35 @@
         </div>
         <div class="buttons-container">
             <div class="row">
-                <div class="col-2">
-                        <div class="mx-2">
-                            <input id="cash" type="number" step="0.1" placeholder="Сумма наличных"  onkeypress="return isNumberKeyCash(event)"
-                                   class="form-control float" required maxlength="255" value="">
+                <div class="col-3">
+                    <div class="row">
+                        <div class="col-4">
+                            <div class="mx-1 mt-1 bg-warning p-1 rounded ">Тип оплаты</div>
+                        </div>
+                        <div class="col-8">
+                            <select onchange="SelectorSum(valueSelector)" id="valueSelector" class="form-select">
+                                <option selected value="0">Наличными</option>
+                                <option value="1">Картой</option>
+                                <option value="2">Смешанное</option>
+                            </select>
                         </div>
                     </div>
-                <div class="col-2">
-                        <input id="card" type="number" step="0.1"  placeholder="Сумма картой" onkeypress="return isNumberKeyCard(event)"
-                               class="form-control float" required maxlength="255" value="">
-                    </div>
-                <div class="col-2">
-                    <button type="button" class=" mx-3 btn btn-danger"
-                            data-bs-toggle="modal" data-bs-target="#modal" >Закрыть смену</button>
+
+
                 </div>
-                <div class="col-2">
+                <div class="col-4">
+                    <div class="row">
+                        <div class="col-6"> <div id="Visibility_Cash" class="mx-2" style="display: none">
+                                <input id="cash" type="number" step="0.1" placeholder="Сумма наличных"  onkeypress="return isNumberKeyCash(event)"
+                                       class="form-control float" required maxlength="255" value="">
+                            </div> </div>
+                        <div class="col-6"> <div id="Visibility_Card" class="mx-2" style="display: none">
+                                <input id="card" type="number" step="0.1"  placeholder="Сумма картой" onkeypress="return isNumberKeyCard(event)"
+                                       class="form-control float" required maxlength="255" value="">
+                            </div> </div>
+                    </div>
+                </div>
+                <div class="col-1">
                         <button onclick="sendKKM('return')" id="refundCheck" class="mx-3 btn btn-danger">возврат</button>
                     </div>
                 <div class="col-2">
