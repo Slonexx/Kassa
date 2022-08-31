@@ -207,7 +207,6 @@
             console.log('option = ' + option.value);
             if (option.value == 0){
                 if (!money_cash) {
-                    console.log('Вы не ввели сумму наличных')
                     window.document.getElementById('messageAlert').innerText = 'Вы не ввели сумму';
                     window.document.getElementById('message').style.display = "block";
                     modalShowHide = 'hide'
@@ -215,7 +214,6 @@
             }
             if (option.value == 1){
                 if (!money_card) {
-                    console.log('Вы не ввели сумму карт')
                     window.document.getElementById('messageAlert').innerText = 'Вы не ввели сумму';
                     window.document.getElementById('message').style.display = "block";
                     modalShowHide = 'hide'
@@ -223,17 +221,17 @@
             }
             if (option.value == 2){
                 if (!money_card && !money_cash){
-                    console.log('Вы не ввели сумму наличных и карт')
                     window.document.getElementById('messageAlert').innerText = 'Вы не ввели сумму';
                     window.document.getElementById('message').style.display = "block";
                     modalShowHide = 'hide'
                 }
             }
-            console.log('modalShowHide = ' + modalShowHide);
+
             //let url = 'http://rekassa/Popup/customerorder/send';
             let url = 'https://smartrekassa.kz/Popup/customerorder/send';
 
             if (modalShowHide === 'show'){
+                $('#downL').modal('toggle');
                 let products = [];
                 for (let i = 0; i < 20; i++) {
                     if ( window.document.getElementById(i).style.display === 'block' ) {
@@ -253,6 +251,7 @@
                 console.log('final = ' + final);
                 let xmlHttpRequest = new XMLHttpRequest();
                 xmlHttpRequest.addEventListener("load", function () {
+                    $('#downL').modal('hide');
                     let json = JSON.parse(this.responseText);
                     if (json.message === 'Ticket created!'){
                         window.document.getElementById("messageGoodAlert").innerText = "Чек создан";
@@ -275,10 +274,6 @@
                 modalShowHide = 'hide';
             }
 
-            $('#downL').modal(modalShowHide);
-            $('#downL').modal(modalShowHide);
-            $('#downL').modal(modalShowHide);
-            closeDown();
         }
 
         function closeShift(){
