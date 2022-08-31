@@ -13,8 +13,8 @@
         let entity_type = 'customerorder';
         let id_ticket = '';
 
-
         window.addEventListener("message", function(event) {
+            openDown();
             //var receivedMessage = {"name":"OpenPopup","messageId":1,"popupName":"fiscalizationPopup","popupParameters":{"object_Id":"4b1034eb-28e1-11ed-0a80-02ab00186962","accountId":"1dd5bd55-d141-11ec-0a80-055600047495"}}; /*event.data;*/
             var receivedMessage = event.data;
             window.document.getElementById("sum").innerHTML = '';
@@ -34,6 +34,7 @@
             }
 
             if (receivedMessage.name === 'OpenPopup') {
+                closeDown();
                 object_Id = receivedMessage.popupParameters.object_Id;
                 accountId = receivedMessage.popupParameters.accountId;
                 let params = {
@@ -343,10 +344,10 @@
 
         }
 
-        function downL(){
-            $('#downL').modal('show');
+        function openDown(){
+            $('#lDown').modal('show');
         }
-        function CloseDownL(){
+        function closeDown(){
             $('#downL').modal('hide');
         }
 
@@ -515,8 +516,25 @@
         <div class="modal-dialog modal-sm">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">
-                        Отправка <i class="fa-solid fa-circle-exclamation text-danger"></i>
+                    <h5 class="modal-title"> <i class="fa-solid fa-circle-exclamation text-danger"></i>
+                        Отправка
+                    </h5>
+                </div>
+                <div class="modal-body text-center" style="background-color: #e5eff1">
+                    <div class="row">
+                        <img style="width: 100%" src="https://i.gifer.com/1uoA.gif" alt="">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="lDown" class="modal fade bd-example-modal-sm" data-bs-keyboard="false" data-bs-backdrop="static"
+         tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"> <i class="fa-solid fa-circle-exclamation text-danger"></i>
+                        Загрузка
                     </h5>
                 </div>
                 <div class="modal-body text-center" style="background-color: #e5eff1">
