@@ -348,7 +348,7 @@
             $('#lDown').modal('show');
         }
         function closeDown(){
-            $('#downL').modal('hide');
+            $('#lDown').modal('hide');
         }
 
     </script>
