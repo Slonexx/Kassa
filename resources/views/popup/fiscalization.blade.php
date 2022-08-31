@@ -210,8 +210,13 @@
             let money_card = window.document.getElementById('card').value;
             let money_cash = window.document.getElementById('cash').value;
 
-            console.log('card = ' + money_card);
-            console.log('cash = ' + money_cash);
+            if (!money_card) {
+                console.log('card = ' + money_card);
+            }
+            if (!money_cash) {
+                console.log('cash = ' + money_cash);
+            }
+
 
                 if (!money_card && !money_cash){
                     window.document.getElementById('messageAlert').innerText = 'Вы не ввели сумму';
