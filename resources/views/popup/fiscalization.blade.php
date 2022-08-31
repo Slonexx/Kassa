@@ -198,6 +198,7 @@
 
         function sendKKM(pay_type){
             window.document.getElementById("getKKM").style.display = "none";
+            $('#downL').modal('show');
             //let url = 'http://rekassa/Popup/customerorder/send';
             let url = 'https://smartrekassa.kz/Popup/customerorder/send';
 
@@ -232,9 +233,12 @@
                     window.document.getElementById("messageGood").style.display = "block";
                     window.document.getElementById("ShowCheck").style.display = "block";
                     window.document.getElementById("refundCheck").style.display = "block";
+                    window.document.getElementById("closeShift").style.display = "block";
+                    $('#downL').modal('hide');
                 } else {
                     window.document.getElementById('messageAlert').innerText = "ошибка";
                     window.document.getElementById('message').style.display = "block";
+                    $('#downL').modal('hide');
                 }
 
             });
@@ -252,6 +256,7 @@
                 window.document.getElementById('messageAlert').innerText = 'Вы не ввели сумму';
                 window.document.getElementById('message').style.display = "block";
                 window.document.getElementById("getKKM").style.display = "block";
+                $('#downL').modal('hide');
             }
 
         }
@@ -336,6 +341,13 @@
                 document.getElementById('Visibility_Card').style.display = 'block';
             }
 
+        }
+
+        function downL(){
+            $('#downL').modal('show');
+        }
+        function CloseDownL(){
+            $('#downL').modal('hide');
         }
 
     </script>
@@ -467,7 +479,9 @@
                 </div>
             </div>
         </div>
+        <button id="down" onclick="downL()" > dwadw </button>
     </div>
+
 
 
     <div class="modal fade" id="modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -492,6 +506,23 @@
                 <div class="modal-footer">
                     <button  onclick="closeShift()" id="closeShift"
                              data-bs-dismiss="modal" class="btn btn-danger">Закрыть смену</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="downL" class="modal fade bd-example-modal-sm" data-bs-keyboard="false" data-bs-backdrop="static"
+         tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        Отправка <i class="fa-solid fa-circle-exclamation text-danger"></i>
+                    </h5>
+                </div>
+                <div class="modal-body text-center" style="background-color: #e5eff1">
+                    <div class="row">
+                        <img style="width: 100%" src="https://i.gifer.com/1uoA.gif" alt="">
+                    </div>
                 </div>
             </div>
         </div>
