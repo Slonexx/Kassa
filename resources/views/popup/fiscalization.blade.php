@@ -20,6 +20,7 @@
             window.document.getElementById("sum").innerHTML = '';
             window.document.getElementById("vat").innerHTML = "";
             window.document.getElementById("message").style.display = "none";
+            window.document.getElementById("messageGood").style.display = "none";
 
             for (var i = 0; i < 20; i++) {
                 window.document.getElementById(i).style.display = "none";
@@ -49,18 +50,19 @@
                     logReceivedMessage(products);
 
                     for (var i = 0; i < products.length; i++) {
-                        window.document.getElementById('productId_' + i).innerHTML = products[i].position;
-                        window.document.getElementById('productName_' + i).innerHTML = products[i].name;
-                        window.document.getElementById('productQuantity_' + i).innerHTML = products[i].quantity;
-                        window.document.getElementById('productPrice_' + i).innerHTML = products[i].price;
-                        if (products[i].vat === 0)  window.document.getElementById('productVat_' + i).innerHTML = "без НДС";
-                        else window.document.getElementById('productVat_' + i).innerHTML = products[i].vat + '%';
-                        window.document.getElementById('productDiscount_' + i).innerHTML = products[i].discount + '%';
-                        window.document.getElementById('productFinal_' + i).innerHTML = products[i].final;
 
+                        if (products[i].type !== 'service') {
+                            window.document.getElementById('productId_' + i).innerHTML = products[i].position;
+                            window.document.getElementById('productName_' + i).innerHTML = products[i].name;
+                            window.document.getElementById('productQuantity_' + i).innerHTML = products[i].quantity;
+                            window.document.getElementById('productPrice_' + i).innerHTML = products[i].price;
+                            if (products[i].vat === 0)  window.document.getElementById('productVat_' + i).innerHTML = "без НДС";
+                            else window.document.getElementById('productVat_' + i).innerHTML = products[i].vat + '%';
+                            window.document.getElementById('productDiscount_' + i).innerHTML = products[i].discount + '%';
+                            window.document.getElementById('productFinal_' + i).innerHTML = products[i].final;
 
-
-                        window.document.getElementById(i).style.display = "block";
+                            window.document.getElementById(i).style.display = "block";
+                        }
                     }
 
 
@@ -219,6 +221,11 @@
 
             let xmlHttpRequest = new XMLHttpRequest();
             xmlHttpRequest.addEventListener("load", function () {
+                if (this.responseText.message === 'Ticket created!'){
+                    window.document.getElementById("messageGood").innerText = "Чек создан";
+                    window.document.getElementById("messageGood").style.display = "block";
+                    updatePopup();
+                }
 
             });
 
@@ -285,6 +292,78 @@
             xmlHttpRequest.send();
         }
 
+        function updatePopup(){
+            let params = {
+                object_Id: object_Id,
+                accountId: accountId,
+            };
+            let final = url + formatParams(params);
+
+            let xmlHttpRequest = new XMLHttpRequest();
+            xmlHttpRequest.addEventListener("load", function () {
+
+                let json = JSON.parse(this.responseText);
+                let products = json.products;
+                id_ticket = json.attributes.ticket_id;
+                logReceivedMessage(products);
+
+                for (var i = 0; i < products.length; i++) {
+                    window.document.getElementById('productId_' + i).innerHTML = products[i].position;
+                    window.document.getElementById('productName_' + i).innerHTML = products[i].name;
+                    window.document.getElementById('productQuantity_' + i).innerHTML = products[i].quantity;
+                    window.document.getElementById('productPrice_' + i).innerHTML = products[i].price;
+                    if (products[i].vat === 0)  window.document.getElementById('productVat_' + i).innerHTML = "без НДС";
+                    else window.document.getElementById('productVat_' + i).innerHTML = products[i].vat + '%';
+                    window.document.getElementById('productDiscount_' + i).innerHTML = products[i].discount + '%';
+                    window.document.getElementById('productFinal_' + i).innerHTML = products[i].final;
+
+
+
+                    window.document.getElementById(i).style.display = "block";
+                }
+
+
+
+                window.document.getElementById("numberOrder").innerHTML = json.name;
+                window.document.getElementById("cash").value = '';
+                window.document.getElementById("sum").innerHTML = json.sum;
+
+
+
+                if (json.vat == null) {
+                    window.document.getElementById("vat").innerHTML = "";
+                    window.document.getElementById("vat").style.display = "none";
+                    window.document.getElementById("vatIncluded").style.display = "none";
+                }
+                else if (json.vat.vatIncluded === true) {
+                    window.document.getElementById("vat").innerHTML = "";
+                    window.document.getElementById("vat").style.display = "none";
+                    window.document.getElementById("vatIncluded").style.display = "block";
+                } else {
+                    window.document.getElementById("vat").style.display = "block";
+                    window.document.getElementById("vat").innerHTML = json.vat.vatSum;
+                    window.document.getElementById("vatIncluded").style.display = "none";
+                }
+
+
+
+                window.document.getElementById("getKKM").style.display = "none";
+                window.document.getElementById("ShowCheck").style.display = "none";
+                window.document.getElementById("refundCheck").style.display = "none";
+                if (json.attributes != null){
+                    if (json.attributes.ticket_id != null){
+                        window.document.getElementById("ShowCheck").style.display = "block";
+                        window.document.getElementById("refundCheck").style.display = "block";
+                    } else {
+                        window.document.getElementById("getKKM").style.display = "block";
+                    }
+                } else  window.document.getElementById("getKKM").style.display = "block";
+
+            });
+            xmlHttpRequest.open("GET", final);
+            xmlHttpRequest.send();
+        }
+
     </script>
 
 
@@ -298,12 +377,18 @@
                 </div>
             </div>
             <div class="col-1 ">
-                <button type="submit" onclick="" class="myButton btn "> <i class="fa-solid fa-arrow-rotate-right"></i> </button>
+                <button type="submit" onclick="updatePopup()" class="myButton btn "> <i class="fa-solid fa-arrow-rotate-right"></i> </button>
             </div>
         </div>
         <div id="message" class="mt-2 row" style="display:none;" >
             <div class="col-12">
                 <div id="messageAlert" class=" mx-3 p-2 alert alert-danger text-center ">
+                </div>
+            </div>
+        </div>
+        <div id="messageGood" class="mt-2 row" style="display:none;" >
+            <div class="col-12">
+                <div id="messageAlert" class=" mx-3 p-2 alert alert-success text-center ">
                 </div>
             </div>
         </div>

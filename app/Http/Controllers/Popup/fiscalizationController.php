@@ -64,6 +64,7 @@ class fiscalizationController extends Controller
 
             $products[$id] = [
                 'position' => $item->id,
+                'type' => $item->assortment->meta->type,
                 'name' => $Client->get($item->assortment->meta->href)->name,
                 'quantity' => $item->quantity,
                 'price' => $item->price / 100 ?: 0,
