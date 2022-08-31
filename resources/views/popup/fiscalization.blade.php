@@ -70,8 +70,6 @@
 
                             let sum = window.document.getElementById("sum").innerHTML;
                             if (!sum) sum = 0;
-                            console.log('sum = ' + sum);
-                            console.log('parseFloat(sum) = ' + parseFloat(sum));
                             window.document.getElementById("sum").innerHTML = parseFloat(sum) + parseFloat(products[i].final);
                             window.document.getElementById(i).style.display = "block";
                         } else {
