@@ -242,7 +242,7 @@
                 entity_type: entity_type,
                 money_card: money_card,
                 money_cash: money_cash,
-                pay_type: pay_type.toString,
+                pay_type: pay_type,
                 position: JSON.stringify(products),
             };
             let final = url + formatParams(params);
