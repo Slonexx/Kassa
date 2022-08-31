@@ -198,6 +198,34 @@
         function sendKKM(pay_type){
             window.document.getElementById("getKKM").style.display = "none";
             $('#downL').modal('show');
+
+            let money_card = window.document.getElementById('card').value;
+            let money_cash = window.document.getElementById('cash').value;
+            let SelectorInfo = document.getElementById('valueSelector');
+            let option = SelectorInfo.options[SelectorInfo.selectedIndex];
+            if (option.value === '0'){
+                if (!money_cash) {
+                    window.document.getElementById('messageAlert').innerText = 'Вы не ввели сумму';
+                    window.document.getElementById('message').style.display = "block";
+                    $('#downL').modal('hide');
+                }
+            }
+            if (option.value === '1'){
+                if (!money_card) {
+                    window.document.getElementById('messageAlert').innerText = 'Вы не ввели сумму';
+                    window.document.getElementById('message').style.display = "block";
+                    $('#downL').modal('hide');
+                }
+            }
+            if (option.value === '2'){
+                if (!money_card && !money_cash){
+                    window.document.getElementById('messageAlert').innerText = 'Вы не ввели сумму';
+                    window.document.getElementById('message').style.display = "block";
+                    $('#downL').modal('hide');
+                }
+            }
+
+
             //let url = 'http://rekassa/Popup/customerorder/send';
             let url = 'https://smartrekassa.kz/Popup/customerorder/send';
 
@@ -207,23 +235,6 @@
                     products[i] = window.document.getElementById('productId_'+i).innerText
                 }
             }
-            let money_card = window.document.getElementById('card').value;
-            let money_cash = window.document.getElementById('cash').value;
-
-            if (!money_card) {
-                console.log('card = ' + money_card);
-            }
-            if (!money_cash) {
-                console.log('cash = ' + money_cash);
-            }
-
-
-                if (!money_card && !money_cash){
-                    window.document.getElementById('messageAlert').innerText = 'Вы не ввели сумму';
-                    window.document.getElementById('message').style.display = "block";
-                    $('#downL').modal('hide');
-                }
-
             let params = {
                 accountId: accountId,
                 object_Id: object_Id,
@@ -234,7 +245,6 @@
                 position: JSON.stringify(products),
             };
             let final = url + formatParams(params);
-            console.log('final = ' + final);
 
             let xmlHttpRequest = new XMLHttpRequest();
             xmlHttpRequest.addEventListener("load", function () {
@@ -247,7 +257,6 @@
                     window.document.getElementById("closeShift").style.display = "block";
                     $('#downL').modal('hide');
                     let response = json.response;
-                    logReceivedMessage(response.id);
                     id_ticket = response.id;
                 } else {
                     window.document.getElementById('messageAlert').innerText = "ошибка";
@@ -267,7 +276,6 @@
                 xmlHttpRequest.send();
                 $('#downL').modal('hide');
             }
-
 
         }
 
