@@ -230,7 +230,7 @@
                     modalShowHide = 'hide'
                 }
             }
-
+            console.log('modalShowHide = ' + modalShowHide);
             //let url = 'http://rekassa/Popup/customerorder/send';
             let url = 'https://smartrekassa.kz/Popup/customerorder/send';
 
