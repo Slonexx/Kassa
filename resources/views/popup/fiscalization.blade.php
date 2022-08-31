@@ -40,6 +40,7 @@
                     accountId: accountId,
                 };
                 let final = url + formatParams(params);
+                console.log('final = ' + final)
 
                 let xmlHttpRequest = new XMLHttpRequest();
                 xmlHttpRequest.addEventListener("load", function () { $('#lDown').modal('hide');

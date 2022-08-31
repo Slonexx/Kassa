@@ -37,7 +37,6 @@
         function fiscalization(){
 
             Global_messageId++;
-            console.log('Global objectId = ' + Global_object_Id);
             var sendingMessage = {
                 name: "ShowPopupRequest",
                 messageId: Global_messageId,
