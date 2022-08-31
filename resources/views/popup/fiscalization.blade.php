@@ -202,15 +202,18 @@
             let url = 'https://smartrekassa.kz/Popup/customerorder/send';
 
             let products = [];
-
             for (let i = 0; i < 20; i++) {
                 if ( window.document.getElementById(i).style.display === 'block' ) {
                     products[i] = window.document.getElementById('productId_'+i).innerText
                 }
             }
-            logReceivedMessage(products);
             let money_card = window.document.getElementById('card').value;
             let money_cash = window.document.getElementById('cash').value;
+                if (!money_card && !money_cash){
+                    window.document.getElementById('messageAlert').innerText = 'Вы не ввели сумму';
+                    window.document.getElementById('message').style.display = "block";
+                    $('#downL').modal('hide');
+                }
 
             let params = {
                 accountId: accountId,
@@ -223,6 +226,7 @@
             };
             let final = url + formatParams(params);
             console.log('final' + final);
+
             let xmlHttpRequest = new XMLHttpRequest();
             xmlHttpRequest.addEventListener("load", function () {
                 let json = JSON.parse(this.responseText);
@@ -242,9 +246,7 @@
                     window.document.getElementById("getKKM").style.display = "block";
                     $('#downL').modal('hide');
                 }
-
             });
-
 
             if (money_card) {
                 xmlHttpRequest.open("GET", final);
@@ -256,11 +258,7 @@
                 xmlHttpRequest.send();
                 $('#downL').modal('hide');
             }
-            if (!money_card && !money_cash){
-                window.document.getElementById('messageAlert').innerText = 'Вы не ввели сумму';
-                window.document.getElementById('message').style.display = "block";
-                $('#downL').modal('hide');
-            }
+
 
         }
 
