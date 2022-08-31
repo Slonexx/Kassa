@@ -225,6 +225,7 @@
                 position: JSON.stringify(products),
             };
             let final = url + formatParams(params);
+            console.log('final' + final);
             let xmlHttpRequest = new XMLHttpRequest();
             xmlHttpRequest.addEventListener("load", function () {
                 let json = JSON.parse(this.responseText);
