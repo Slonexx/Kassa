@@ -210,7 +210,7 @@
                     console.log('Вы не ввели сумму наличных')
                     window.document.getElementById('messageAlert').innerText = 'Вы не ввели сумму';
                     window.document.getElementById('message').style.display = "block";
-                    $('#downL').modal('hide');
+                    closeDown();
                 }
             }
             if (option.value == 1){
@@ -218,7 +218,7 @@
                     console.log('Вы не ввели сумму карт')
                     window.document.getElementById('messageAlert').innerText = 'Вы не ввели сумму';
                     window.document.getElementById('message').style.display = "block";
-                    $('#downL').modal('hide');
+                    closeDown();
                 }
             }
             if (option.value == 2){
@@ -226,7 +226,7 @@
                     console.log('Вы не ввели сумму наличных и карт')
                     window.document.getElementById('messageAlert').innerText = 'Вы не ввели сумму';
                     window.document.getElementById('message').style.display = "block";
-                    $('#downL').modal('hide');
+                    closeDown();
                 }
             }
             console.log('прошел проверки')
@@ -372,6 +372,7 @@
         }
         function closeDown(){
             $('#lDown').modal('hide');
+            $('#downL').modal('hide');
         }
 
     </script>
