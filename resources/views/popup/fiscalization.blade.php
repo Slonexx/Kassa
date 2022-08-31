@@ -203,6 +203,7 @@
             let money_cash = window.document.getElementById('cash').value;
             let SelectorInfo = document.getElementById('valueSelector');
             let option = SelectorInfo.options[SelectorInfo.selectedIndex];
+            console.log('option = ' + option.value);
             if (option.value === '0'){
                 if (!money_cash) {
                     window.document.getElementById('messageAlert').innerText = 'Вы не ввели сумму';
@@ -249,6 +250,7 @@
             let xmlHttpRequest = new XMLHttpRequest();
             xmlHttpRequest.addEventListener("load", function () {
                 let json = JSON.parse(this.responseText);
+                console.log('json = ' + JSON.stringify(json))
                 if (json.message === 'Ticket created!'){
                     window.document.getElementById("messageGoodAlert").innerText = "Чек создан";
                     window.document.getElementById("messageGood").style.display = "block";
