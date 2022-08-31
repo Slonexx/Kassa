@@ -51,7 +51,7 @@
 
                     for (var i = 0; i < products.length; i++) {
 
-                        if (products[i].type !== 'service') {
+                        if (products[i].propety === true) {
                             window.document.getElementById('productId_' + i).innerHTML = products[i].position;
                             window.document.getElementById('productName_' + i).innerHTML = products[i].name;
                             window.document.getElementById('productQuantity_' + i).innerHTML = products[i].quantity;

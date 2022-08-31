@@ -60,11 +60,15 @@ class fiscalizationController extends Controller
                     $final = $final + ( $final * ($item->vat/100) );
                 }
             }
+            $uom_body = $Client->get($item->assortment->meta->href);
+            if (property_exists($uom_body, 'uom')){
+               $propety_uom = true;
+            } else $propety_uom = false;
 
 
             $products[$id] = [
                 'position' => $item->id,
-                'type' => $item->assortment->meta->type,
+                'propety' => $propety_uom,
                 'name' => $Client->get($item->assortment->meta->href)->name,
                 'quantity' => $item->quantity,
                 'price' => $item->price / 100 ?: 0,
