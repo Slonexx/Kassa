@@ -10,7 +10,7 @@
         const url = 'https://smartrekassa.kz/Popup/customerorder/show';
         let object_Id = '';
         let accountId = '';
-        let entity_type = 'customerorder';
+        let entity_type = '';
         let id_ticket = '';
 
         window.addEventListener("message", function(event) { openDown();
@@ -35,6 +35,7 @@
             if (receivedMessage.name === 'OpenPopup') {
                 object_Id = receivedMessage.popupParameters.object_Id;
                 accountId = receivedMessage.popupParameters.accountId;
+                entity_type = receivedMessage.popupParameters.entity_type;
                 let params = {
                     object_Id: object_Id,
                     accountId: accountId,

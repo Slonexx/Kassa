@@ -8,6 +8,7 @@
         let Global_messageId = 0;
         let Global_accountId = "{{$accountId}}";
         let Global_object_Id;
+        let entity_type = 'customerorder';
 
         window.addEventListener("message", function(event) {
             const receivedMessage = event.data;
@@ -44,6 +45,7 @@
                 popupParameters: {
                     object_Id:Global_object_Id,
                     accountId:Global_accountId,
+                    entity_type:entity_type,
                 },
             };
             logSendingMessage(sendingMessage);
