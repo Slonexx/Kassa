@@ -236,11 +236,12 @@
                     window.document.getElementById("closeShift").style.display = "block";
                     $('#downL').modal('hide');
                     let response = json.response;
-                    logReceivedMessage(json.response);
+                    logReceivedMessage(response.id);
                     id_ticket = response.id;
                 } else {
                     window.document.getElementById('messageAlert').innerText = "ошибка";
                     window.document.getElementById('message').style.display = "block";
+                    window.document.getElementById("getKKM").style.display = "block";
                     $('#downL').modal('hide');
                 }
 
