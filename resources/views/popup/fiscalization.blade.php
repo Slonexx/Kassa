@@ -15,7 +15,7 @@
 
 
         window.addEventListener("message", function(event) {
-            //var receivedMessage = {"name":"OpenPopup","messageId":10,"popupName":"fiscalizationPopup","popupParameters":{"object_Id":"75035b22-243a-11ed-0a80-07600015e5d3","accountId":"1dd5bd55-d141-11ec-0a80-055600047495"}}; /*event.data;*/
+            //var receivedMessage = {"name":"OpenPopup","messageId":1,"popupName":"fiscalizationPopup","popupParameters":{"object_Id":"4b1034eb-28e1-11ed-0a80-02ab00186962","accountId":"1dd5bd55-d141-11ec-0a80-055600047495"}}; /*event.data;*/
             var receivedMessage = event.data;
             window.document.getElementById("sum").innerHTML = '';
             window.document.getElementById("vat").innerHTML = "";
@@ -71,7 +71,7 @@
 
                             window.document.getElementById(i).style.display = "block";
                         } else {
-                            window.document.getElementById("message").innerText = "У некоторых позиций нету ед. изм.";
+                            window.document.getElementById("messageAlert").innerText = "Позиции у которых нету ед. изм. не добавились ";
                             window.document.getElementById("message").style.display = "block";
                         }
                     }
@@ -197,6 +197,7 @@
         }
 
         function sendKKM(pay_type){
+            window.document.getElementById("getKKM").style.display = "none";
             //let url = 'http://rekassa/Popup/customerorder/send';
             let url = 'https://smartrekassa.kz/Popup/customerorder/send';
 
@@ -223,16 +224,17 @@
             };
             let final = url + formatParams(params);
 
-            console.log(final);
-
             let xmlHttpRequest = new XMLHttpRequest();
             xmlHttpRequest.addEventListener("load", function () {
-                console.log('message = ' + this.responseText);
                 let json = JSON.parse(this.responseText);
                 if (json.message === 'Ticket created!'){
-                    window.document.getElementById("messageGood").innerText = "Чек создан";
+                    window.document.getElementById("messageGoodAlert").innerText = "Чек создан";
                     window.document.getElementById("messageGood").style.display = "block";
-                    updatePopup();
+                    window.document.getElementById("ShowCheck").style.display = "block";
+                    window.document.getElementById("refundCheck").style.display = "block";
+                } else {
+                    window.document.getElementById('messageAlert').innerText = "ошибка";
+                    window.document.getElementById('message').style.display = "block";
                 }
 
             });
@@ -249,6 +251,7 @@
             if (!money_card && !money_cash){
                 window.document.getElementById('messageAlert').innerText = 'Вы не ввели сумму';
                 window.document.getElementById('message').style.display = "block";
+                window.document.getElementById("getKKM").style.display = "block";
             }
 
         }
@@ -311,61 +314,7 @@
             xmlHttpRequest.addEventListener("load", function () {
 
                 let json = JSON.parse(this.responseText);
-                let products = json.products;
-                id_ticket = json.attributes.ticket_id;
-                logReceivedMessage(products);
 
-                for (var i = 0; i < products.length; i++) {
-                    window.document.getElementById('productId_' + i).innerHTML = products[i].position;
-                    window.document.getElementById('productName_' + i).innerHTML = products[i].name;
-                    window.document.getElementById('productQuantity_' + i).innerHTML = products[i].quantity;
-                    window.document.getElementById('productPrice_' + i).innerHTML = products[i].price;
-                    if (products[i].vat === 0)  window.document.getElementById('productVat_' + i).innerHTML = "без НДС";
-                    else window.document.getElementById('productVat_' + i).innerHTML = products[i].vat + '%';
-                    window.document.getElementById('productDiscount_' + i).innerHTML = products[i].discount + '%';
-                    window.document.getElementById('productFinal_' + i).innerHTML = products[i].final;
-
-
-
-                    window.document.getElementById(i).style.display = "block";
-                }
-
-
-
-                window.document.getElementById("numberOrder").innerHTML = json.name;
-                window.document.getElementById("cash").value = '';
-                window.document.getElementById("sum").innerHTML = json.sum;
-
-
-
-                if (json.vat == null) {
-                    window.document.getElementById("vat").innerHTML = "";
-                    window.document.getElementById("vat").style.display = "none";
-                    window.document.getElementById("vatIncluded").style.display = "none";
-                }
-                else if (json.vat.vatIncluded === true) {
-                    window.document.getElementById("vat").innerHTML = "";
-                    window.document.getElementById("vat").style.display = "none";
-                    window.document.getElementById("vatIncluded").style.display = "block";
-                } else {
-                    window.document.getElementById("vat").style.display = "block";
-                    window.document.getElementById("vat").innerHTML = json.vat.vatSum;
-                    window.document.getElementById("vatIncluded").style.display = "none";
-                }
-
-
-
-                window.document.getElementById("getKKM").style.display = "none";
-                window.document.getElementById("ShowCheck").style.display = "none";
-                window.document.getElementById("refundCheck").style.display = "none";
-                if (json.attributes != null){
-                    if (json.attributes.ticket_id != null){
-                        window.document.getElementById("ShowCheck").style.display = "block";
-                        window.document.getElementById("refundCheck").style.display = "block";
-                    } else {
-                        window.document.getElementById("getKKM").style.display = "block";
-                    }
-                } else  window.document.getElementById("getKKM").style.display = "block";
 
             });
             xmlHttpRequest.open("GET", final);
@@ -421,7 +370,7 @@
         </div>
         <div id="messageGood" class="mt-2 row" style="display:none;" >
             <div class="col-12">
-                <div id="messageAlert" class=" mx-3 p-2 alert alert-success text-center ">
+                <div id="messageGoodAlert" class=" mx-3 p-2 alert alert-success text-center ">
                 </div>
             </div>
         </div>
@@ -482,7 +431,7 @@
                 <div class="col-3">
                     <div class="row">
                         <div class="col-5">
-                            <div class="mx-1 mt-1 bg-warning p-1 rounded ">Тип оплаты</div>
+                            <div class="mx-1 mt-1 bg-warning p-1 rounded text-center">Тип оплаты</div>
                         </div>
                         <div class="col-7">
                             <select onchange="SelectorSum(valueSelector)" id="valueSelector" class="form-select">
