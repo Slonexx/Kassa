@@ -277,6 +277,9 @@
             }
 
             $('#downL').modal(modalShowHide);
+            $('#downL').modal(modalShowHide);
+            $('#downL').modal(modalShowHide);
+            closeDown();
         }
 
         function closeShift(){
@@ -496,7 +499,6 @@
                 </div>
             </div>
         </div>
-
     </div>
 
 
