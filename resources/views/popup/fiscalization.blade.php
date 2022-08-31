@@ -246,11 +246,11 @@
                 position: JSON.stringify(products),
             };
             let final = url + formatParams(params);
-
+            console.log('final = ' + final);
             let xmlHttpRequest = new XMLHttpRequest();
             xmlHttpRequest.addEventListener("load", function () {
                 let json = JSON.parse(this.responseText);
-                console.log('json = ' + JSON.stringify(json))
+                console.log('json = ' + JSON.stringify(json));
                 if (json.message === 'Ticket created!'){
                     window.document.getElementById("messageGoodAlert").innerText = "Чек создан";
                     window.document.getElementById("messageGood").style.display = "block";
@@ -266,6 +266,8 @@
                     window.document.getElementById("getKKM").style.display = "block";
                     $('#downL').modal('hide');
                 }
+
+                $('#downL').modal('hide');
             });
 
             if (money_card) {
