@@ -223,7 +223,6 @@
                 position: JSON.stringify(products),
             };
             let final = url + formatParams(params);
-            console.log('final = ' + final)
             let xmlHttpRequest = new XMLHttpRequest();
             xmlHttpRequest.addEventListener("load", function () {
                 let json = JSON.parse(this.responseText);
@@ -234,8 +233,8 @@
                     window.document.getElementById("refundCheck").style.display = "block";
                     window.document.getElementById("closeShift").style.display = "block";
                     $('#downL').modal('hide');
-                    /*let attributes = json.attributes;
-                    id_ticket = attributes.ticket_id;*/
+                    let response = json.response;
+                    id_ticket = response.id;
                 } else {
                     window.document.getElementById('messageAlert').innerText = "ошибка";
                     window.document.getElementById('message').style.display = "block";
