@@ -198,7 +198,8 @@
 
         function sendKKM(pay_type){
             window.document.getElementById("getKKM").style.display = "none";
-            $('#downL').modal('show');
+            let modalShowHide = 'show';
+            $('#downL').modal(modalShowHide);
 
             let money_card = window.document.getElementById('card').value;
             let money_cash = window.document.getElementById('cash').value;
@@ -210,7 +211,7 @@
                     console.log('Вы не ввели сумму наличных')
                     window.document.getElementById('messageAlert').innerText = 'Вы не ввели сумму';
                     window.document.getElementById('message').style.display = "block";
-                    closeDown();
+                    modalShowHide = 'hide'
                 }
             }
             if (option.value == 1){
@@ -218,7 +219,7 @@
                     console.log('Вы не ввели сумму карт')
                     window.document.getElementById('messageAlert').innerText = 'Вы не ввели сумму';
                     window.document.getElementById('message').style.display = "block";
-                    closeDown();
+                    modalShowHide = 'hide'
                 }
             }
             if (option.value == 2){
@@ -226,65 +227,56 @@
                     console.log('Вы не ввели сумму наличных и карт')
                     window.document.getElementById('messageAlert').innerText = 'Вы не ввели сумму';
                     window.document.getElementById('message').style.display = "block";
-                    closeDown();
+                    modalShowHide = 'hide'
                 }
             }
-            console.log('прошел проверки')
 
             //let url = 'http://rekassa/Popup/customerorder/send';
             let url = 'https://smartrekassa.kz/Popup/customerorder/send';
 
-            let products = [];
-            for (let i = 0; i < 20; i++) {
-                if ( window.document.getElementById(i).style.display === 'block' ) {
-                    products[i] = window.document.getElementById('productId_'+i).innerText
+            if (modalShowHide === 'show'){
+                let products = [];
+                for (let i = 0; i < 20; i++) {
+                    if ( window.document.getElementById(i).style.display === 'block' ) {
+                        products[i] = window.document.getElementById('productId_'+i).innerText
+                    }
                 }
-            }
-            let params = {
-                accountId: accountId,
-                object_Id: object_Id,
-                entity_type: entity_type,
-                money_card: money_card,
-                money_cash: money_cash,
-                pay_type: pay_type,
-                position: JSON.stringify(products),
-            };
-            let final = url + formatParams(params);
-            console.log('final = ' + final);
-            let xmlHttpRequest = new XMLHttpRequest();
-            xmlHttpRequest.addEventListener("load", function () {
-                let json = JSON.parse(this.responseText);
-                console.log('json = ' + JSON.stringify(json));
-                if (json.message === 'Ticket created!'){
-                    window.document.getElementById("messageGoodAlert").innerText = "Чек создан";
-                    window.document.getElementById("messageGood").style.display = "block";
-                    window.document.getElementById("ShowCheck").style.display = "block";
-                    window.document.getElementById("refundCheck").style.display = "block";
-                    window.document.getElementById("closeShift").style.display = "block";
-                    $('#downL').modal('hide');
-                    let response = json.response;
-                    id_ticket = response.id;
-                } else {
-                    window.document.getElementById('messageAlert').innerText = "ошибка";
-                    window.document.getElementById('message').style.display = "block";
-                    window.document.getElementById("getKKM").style.display = "block";
-                    $('#downL').modal('hide');
-                }
-
-                $('#downL').modal('hide');
-            });
-
-            if (money_card) {
+                let params = {
+                    accountId: accountId,
+                    object_Id: object_Id,
+                    entity_type: entity_type,
+                    money_card: money_card,
+                    money_cash: money_cash,
+                    pay_type: pay_type,
+                    position: JSON.stringify(products),
+                };
+                let final = url + formatParams(params);
+                console.log('final = ' + final);
+                let xmlHttpRequest = new XMLHttpRequest();
+                xmlHttpRequest.addEventListener("load", function () {
+                    let json = JSON.parse(this.responseText);
+                    if (json.message === 'Ticket created!'){
+                        window.document.getElementById("messageGoodAlert").innerText = "Чек создан";
+                        window.document.getElementById("messageGood").style.display = "block";
+                        window.document.getElementById("ShowCheck").style.display = "block";
+                        window.document.getElementById("refundCheck").style.display = "block";
+                        window.document.getElementById("closeShift").style.display = "block";
+                        modalShowHide = 'hide';
+                        let response = json.response;
+                        id_ticket = response.id;
+                    } else {
+                        window.document.getElementById('messageAlert').innerText = "ошибка";
+                        window.document.getElementById('message').style.display = "block";
+                        window.document.getElementById("getKKM").style.display = "block";
+                        modalShowHide = 'hide';
+                    }
+                });
                 xmlHttpRequest.open("GET", final);
                 xmlHttpRequest.send();
-                $('#downL').modal('hide');
-            }
-            if (money_cash) {
-                xmlHttpRequest.open("GET", final);
-                xmlHttpRequest.send();
-                $('#downL').modal('hide');
+                modalShowHide = 'hide';
             }
 
+            $('#downL').modal(modalShowHide);
         }
 
         function closeShift(){
