@@ -69,6 +69,8 @@
                             window.document.getElementById('productFinal_' + i).innerHTML = products[i].final;
 
                             let sum = window.document.getElementById("sum").innerHTML;
+                            console.log('sum = ' + sum);
+                            console.log('parseFloat(sum) = ' + parseFloat(sum));
                             window.document.getElementById("sum").innerHTML = parseFloat(sum) + parseFloat(products[i].final);
                             window.document.getElementById(i).style.display = "block";
                         } else {
