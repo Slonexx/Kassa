@@ -21,7 +21,7 @@ class demandEditController extends Controller
 
 
 
-        return view( 'widget.demand', [
+        return view( 'widget.salesreturn', [
             'accountId' => $accountId,
             'entity' => $entity,
             'worker' => $Workers->access,
