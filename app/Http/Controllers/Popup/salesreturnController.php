@@ -12,7 +12,7 @@ class salesreturnController extends Controller
 {
     public function salesreturnPopup(Request $request){
 
-        return view( 'popup.fiscalization', [
+        return view( 'popup.salesreturn', [
 
         ] );
     }
