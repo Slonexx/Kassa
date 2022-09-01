@@ -13,6 +13,7 @@ use App\Http\Controllers\Web\postSetting\postDeviceController;
 use App\Http\Controllers\Web\postSetting\postWorkerController;
 use App\Http\Controllers\Web\settingController;
 use App\Http\Controllers\Widget\customerorder\customerorderEditController;
+use App\Http\Controllers\Widget\demandEditController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('delete/{accountId}', [DeleteVendorApiController::class, 'delete']);
@@ -22,7 +23,7 @@ Route::get('/{accountId}/', [indexController::class, 'indexShow'])->name('main')
 
 
 Route::get('/widget/customerorder', [customerorderEditController::class, 'customerorder']);
-Route::get('/widget/demand', [customerorderEditController::class, 'demand']);
+Route::get('/widget/demand', [demandEditController::class, 'demand']);
 
 Route::get('/Popup/customerorder', [fiscalizationController::class, 'fiscalizationPopup']);
 Route::get('/Popup/customerorder/show', [fiscalizationController::class, 'ShowFiscalizationPopup']);
