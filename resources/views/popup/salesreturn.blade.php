@@ -336,7 +336,7 @@
                         <span class="text-white mt-1"> re:Kassa </span>
                     </div>
                     <div class="col-3 mt-1">
-                        <span class="text-white">Отгрузка №</span> <span id="numberOrder" class="mx-2 text-white"></span>
+                        <span class="text-white">Возврат покупателя №</span> <span id="numberOrder" class="mx-2 text-white"></span>
                     </div>
                     <div class="col-6"></div>
                 </div>
