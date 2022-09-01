@@ -83,7 +83,7 @@
             <button type="submit" onclick="" class="myButton btn "> <i class="fa-solid fa-arrow-rotate-right"></i> </button>
         </div>
     </div>
-    <div id="workerAccess_yes" class="row mt-2rounded bg-white" style="display:none;">
+    <div id="workerAccess_yes" class="row mt-2 rounded bg-white" style="display:none;">
         <div class="col-1"></div>
         <button onclick="fiscalization()" class="col-10 btn btn-warning text-black rounded-pill"> Возврат </button>
     </div>

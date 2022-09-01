@@ -19,7 +19,6 @@
             window.document.getElementById("vat").innerHTML = "";
             window.document.getElementById("message").style.display = "none";
             window.document.getElementById("messageGood").style.display = "none";
-            window.document.getElementById("closeButtonId").style.display = "none";
 
             for (let i = 0; i < 20; i++) {
                 window.document.getElementById(i).style.display = "none";
@@ -44,7 +43,6 @@
                 let xmlHttpRequest = new XMLHttpRequest();
                 xmlHttpRequest.addEventListener("load", function () { $('#lDown').modal('hide');
 
-                    window.document.getElementById("closeButtonId").style.display = "block";
                     document.getElementById('Visibility_Cash').style.display = 'block';
                     document.getElementById('Visibility_Card').style.display = 'none';
                     window.document.getElementById("getKKM").style.display = "none";
@@ -197,7 +195,6 @@
             let money_cash = window.document.getElementById('cash').value;
             let SelectorInfo = document.getElementById('valueSelector');
             let option = SelectorInfo.options[SelectorInfo.selectedIndex];
-            console.log('option = ' + option.value);
             if (option.value === 0){
                 if (!money_cash) {
                     window.document.getElementById('messageAlert').innerText = 'Вы не ввели сумму';
