@@ -195,21 +195,21 @@
             let money_cash = window.document.getElementById('cash').value;
             let SelectorInfo = document.getElementById('valueSelector');
             let option = SelectorInfo.options[SelectorInfo.selectedIndex];
-            if (option.value === 0){
+            if (option.value == 0){
                 if (!money_cash) {
                     window.document.getElementById('messageAlert').innerText = 'Вы не ввели сумму';
                     window.document.getElementById('message').style.display = "block";
                     modalShowHide = 'hide'
                 }
             }
-            if (option.value === 1){
+            if (option.value == 1){
                 if (!money_card) {
                     window.document.getElementById('messageAlert').innerText = 'Вы не ввели сумму';
                     window.document.getElementById('message').style.display = "block";
                     modalShowHide = 'hide'
                 }
             }
-            if (option.value === 2){
+            if (option.value == 2){
                 if (!money_card && !money_cash){
                     window.document.getElementById('messageAlert').innerText = 'Вы не ввели сумму';
                     window.document.getElementById('message').style.display = "block";
