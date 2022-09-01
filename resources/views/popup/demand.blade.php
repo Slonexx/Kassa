@@ -320,24 +320,33 @@
             }
 
         }
-
+        function openDown(){
+            $('#lDown').modal('show');
+        }
+        function closeDown(){
+            $('#lDown').modal('hide');
+            $('#downL').modal('hide');
+        }
     </script>
 
 
     <div class="main-container">
         <div class="row gradient rounded p-2">
             <div class="col-9">
-                <div class="mx-2"> <img src="https://app.rekassa.kz/static/logo.png" width="35" height="35"  alt="">
-                    <span class="text-white"> re:Kassa </span>
-                    <span class="mx-5 text-white">Заказ покупателя №</span>
-                    <span id="numberOrder" class="text-white"></span>
+                <div class="mx-2 row">
+                    <div class="col-2">
+                        <img src="https://app.rekassa.kz/static/logo.png" width="35" height="35"  alt="">
+                        <span class="text-white mt-1"> re:Kassa </span>
+                    </div>
+                    <div class="col-3 mt-1">
+                        <span class="text-white">Отгрузка №</span> <span id="numberOrder" class="mx-2 text-white"></span>
+                    </div>
+                    <div class="col-6"></div>
                 </div>
             </div>
             <div class="col-3">
                 <div class="row">
                     <div class="col-9 text-center">
-                        <button id="closeButtonId" type="button" class=" mx-3 btn btn-danger"
-                                data-bs-toggle="modal" data-bs-target="#modal" >Закрыть смену</button>
                     </div>
                     <div class="col-3">
                         <button type="submit" onclick="updatePopup()" class="myButton btn "> <i class="fa-solid fa-arrow-rotate-right"></i> </button>
