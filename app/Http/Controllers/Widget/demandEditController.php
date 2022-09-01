@@ -17,7 +17,7 @@ class demandEditController extends Controller
 
         $Workers = new getWorkerID($employee->id);
 
-        $entity = 'counterparty';
+        $entity = 'demand';
 
 
 

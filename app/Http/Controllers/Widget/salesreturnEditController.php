@@ -17,7 +17,7 @@ class salesreturnEditController extends Controller
 
         $Workers = new getWorkerID($employee->id);
 
-        $entity = 'counterparty';
+        $entity = 'salesreturn';
 
 
 
