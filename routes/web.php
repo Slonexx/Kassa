@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Config\DeleteVendorApiController;
 use App\Http\Controllers\deleteData\deleteDevice;
+use App\Http\Controllers\Popup\demandController;
 use App\Http\Controllers\Popup\fiscalizationController;
 use App\Http\Controllers\Web\getSetting\BaseController;
 use App\Http\Controllers\Web\getSetting\DeviceController;
@@ -21,11 +22,17 @@ Route::get('/{accountId}/', [indexController::class, 'indexShow'])->name('main')
 
 
 Route::get('/widget/customerorder', [customerorderEditController::class, 'customerorder']);
+Route::get('/widget/demand', [customerorderEditController::class, 'demand']);
 
 Route::get('/Popup/customerorder', [fiscalizationController::class, 'fiscalizationPopup']);
 Route::get('/Popup/customerorder/show', [fiscalizationController::class, 'ShowFiscalizationPopup']);
 Route::get('/Popup/customerorder/send', [fiscalizationController::class, 'SendFiscalizationPopup']);
 Route::get('/Popup/customerorder/closeShift', [fiscalizationController::class, 'closeShiftPopup']);
+
+Route::get('/Popup/demand', [demandController::class, 'DemandPopup']);
+Route::get('/Popup/demand/show', [demandController::class, 'ShowDemandPopup']);
+Route::get('/Popup/demand/send', [demandController::class, 'SendDemandPopup']);
+
 
 
 Route::get('/Setting/{accountId}', [BaseController::class, 'getBase'])->name('getBase');
