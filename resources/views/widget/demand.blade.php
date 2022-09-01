@@ -41,7 +41,7 @@
             var sendingMessage = {
                 name: "ShowPopupRequest",
                 messageId: Global_messageId,
-                popupName: "fiscalizationPopup",
+                popupName: "demandPopup",
                 popupParameters: {
                     object_Id:Global_object_Id,
                     accountId:Global_accountId,
