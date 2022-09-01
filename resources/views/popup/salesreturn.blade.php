@@ -5,9 +5,9 @@
 
     <script>
 
-        //const url = 'http://rekassa/Popup/customerorder/show';
+        //const url = 'http://rekassa/Popup/salesreturn/show';
 
-        const url = 'https://smartrekassa.kz/Popup/demand/show';
+        const url = 'https://smartrekassa.kz/Popup/salesreturn/show';
         let object_Id = '';
         let accountId = '';
         let entity_type = '';
@@ -218,7 +218,7 @@
             }
 
             //let url = 'http://rekassa/Popup/demand/send';
-            let url = 'https://smartrekassa.kz/Popup/demand/send';
+            let url = 'https://smartrekassa.kz/Popup/salesreturn/send';
 
             if (modalShowHide === 'show'){
                 $('#downL').modal('toggle');
@@ -238,7 +238,6 @@
                     position: JSON.stringify(products),
                 };
                 let final = url + formatParams(params);
-                console.log('final = ' + final);
                 let xmlHttpRequest = new XMLHttpRequest();
                 xmlHttpRequest.addEventListener("load", function () {
                     $('#downL').modal('hide');
