@@ -19,17 +19,17 @@ class indexController extends Controller
             $employee = $vendorAPI->context($contextKey);
             $accountId = $employee->accountId;
 
-        //$isAdmin = $employee->permissions->admin->view;
+        $isAdmin = $employee->permissions->admin->view;
 
         return redirect()->route('main', [
             'accountId' => $accountId,
-            //'isAdmin' => $isAdmin,
-        ] );
+        ] )->with(['isAdmin' => $isAdmin,]);
     }
 
-    public function indexShow($accountId){
+    public function indexShow($accountId, Request $request){
+        $isAdmin = $request->isAdmin;
         return view("main.index" , [
             'accountId' => $accountId,
-        ] );
+        ] )->with(['isAdmin' => $isAdmin,]);
     }
 }
