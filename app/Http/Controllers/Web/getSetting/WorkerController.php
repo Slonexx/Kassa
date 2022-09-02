@@ -13,7 +13,9 @@ use Illuminate\Support\Facades\Http;
 
 class WorkerController extends Controller
 {
-    public function getWorker($accountId){
+    public function getWorker($accountId, Request $request){
+        $isAdmin = $request->isAdmin;
+        $message = $request->message;
 
         $Device = new getDevices($accountId);
         $Device = $Device->devices;
@@ -58,6 +60,8 @@ class WorkerController extends Controller
 
         return view('setting.worker', [
             'accountId' => $accountId,
+            'isAdmin' => $isAdmin,
+            'message'=>$message,
             'employee' => $Body_employee,
             'security' => $security,
             'workers' => $Workers,

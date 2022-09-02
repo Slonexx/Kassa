@@ -18,29 +18,33 @@
                 </div>
             </div>
             <br>
-            <div class="toc-list-h1">
-                <a class="mt-2 mb-2" href="/{{$accountId}}">Главная </a>
-                <div>
-                    <button class="dropdown-btn">Настройки <i class="fa fa-caret-down"></i> </button>
-                    <div class="dropdown-container">
-                        <a href="/Setting/{{$accountId}}"> Основная </a>
-                        <a href="/Setting/Device/{{$accountId}}"> Кассовый аппарат </a>
-                        <a href="/Setting/Worker/{{$accountId}}"> Сотрудники </a>
+                <div class="toc-list-h1">
+                    <a class="mt-2 mb-2" href="/{{$accountId}}?isAdmin={{ request()->isAdmin }}">Главная </a>
+                    <div>
+                        @if ( request()->isAdmin == null )
+                        @else
+                            @if( request()->isAdmin == 'ALL')
+                                    <button class="dropdown-btn">Настройки <i class="fa fa-caret-down"></i> </button>
+                                    <div class="dropdown-container">
+                                        <a href="/Setting/{{$accountId}}?isAdmin={{ request()->isAdmin }}"> Основная </a>
+                                        <a href="/Setting/Device/{{$accountId}}?isAdmin={{ request()->isAdmin }}"> Кассовый аппарат </a>
+                                        <a href="/Setting/Worker/{{$accountId}}?isAdmin={{ request()->isAdmin }}"> Сотрудники </a>
+                                    </div>
+                            @endif
+                        @endif
                     </div>
                 </div>
-
-            </div>
 
             <div class="mt-2 mb-2" >
                 <button class="dropdown-btn">Помощь <i class="fa fa-caret-down"></i> </button>
                     <div class="dropdown-container">
-                        <a target="_blank" href="">
+                        <a target="_blank" href="https://smartuds.bitrix24.site/contact/">
                             <i class="fa-solid fa-address-book"></i>
                             Контакты </a>
                         <a target="_blank" href="https://api.whatsapp.com/send/?phone=77232400545&text=" >
                             <i class="fa-brands fa-whatsapp"></i>
                             Написать на WhatsApp </a>
-                        <a target="_blank" href="" >
+                        <a target="_blank" href="https://smartrekassa.bitrix24.site/instruktsiiponastroyke" >
                             <i class="fa-solid fa-chalkboard-user"></i>
                              Инструкция </a>
                     </div>

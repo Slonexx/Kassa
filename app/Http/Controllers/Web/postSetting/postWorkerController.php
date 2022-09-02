@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 class postWorkerController extends Controller
 {
     public function postWorker(Request $request, $accountId){
+        $isAdmin = $request->isAdmin;
         $allRequest = $request->request;
         $devices = new getDevices($accountId);
         $devices = $devices->devices;
@@ -31,7 +32,10 @@ class postWorkerController extends Controller
             if ($First['znm'] == null) DataBaseService::createWorker($item['id'], $item['znm'], $item['access']);
             else DataBaseService::updateWorker($item['id'], $item['znm'], $item['access']);
         }
-
-        return redirect()->route('getWorker', [ 'accountId' => $accountId ]);
+        $message = [
+            'alert' => ' alert alert-success alert-dismissible fade show in text-center ',
+            'message' => ' Настройки сохранились ',
+        ];
+        return redirect()->route('getWorker', [ 'accountId' => $accountId, 'isAdmin' => $isAdmin, 'message'=>$message ]);
     }
 }

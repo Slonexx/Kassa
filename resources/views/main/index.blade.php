@@ -1,19 +1,10 @@
 @extends('layout')
 
 @section('content')
-
-    {{--<form action="  {{ route( 'CheckSave' , ['accountId' => $accountId] ) }} " method="post">
-    @csrf <!-- {{ csrf_field() }} -->
-        <button class="btn btn-outline-dark textHover"> check </button>
-
-    </form>--}}
-
-    @php
-    $max = random_int(1, 1000);
-    for ( $i = 1; $i<=$max; $i++ ){
-    echo $i. " ";
-    }
-
-    @endphp
+    @if ( request()->isAdmin != null and request()->isAdmin != 'ALL' )
+    <div class="mt-2 alert alert-danger alert-dismissible fade show in text-center  "> Доступ к настройкам есть только у администратора
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    @endif
 @endsection
 

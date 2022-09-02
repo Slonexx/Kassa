@@ -151,7 +151,7 @@
              role="alert" style="display: none"> Уже максимальное количество кассовых аппаратов </div>
 
 
-        <form action="/Setting/Device/{{$accountId}}" method="post" class="mt-3">
+        <form action="/Setting/Device/{{$accountId}}?isAdmin={{ $isAdmin }}" method="post" class="mt-3">
         @csrf <!-- {{ csrf_field() }} -->
 
             <div id="device_1" style="{{$device_1['visible']}}" >

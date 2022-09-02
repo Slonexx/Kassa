@@ -15,7 +15,7 @@ use Illuminate\Http\Request;
 
 class postDeviceController extends Controller
 {
-    public function postDevice(Request $request, $accountId){
+    public function postDevice(Request $request, $accountId){ $isAdmin = $request->isAdmin;
         $Setting = new getSetting($accountId);
 
 
@@ -39,13 +39,13 @@ class postDeviceController extends Controller
 
                     $message = [
                         'alert' => ' alert alert-danger alert-dismissible fade show in text-center ',
-                        'message' => ' Api key или заводской номер кассового аппарата с паролем не верный ! ',
+                        'message' => ' Заводской номер кассового аппарата или паролем не правильные ! ',
                     ];
-
-                    return view('setting.base', [
+                    $Devices = new getDevices($accountId);
+                    return view('setting.device', [
                         'accountId' => $accountId,
-                        'apiKey' => $Setting->apiKey,
-                        'paymentDocument' => $Setting->paymentDocument,
+                        'isAdmin' => $isAdmin,
+                        'devices' => $Devices->devices,
                         'message' => $message,
                     ]);
                 }
@@ -64,25 +64,14 @@ class postDeviceController extends Controller
 
              }
          }*/
-        $message = [
-            'alert' => ' alert alert-success alert-dismissible fade show in text-center ',
-            'message' => ' Настройки сохранились, настройки доступ для сотрудников в настройки →  сотрудники ',
-        ];
 
         $cfg = new cfg();
         $app = AppInstanceContoller::loadApp($cfg->appId, $accountId);
         $app->status = AppInstanceContoller::ACTIVATED;
-
         $vendorAPI = new VendorApiController();
         $vendorAPI->updateAppStatus($cfg->appId, $accountId, $app->getStatusName());
-
         $app->persist();
 
-        $Devices = new getDevices($accountId);
-        return view('setting.device', [
-            'accountId' => $accountId,
-            'devices' => $Devices->devices,
-            'message' => $message,
-        ]);
+        return redirect()->route('getWorker', ['accountId' => $accountId, 'isAdmin' => $isAdmin]);
     }
 }

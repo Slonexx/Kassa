@@ -10,7 +10,6 @@ class indexController extends Controller
 {
     public function Index(Request $request){
 
-
             $contextKey = $request->contextKey;
             if ($contextKey == null) {
                 return view("main.dump");

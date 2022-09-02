@@ -8,22 +8,20 @@ use Illuminate\Http\Request;
 
 class BaseController extends Controller
 {
-    public function getBase($accountId): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
+    public function getBase($accountId, Request $request): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
-
+        $isAdmin = $request->isAdmin;
         $Setting = new getSetting($accountId);
         $tokenMs = $Setting->tokenMs;
-        $apiKey = $Setting->apiKey;
         $paymentDocument = $Setting->paymentDocument;
 
         if ($tokenMs == null) {
-            $apiKey = "";
             $paymentDocument = "0";
         }
 
         return view('setting.base', [
             'accountId' => $accountId,
-            'apiKey' => $apiKey,
+            'isAdmin' => $isAdmin,
             'paymentDocument' => $paymentDocument,
         ]);
     }

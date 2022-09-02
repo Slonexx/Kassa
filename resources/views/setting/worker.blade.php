@@ -20,14 +20,14 @@
 
         @isset($message)
 
-            <div class="{{$message['alert']}}"> {{ $message['message'] }}
+            <div class="mt-2 {{$message['alert']}}"> {{ $message['message'] }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
 
         @endisset
 
 
-        <form action="/Setting/Worker/{{$accountId}}" method="post" class="mt-3">
+        <form action="/Setting/Worker/{{$accountId}}?isAdmin={{ $isAdmin }}" method="post" class="mt-3">
         @csrf <!-- {{ csrf_field() }} -->
 
             <div id="Workers">

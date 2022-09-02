@@ -8,12 +8,13 @@ use Illuminate\Http\Request;
 
 class DeviceController extends Controller
 {
-    public function getDevice($accountId): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
+    public function getDevice($accountId, Request $request): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
+        $isAdmin = $request->isAdmin;
         $Devices = new getDevices($accountId);
-
         return view('setting.device', [
             'accountId' => $accountId,
+            'isAdmin' => $isAdmin,
             'devices' => $Devices->devices,
         ]);
     }
