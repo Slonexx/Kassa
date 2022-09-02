@@ -29,9 +29,9 @@ class indexController extends Controller
 
     public function indexShow($accountId, Request $request){
         $isAdmin = $request->isAdmin;
-        dd($isAdmin);
         return view("main.index" , [
             'accountId' => $accountId,
-        ] )->with(['isAdmin' => $isAdmin,]);
+            'isAdmin' => $isAdmin,
+        ] );
     }
 }
