@@ -23,7 +23,8 @@ class indexController extends Controller
 
         return redirect()->route('main', [
             'accountId' => $accountId,
-        ] )->with(['isAdmin' => $isAdmin,]);
+            'isAdmin' => $isAdmin,
+        ] );
     }
 
     public function indexShow($accountId, Request $request){
