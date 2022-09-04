@@ -20,6 +20,13 @@ class WorkerController extends Controller
         $Device = new getDevices($accountId);
         $Device = $Device->devices;
 
+        if ( !$Device ){
+            return view('setting.no', [
+                'accountId' => $accountId,
+                'isAdmin' => $isAdmin,
+            ]);
+        }
+
         $Workers = null;
         foreach ($Device as $item){
             $Workers = new getWorkers($item->znm);
