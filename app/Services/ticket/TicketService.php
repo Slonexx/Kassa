@@ -130,7 +130,7 @@ class TicketService
                         "coins" => intval(round(floatval($totalSum)-intval($totalSum),2)*100),
                         ],
                     "taken" => [
-                            "bills" => intval($tookSum),
+                            "bills" => intval($money_cash),
                             "coins" => intval(round(floatval($tookSum)-intval($tookSum),2)*100),
                     ],
                     "change" => [
@@ -147,7 +147,7 @@ class TicketService
                     "payments" => $payments,
                     "amounts" => $amounts,
                 ];
-
+                //dd($body);
 /*                if (property_exists($jsonEntity,'vatSum')){
                 }*/
 
