@@ -53,6 +53,8 @@
                     window.document.getElementById("getKKM").style.display = "none";
                     window.document.getElementById("ShowCheck").style.display = "none";
                     window.document.getElementById("refundCheck").style.display = "none";
+
+                    let element = document.getElementById('valueSelector').value = 0;
                     document.getElementById('Visibility_Cash').style.display = 'block';
                     document.getElementById('Visibility_Card').style.display = 'none';
 
