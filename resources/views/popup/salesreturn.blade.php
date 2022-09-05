@@ -20,6 +20,10 @@
             window.document.getElementById("message").style.display = "none";
             window.document.getElementById("messageGood").style.display = "none";
 
+            document.getElementById('valueSelector').value = 0;
+            document.getElementById('Visibility_Cash').style.display = 'block';
+            document.getElementById('Visibility_Card').style.display = 'none';
+
             for (let i = 0; i < 20; i++) {
                 window.document.getElementById(i).style.display = "none";
                 window.document.getElementById('productName_' + i).innerHTML = '';
