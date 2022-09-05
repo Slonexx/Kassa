@@ -92,9 +92,10 @@
         <div class="col-10">
             <div class="text-center">
                 <div class="p-3 mb-2 bg-danger text-white">
-                    <i class="fa-solid fa-user-gear"></i>
-                    У вас нет доступа к данному виджету, сообщите администратору, чтобы он предоставил вам доступ
-                    <i class="fa-solid fa-ban "></i>
+                  <span class="s-min-10">
+                        У вас нет доступа к данному виджету, сообщите администратору, чтоб он вам предоставил доступ
+                        <i class="fa-solid fa-ban "></i>
+                  </span>
                 </div>
             </div>
         </div>
@@ -122,6 +123,9 @@
     .myButton:active {
         position: relative !important;
         top: 1px !important;
+    }
+    .s-min-10 {
+        font-size: 10px;
     }
 </style>
 
