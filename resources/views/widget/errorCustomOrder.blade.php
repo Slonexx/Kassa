@@ -17,11 +17,12 @@
     <div class="row mt-4 rounded bg-white">
         <div class="col-1"></div>
         <div class="col-10">
-            <div class="text-center s-min-10 ">
+            <div class="text-center">
                 <div class="p-3 mb-2 bg-danger text-white">
-                    <i class="fa-solid fa-user-gear"></i>
-                    У вас нет доступа к данному виджету, сообщите администратору, чтоб он вам предоставил доступ
-                    <i class="fa-solid fa-ban "></i>
+                    <span class="s-min-10">
+                        У вас нет доступа к данному виджету, сообщите администратору, чтоб он вам предоставил доступ
+                        <i class="fa-solid fa-ban "></i>
+                    </span>
                 </div>
             </div>
         </div>
