@@ -23,6 +23,7 @@
             window.document.getElementById("closeButtonId").style.display = "none";
             window.document.getElementById("cash").style.display = "block";
 
+
             for (var i = 0; i < 20; i++) {
                 window.document.getElementById(i).style.display = "none";
                 window.document.getElementById('productName_' + i).innerHTML = '';
@@ -52,6 +53,8 @@
                     window.document.getElementById("getKKM").style.display = "none";
                     window.document.getElementById("ShowCheck").style.display = "none";
                     window.document.getElementById("refundCheck").style.display = "none";
+                    document.getElementById('Visibility_Cash').style.display = 'block';
+                    document.getElementById('Visibility_Card').style.display = 'none';
 
                     let json = JSON.parse(this.responseText);
                     let products = json.products;
