@@ -125,7 +125,7 @@
             top: 1px !important;
         }
         .s-min-10 {
-            font-size: 10px;
+            font-size: 12px;
         }
     </style>
 
