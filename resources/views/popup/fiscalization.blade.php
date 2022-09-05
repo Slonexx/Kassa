@@ -21,6 +21,8 @@
             window.document.getElementById("message").style.display = "none";
             window.document.getElementById("messageGood").style.display = "none";
             window.document.getElementById("closeButtonId").style.display = "none";
+            window.document.getElementById("cash").style.display = "block";
+            window.document.getElementById("card").style.display = "none";
 
             for (var i = 0; i < 20; i++) {
                 window.document.getElementById(i).style.display = "none";
