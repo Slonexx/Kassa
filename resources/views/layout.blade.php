@@ -26,8 +26,8 @@
                             @if( request()->isAdmin == 'ALL')
                                     <button class="dropdown-btn">Настройки <i class="fa fa-caret-down"></i> </button>
                                     <div class="dropdown-container">
-                                        <a href="/Setting/{{$accountId}}?isAdmin={{ request()->isAdmin }}"> Основная </a>
                                         <a href="/Setting/Device/{{$accountId}}?isAdmin={{ request()->isAdmin }}"> Кассовый аппарат </a>
+                                        <a href="/Setting/Document/{{$accountId}}?isAdmin={{ request()->isAdmin }}"> Документ </a>
                                         <a href="/Setting/Worker/{{$accountId}}?isAdmin={{ request()->isAdmin }}"> Сотрудники </a>
                                     </div>
                             @endif

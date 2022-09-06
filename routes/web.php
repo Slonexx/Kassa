@@ -7,10 +7,12 @@ use App\Http\Controllers\Popup\fiscalizationController;
 use App\Http\Controllers\Popup\salesreturnController;
 use App\Http\Controllers\Web\getSetting\BaseController;
 use App\Http\Controllers\Web\getSetting\DeviceController;
+use App\Http\Controllers\Web\getSetting\DocumentController;
 use App\Http\Controllers\Web\getSetting\WorkerController;
 use App\Http\Controllers\Web\indexController;
 use App\Http\Controllers\Web\postSetting\postBaseController;
 use App\Http\Controllers\Web\postSetting\postDeviceController;
+use App\Http\Controllers\Web\postSetting\postDocumentController;
 use App\Http\Controllers\Web\postSetting\postWorkerController;
 use App\Http\Controllers\Web\settingController;
 use App\Http\Controllers\Widget\customerorder\customerorderEditController;
@@ -43,12 +45,12 @@ Route::get('/Popup/salesreturn/send', [salesreturnController::class, 'SendSalesr
 
 
 
-Route::get('/Setting/{accountId}', [BaseController::class, 'getBase'])->name('getBase');
-Route::post('/Setting/{accountId}', [postBaseController::class, 'postBase']);
-
-
 Route::get('/Setting/Device/{accountId}', [DeviceController::class, 'getDevice'])->name('getDevices');
 Route::post('/Setting/Device/{accountId}', [postDeviceController::class, 'postDevice']);
+
+
+Route::get('/Setting/Document/{accountId}', [DocumentController::class, 'getDocument'])->name('getDocument');
+Route::post('/Setting/Document/{accountId}', [postDocumentController::class, 'postDocument']);
 
 
 Route::get('/Setting/Worker/{accountId}', [WorkerController::class, 'getWorker'])->name('getWorker');

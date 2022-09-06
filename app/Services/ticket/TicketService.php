@@ -42,6 +42,7 @@ class TicketService
         $payType = $data['pay_type'];
 
         $tookSum = $money_card+$money_cash;
+        $money_cash_product = 0;
 
         if (is_null($money_card)) $money_card = 0;
         if (is_null($money_cash)) $money_cash = 0;
@@ -55,10 +56,6 @@ class TicketService
                 ],
                 "code" => 400
             ];
-
-        //$setting = new getSetting($accountId);
-        //$setting->tokenMs;
-        //take settings by accountId
 
         $Setting = new getSetting($accountId);
 
@@ -100,6 +97,7 @@ class TicketService
             $change = $tookSum - $totalSum;
 
             $items = $this->getItemsByHrefPositions($jsonEntity->positions->meta->href,$positions,$jsonEntity,$apiKeyMs);
+
             if (count($items) > 0 ){
 
                 $payments = [];
@@ -150,6 +148,7 @@ class TicketService
                 //dd($body);
 /*                if (property_exists($jsonEntity,'vatSum')){
                 }*/
+
 
                 //dd($body);
 
@@ -263,7 +262,7 @@ class TicketService
                                 ],
                                 "percent" => $row->vat * 1000,
                                 "taxType" => 100,
-                                "isInTotalSum" => true,
+                                "isInTotalSum" => $jsonEntity->vatIncluded,
                                 "taxationType" => 100,
                             ],
                         ];
@@ -308,7 +307,7 @@ class TicketService
                             ],
                             "percent" => $row->vat * 1000,
                             "taxType" => 100,
-                            "isInTotalSum" =>true,
+                            "isInTotalSum" => $jsonEntity->vatIncluded,
                             "taxationType" => 100,
                         ],
                     ];

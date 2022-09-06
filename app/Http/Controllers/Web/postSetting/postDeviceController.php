@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Web\postSetting;
 
 use App\Clients\KassClient;
+use App\Http\Controllers\Config\getSettingVendorController;
 use App\Http\Controllers\Config\Lib\AppInstanceContoller;
 use App\Http\Controllers\Config\Lib\cfg;
 use App\Http\Controllers\Config\Lib\VendorApiController;
@@ -16,13 +17,11 @@ use Illuminate\Http\Request;
 class postDeviceController extends Controller
 {
     public function postDevice(Request $request, $accountId){ $isAdmin = $request->isAdmin;
+        $this->createBDAccess($accountId);
         $Setting = new getSetting($accountId);
-
 
         $ZHM_1 = $request->ZHM_1;
         $PASSWORD_1 = $request->PASSWORD_1;
-        /*$ZHM_2 = $request->ZHM_2;
-        $PASSWORD_2 = $request->PASSWORD_2;*/
 
         if ($ZHM_1 != null and $PASSWORD_1 != null) {
             try {
@@ -55,15 +54,6 @@ class postDeviceController extends Controller
 
             }
         }
-        /* if ($ZHM_2 != null and $PASSWORD_2 != null) {
-             try {
-                 $Device = new getDeviceFirst($ZHM_2);
-                 if ($Device->accountId == null) DataBaseService::createDevice($ZHM_2, $PASSWORD_2, 2, $accountId);
-                 else DataBaseService::updateDevice($ZHM_2, $PASSWORD_2, 2, $accountId);
-             } catch (\Throwable $e) {
-
-             }
-         }*/
 
         $cfg = new cfg();
         $app = AppInstanceContoller::loadApp($cfg->appId, $accountId);
@@ -72,6 +62,25 @@ class postDeviceController extends Controller
         $vendorAPI->updateAppStatus($cfg->appId, $accountId, $app->getStatusName());
         $app->persist();
 
-        return redirect()->route('getWorker', ['accountId' => $accountId, 'isAdmin' => $isAdmin]);
+        return redirect()->route('getDocument', ['accountId' => $accountId, 'isAdmin' => $isAdmin]);
     }
+
+    private function createBDAccess($accountId){
+        $apiKey = 'f5ac6559-b5cd-4e0e-89e5-7fd32a6d60a5';
+        $Setting = new getSettingVendorController($accountId);
+        $app = new getSetting($accountId);
+        $paymentDocument = $app->paymentDocument;
+        try {
+            if ($app->tokenMs == null){
+                DataBaseService::createSetting($accountId, $Setting->TokenMoySklad, $apiKey,
+                    $paymentDocument, null,null);
+            } else {
+                DataBaseService::updateSetting($accountId, $Setting->TokenMoySklad, $apiKey,
+                    $paymentDocument,null,null);
+            }
+        } catch (\Throwable $e){
+
+        }
+    }
+
 }

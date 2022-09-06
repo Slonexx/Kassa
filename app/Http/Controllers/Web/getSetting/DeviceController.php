@@ -10,15 +10,8 @@ use Illuminate\Http\Request;
 class DeviceController extends Controller
 {
     public function getDevice($accountId, Request $request): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
-    {   $isAdmin = $request->isAdmin;
-        $Setting = new getSetting($accountId);
-        if ( !$Setting->tokenMs ){
-            return view('setting.no', [
-                'accountId' => $accountId,
-                'isAdmin' => $isAdmin,
-            ]);
-        }
-
+    {
+        $isAdmin = $request->isAdmin;
         $Devices = new getDevices($accountId);
 
         return view('setting.device', [
