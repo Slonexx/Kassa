@@ -263,7 +263,7 @@ class TicketService
                                 ],
                                 "percent" => $row->vat * 1000,
                                 "taxType" => 100,
-                                "isInTotalSum" => $jsonEntity->vatIncluded,
+                                "isInTotalSum" => true,
                                 "taxationType" => 100,
                             ],
                         ];
@@ -308,7 +308,7 @@ class TicketService
                             ],
                             "percent" => $row->vat * 1000,
                             "taxType" => 100,
-                            "isInTotalSum" => $jsonEntity->vatIncluded,
+                            "isInTotalSum" =>true,
                             "taxationType" => 100,
                         ],
                     ];
