@@ -16,24 +16,7 @@
         window.addEventListener("message", function(event) { openDown();
             //var receivedMessage = {"name":"OpenPopup","messageId":1,"popupName":"fiscalizationPopup","popupParameters":{"object_Id":"4b1034eb-28e1-11ed-0a80-02ab00186962","accountId":"1dd5bd55-d141-11ec-0a80-055600047495"}}; /*event.data;*/
             var receivedMessage = event.data;
-            window.document.getElementById("sum").innerHTML = '';
-            window.document.getElementById("vat").innerHTML = "";
-            window.document.getElementById("message").style.display = "none";
-            window.document.getElementById("messageGood").style.display = "none";
-            window.document.getElementById("closeButtonId").style.display = "none";
-            window.document.getElementById("cash").style.display = "block";
-
-
-            for (var i = 0; i < 20; i++) {
-                window.document.getElementById(i).style.display = "none";
-                window.document.getElementById('productName_' + i).innerHTML = '';
-                window.document.getElementById('productQuantity_' + i).innerHTML = '';
-                window.document.getElementById('productPrice_' + i).innerHTML = '';
-                window.document.getElementById('productVat_' + i).innerHTML = '';
-                window.document.getElementById('productDiscount_' + i).innerHTML = '';
-                window.document.getElementById('productFinal_' + i).innerHTML = '';
-            }
-
+            newPopup();
             if (receivedMessage.name === 'OpenPopup') {
                 object_Id = receivedMessage.popupParameters.object_Id;
                 accountId = receivedMessage.popupParameters.accountId;
@@ -46,23 +29,11 @@
 
                 let xmlHttpRequest = new XMLHttpRequest();
                 xmlHttpRequest.addEventListener("load", function () { $('#lDown').modal('hide');
-
-                    window.document.getElementById("closeButtonId").style.display = "block";
-                    document.getElementById('Visibility_Cash').style.display = 'block';
-                    document.getElementById('Visibility_Card').style.display = 'none';
-                    window.document.getElementById("getKKM").style.display = "none";
-                    window.document.getElementById("ShowCheck").style.display = "none";
-                    window.document.getElementById("refundCheck").style.display = "none";
-
-                    document.getElementById('valueSelector').value = 0;
-                    document.getElementById('Visibility_Cash').style.display = 'block';
-                    document.getElementById('Visibility_Card').style.display = 'none';
-
                     let json = JSON.parse(this.responseText);
-                    let products = json.products;
                     id_ticket = json.attributes.ticket_id;
-                    logReceivedMessage(products);
+                    window.document.getElementById("numberOrder").innerHTML = json.name;
 
+                    let products = json.products;
                     for (var i = 0; i < products.length; i++) {
 
                         if (products[i].propety === true) {
@@ -85,30 +56,6 @@
                         }
                     }
 
-                    window.document.getElementById("numberOrder").innerHTML = json.name;
-                    window.document.getElementById("cash").value = '';
-                    window.document.getElementById("card").value = '';
-
-
-
-
-                    if (json.vat == null) {
-                        window.document.getElementById("vat").innerHTML = "";
-                        window.document.getElementById("vat").style.display = "none";
-                        window.document.getElementById("vatIncluded").style.display = "none";
-                    }
-                    else if (json.vat.vatIncluded === true) {
-                        window.document.getElementById("vat").innerHTML = "";
-                        window.document.getElementById("vat").style.display = "none";
-                        window.document.getElementById("vatIncluded").style.display = "block";
-                    } else {
-                        window.document.getElementById("vat").style.display = "block";
-                        window.document.getElementById("vat").innerHTML = json.vat.vatSum;
-                        window.document.getElementById("vatIncluded").style.display = "none";
-                    }
-
-
-
                     if (json.attributes != null){
                         if (json.attributes.ticket_id != null){
                             window.document.getElementById("ShowCheck").style.display = "block";
@@ -117,18 +64,13 @@
                             window.document.getElementById("getKKM").style.display = "block";
                         }
                     } else  window.document.getElementById("getKKM").style.display = "block";
-
+                    window.document.getElementById("closeButtonId").style.display = "block";
                 });
                 xmlHttpRequest.open("GET", final);
                 xmlHttpRequest.send();
             }
-
              });
 
-            function logReceivedMessage(msg) {
-                var messageAsString = JSON.stringify(msg);
-                console.log("→ Received" + " message: " + messageAsString);
-            }
             function formatParams(params) {
                 return "?" + Object
                     .keys(params)
@@ -188,6 +130,44 @@
             var charCode = (evt.which) ? evt.which : event.keyCode
             if (charCode == 46){
                 var inputValue = $("#card").val();
+                var count = (inputValue.match(/'.'/g) || []).length;
+                if(count<1){
+                    if (inputValue.indexOf('.') < 1){
+                        return true;
+                    }
+                    return false;
+                }else{
+                    return false;
+                }
+            }
+            if (charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57)){
+                return false;
+            }
+            return true;
+        }
+        function isNumberKeyCard(evt){
+            var charCode = (evt.which) ? evt.which : event.keyCode
+            if (charCode == 46){
+                var inputValue = $("#card").val();
+                var count = (inputValue.match(/'.'/g) || []).length;
+                if(count<1){
+                    if (inputValue.indexOf('.') < 1){
+                        return true;
+                    }
+                    return false;
+                }else{
+                    return false;
+                }
+            }
+            if (charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57)){
+                return false;
+            }
+            return true;
+        }
+        function isNumberKeyMobile(evt){
+            var charCode = (evt.which) ? evt.which : event.keyCode
+            if (charCode == 46){
+                var inputValue = $("#mobile").val();
                 var count = (inputValue.match(/'.'/g) || []).length;
                 if(count<1){
                     if (inputValue.indexOf('.') < 1){
@@ -354,14 +334,22 @@
             if (option.value === "0") {
                 document.getElementById('Visibility_Cash').style.display = 'block';
                 document.getElementById('Visibility_Card').style.display = 'none';
+                document.getElementById('Visibility_Mobile').style.display = 'none';
             }
             if (option.value === "1") {
                 document.getElementById('Visibility_Card').style.display = 'block';
                 document.getElementById('Visibility_Cash').style.display = 'none';
+                document.getElementById('Visibility_Mobile').style.display = 'none';
             }
             if (option.value === "2") {
+                document.getElementById('Visibility_Cash').style.display = 'none';
+                document.getElementById('Visibility_Card').style.display = 'none';
+                document.getElementById('Visibility_Mobile').style.display = 'block';
+            }
+            if (option.value === "3") {
                 document.getElementById('Visibility_Cash').style.display = 'block';
                 document.getElementById('Visibility_Card').style.display = 'block';
+                document.getElementById('Visibility_Mobile').style.display = 'block';
             }
 
         }
@@ -373,6 +361,38 @@
             $('#downL').modal('hide');
         }
 
+
+
+        function newPopup(){
+            window.document.getElementById("sum").innerHTML = ''
+
+            window.document.getElementById("message").style.display = "none"
+            window.document.getElementById("messageGood").style.display = "none"
+            window.document.getElementById("closeButtonId").style.display = "none"
+
+            window.document.getElementById("refundCheck").style.display = "none"
+            window.document.getElementById("getKKM").style.display = "none"
+            window.document.getElementById("ShowCheck").style.display = "none"
+
+            window.document.getElementById("cash").value = ''
+            window.document.getElementById("card").value = ''
+            window.document.getElementById("mobile").value = ''
+
+            window.document.getElementById("cash").style.display = "block"
+            let thisSelectorSum = window.document.getElementById("valueSelector")
+            thisSelectorSum.value = 0;
+            SelectorSum(thisSelectorSum)
+
+            for (var i = 0; i < 20; i++) {
+                window.document.getElementById(i).style.display = "none"
+                window.document.getElementById('productName_' + i).innerHTML = ''
+                window.document.getElementById('productQuantity_' + i).innerHTML = ''
+                window.document.getElementById('productPrice_' + i).innerHTML = ''
+                window.document.getElementById('productVat_' + i).innerHTML = ''
+                window.document.getElementById('productDiscount_' + i).innerHTML = ''
+                window.document.getElementById('productFinal_' + i).innerHTML = ''
+            }
+        }
     </script>
 
 
@@ -387,11 +407,14 @@
             </div>
             <div class="col-3">
                 <div class="row">
-                    <div class="col-9 text-center">
-                        <button id="closeButtonId" type="button" class=" mx-3 btn btn-danger"
+                    <div class="col-6">
+                        <button id="closeButtonId" type="button" class="btn btn-danger"
                                 data-bs-toggle="modal" data-bs-target="#modal" >Закрыть смену</button>
                     </div>
                     <div class="col-3">
+                        <button onclick="sendKKM('return')" id="refundCheck" class="btn btn-danger">возврат</button>
+                    </div>
+                    <div class="col-3 text-center">
                         <button type="submit" onclick="updatePopup()" class="myButton btn "> <i class="fa-solid fa-arrow-rotate-right"></i> </button>
                     </div>
                 </div>
@@ -444,61 +467,70 @@
                             </div>
                         @endfor
                     </div>
-                    <div class="col-12 mt-5">
-                        <div class="row">
-                          <div class="col-8"></div>
-                          <div class="col-2">
-                              <h4>Итого: </h4>
-                              <h6>НДС: </h6>
-                          </div>
-                            <div class="col-2 float-right">
-                                <h4 id="sum"></h4>
-                                <h6 id="vat"></h6>
-                                <span id="vatIncluded">Цена включает НДС</span>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
+        <div class="buttons-container-head"></div>
         <div class="buttons-container">
             <div class="row">
-                <div class="col-3">
-                    <div class="row">
-                        <div class="col-5">
-                            <div class="mx-1 mt-1 bg-warning p-1 rounded text-center">Тип оплаты</div>
-                        </div>
-                        <div class="col-7">
-                            <select onchange="SelectorSum(valueSelector)" id="valueSelector" class="form-select">
-                                <option selected value="0">Наличными</option>
-                                <option value="1">Картой</option>
-                                <option value="2">Смешанное</option>
-                            </select>
-                        </div>
-                    </div>
 
-
-                </div>
-                <div class="col-4">
+                <div class="col-7 row">
                     <div class="row">
-                        <div class="col-6"> <div id="Visibility_Cash" class="mx-2" style="display: none">
-                                <input id="cash" type="number" step="0.1" placeholder="Сумма наличных"  onkeypress="return isNumberKeyCash(event)"
-                                       class="form-control float" required maxlength="255" value="">
-                            </div> </div>
-                        <div class="col-6"> <div id="Visibility_Card" class="mx-2" style="display: none">
-                                <input id="card" type="number" step="0.1"  placeholder="Сумма картой" onkeypress="return isNumberKeyCard(event)"
-                                       class="form-control float" required maxlength="255" value="">
-                            </div> </div>
+                        <div class="col-12 mx-2 ">
+                            <div class="col-5 bg-success text-white p-1 rounded">
+                                <span> Итого: </span>
+                                <span id="sum"></span>
+                            </div>
+
+                        </div>
                     </div>
                 </div>
                 <div class="col-1">
-                        <button onclick="sendKKM('return')" id="refundCheck" class="mx-3 btn btn-danger">возврат</button>
+
                     </div>
                 <div class="col-2">
+
+                </div>
+                <div class="col-2 d-flex justify-content-end">
+                    <button onclick="sendKKM('sell')" id="getKKM" class="mx-3 btn btn-success">Отправить в ККМ</button>
+                </div>
+
+                <div class="row mt-2">
+                    <div class="col-3">
+                        <div class="row">
+                            <div class="col-5">
+                                <div class="mx-1 mt-1 bg-warning p-1 rounded text-center">Тип оплаты</div>
+                            </div>
+                            <div class="col-7">
+                                <select onchange="SelectorSum(valueSelector)" id="valueSelector" class="form-select">
+                                    <option selected value="0">Наличными</option>
+                                    <option value="1">Картой</option>
+                                    <option value="2">Мобильная</option>
+                                    <option value="3">Смешанная</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="row">
+                            <div class="col-4"> <div id="Visibility_Cash" class="mx-2" style="display: none">
+                                    <input id="cash" type="number" step="0.1" placeholder="Сумма наличных"  onkeypress="return isNumberKeyCash(event)"
+                                           class="form-control float" required maxlength="255" value="">
+                                </div> </div>
+                            <div class="col-4"> <div id="Visibility_Card" class="mx-2" style="display: none">
+                                    <input id="card" type="number" step="0.1"  placeholder="Сумма картой" onkeypress="return isNumberKeyCard(event)"
+                                           class="form-control float" required maxlength="255" value="">
+                                </div> </div>
+                            <div class="col-4"> <div id="Visibility_Mobile" class="mx-2" style="display: none">
+                                    <input id="mobile" type="number" step="0.1"  placeholder="Сумма мобильных" onkeypress="return isNumberKeyMobile(event)"
+                                           class="form-control float" required maxlength="255" value="">
+                                </div> </div>
+                        </div>
+                    </div>
+                    <div class="col-1"></div>
+                    <div class="col-2 d-flex justify-content-end">
                         <button onclick="ShowCheck()" id="ShowCheck" class="mx-3 btn btn-success">Показать чек</button>
                     </div>
-                <div class="col-2">
-                    <button onclick="sendKKM('sell')" id="getKKM" class="mx-3 btn btn-success">Отправить в ККМ</button>
                 </div>
             </div>
         </div>
@@ -584,9 +616,14 @@
         overflow-x: hidden;
         flex-grow: 1;
     }
+    .buttons-container-head{
+        background-color: rgba(12, 125, 112, 0.27);
+        padding-top: 3px;
+        min-height: 3px;
+    }
     .buttons-container {
-        padding-top: 15px;
-        min-height: 55px;
+        padding-top: 10px;
+        min-height: 100px;
     }
 
     .myButton {
@@ -609,61 +646,3 @@
         top: 1px !important;
     }
 </style>
-
-<script>
-   /* for (var i = 0; i < products.length; i++) {
-        let divRow = document.createElement('div');
-        divRow.setAttribute('id', products[i].position);
-        divRow.setAttribute('class', 'row');
-        document.getElementById('products').appendChild(divRow);
-
-        let productNumber = document.createElement('div');
-        productNumber.setAttribute('class', 'col-1');
-        productNumber.innerText = i + 1;
-        document.getElementById(products[i].position).appendChild(productNumber);
-
-        let productName = document.createElement('div');
-        productName.setAttribute('class', 'col-4 mt-1');
-        productName.innerText = products[i].name;
-        document.getElementById(products[i].position).appendChild(productName);
-
-        let productQuantity = document.createElement('div');
-        productQuantity.setAttribute('class', 'col-1');
-        productQuantity.innerText = products[i].quantity;
-        document.getElementById(products[i].position).appendChild(productQuantity);
-
-        let productPrice = document.createElement('div');
-        productPrice.setAttribute('class', 'col-1');
-        productPrice.innerText = products[i].price;
-        document.getElementById(products[i].position).appendChild(productPrice);
-
-        let productVat = document.createElement('div');
-        productVat.setAttribute('class', 'col-1');
-        let procent = products[i].vat;
-        if (procent === 0) productVat.innerText = 'без НДС';
-        else productVat.innerText = products[i].vat + '%';
-        document.getElementById(products[i].position).appendChild(productVat);
-
-        let productDiscount = document.createElement('div');
-        productDiscount.setAttribute('class', 'col-1');
-        productDiscount.innerText = products[i].discount + '%';
-        document.getElementById(products[i].position).appendChild(productDiscount);
-
-        let productFinal = document.createElement('div');
-        productFinal.setAttribute('class', 'col-1');
-        productFinal.innerText = products[i].final;
-        document.getElementById(products[i].position).appendChild(productFinal);
-
-        let productCheck = document.createElement('dir');
-        productCheck.setAttribute('class', 'col-2');
-        productCheck.setAttribute('id', 'btn_'+products[i].position);
-        document.getElementById(products[i].position).appendChild(productCheck);
-
-        let DeleteCheck = document.createElement('button');
-        DeleteCheck.setAttribute('class', ' btn btn-danger');
-        DeleteCheck.setAttribute('onclick', 'deleteBTNClick('+ products[i].position.toString() +')');
-        DeleteCheck.innerText = "Убрать";
-        document.getElementById('btn_'+products[i].position).appendChild(DeleteCheck);
-
-    }*/
-</script>
