@@ -5,6 +5,7 @@ namespace App\Clients;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\GuzzleException;
+use Illuminate\Support\Str;
 
 class KassClient
 {
@@ -33,9 +34,11 @@ class KassClient
      * @throws GuzzleException
      */
     public function getNewJwtToken() {
+        $uuid_v4 = Str::uuid();
         $res =  $this->client->post('auth/login',[
             'headers' => [
                 'Accept' => 'application/json',
+                'X-Request-ID' => $uuid_v4,
             ],
             'query' => [
                 'apiKey' => $this->apiKey,
@@ -54,9 +57,11 @@ class KassClient
      */
     public function get($uri){
         $jsonWithToken = $this->getNewJwtToken();
+        $uuid_v4 = Str::uuid();
         $res = $this->client->get($uri,[
             'headers' => [
                 'Accept' => 'application/json',
+                'X-Request-ID' => $uuid_v4,
                 'Authorization' => 'Bearer '.$jsonWithToken->token,
             ],
         ]);
@@ -68,9 +73,11 @@ class KassClient
      */
     public function post($uri, $body){
         $jsonWithToken = $this->getNewJwtToken();
+        $uuid_v4 = Str::uuid();
         $res = $this->client->post($uri,[
             'headers' => [
                 'Accept' => 'application/json',
+                'X-Request-ID' => $uuid_v4,
                 'Authorization' => 'Bearer '.$jsonWithToken->token,
             ],
             'json' => $body
@@ -80,11 +87,12 @@ class KassClient
 
     public function getStatusCode(): int
     {
-
+        $uuid_v4 = Str::uuid();
         $res =  $this->client->post('auth/login',[
             'http_errors' => false,
             'headers' => [
                 'Accept' => 'application/json',
+                'X-Request-ID' => $uuid_v4,
             ],
             'query' => [
                 'apiKey' => $this->apiKey,
@@ -111,9 +119,11 @@ class KassClient
 
     public function delete($uri){
         $jsonWithToken = $this->getNewJwtToken();
+        $uuid_v4 = Str::uuid();
         $res = $this->client->delete($uri,[
             'headers' => [
                 'Accept' => 'application/json',
+                'X-Request-ID' => $uuid_v4,
                 'Authorization' => 'Bearer '.$jsonWithToken->token,
             ],
         ]);
