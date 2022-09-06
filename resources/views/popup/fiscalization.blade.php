@@ -13,10 +13,10 @@
         let entity_type = '';
         let id_ticket = '';
 
-        window.addEventListener("message", function(event) { openDown();
+        window.addEventListener("message", function(event) { //openDown();
             //var receivedMessage = {"name":"OpenPopup","messageId":1,"popupName":"fiscalizationPopup","popupParameters":{"object_Id":"4b1034eb-28e1-11ed-0a80-02ab00186962","accountId":"1dd5bd55-d141-11ec-0a80-055600047495"}}; /*event.data;*/
             var receivedMessage = event.data;
-            newPopup();
+            //newPopup();
             if (receivedMessage.name === 'OpenPopup') {
                 object_Id = receivedMessage.popupParameters.object_Id;
                 accountId = receivedMessage.popupParameters.accountId;
@@ -190,25 +190,33 @@
 
             let money_card = window.document.getElementById('card').value;
             let money_cash = window.document.getElementById('cash').value;
+            let money_mobile = window.document.getElementById('mobile').value;
             let SelectorInfo = document.getElementById('valueSelector');
             let option = SelectorInfo.options[SelectorInfo.selectedIndex];
-            console.log('option = ' + option.value);
+
             if (option.value == 0){
                 if (!money_cash) {
-                    window.document.getElementById('messageAlert').innerText = 'Вы не ввели сумму';
+                    window.document.getElementById('messageAlert').innerText = 'Вы не ввели сумму наличных';
                     window.document.getElementById('message').style.display = "block";
                     modalShowHide = 'hide'
                 }
             }
             if (option.value == 1){
                 if (!money_card) {
-                    window.document.getElementById('messageAlert').innerText = 'Вы не ввели сумму';
+                    window.document.getElementById('messageAlert').innerText = 'Вы не ввели сумму карты';
                     window.document.getElementById('message').style.display = "block";
                     modalShowHide = 'hide'
                 }
             }
             if (option.value == 2){
-                if (!money_card && !money_cash){
+                if (!money_mobile){
+                    window.document.getElementById('messageAlert').innerText = 'Вы не ввели сумму мобильных';
+                    window.document.getElementById('message').style.display = "block";
+                    modalShowHide = 'hide'
+                }
+            }
+            if (option.value == 3){
+                if (!money_card && !money_cash && !money_mobile){
                     window.document.getElementById('messageAlert').innerText = 'Вы не ввели сумму';
                     window.document.getElementById('message').style.display = "block";
                     modalShowHide = 'hide'
@@ -232,11 +240,12 @@
                     entity_type: entity_type,
                     money_card: money_card,
                     money_cash: money_cash,
+                    money_mobile: money_mobile,
                     pay_type: pay_type,
                     position: JSON.stringify(products),
                 };
                 let final = url + formatParams(params);
-                console.log('final = ' + final);
+                console.log('send to kkm = ' + final);
                 let xmlHttpRequest = new XMLHttpRequest();
                 xmlHttpRequest.addEventListener("load", function () {
                     $('#downL').modal('hide');
@@ -251,7 +260,7 @@
                         let response = json.response;
                         id_ticket = response.id;
                     } else {
-                        window.document.getElementById('messageAlert').innerText = "ошибка";
+                        window.document.getElementById('messageAlert').innerText = "Ошибка 400";
                         window.document.getElementById('message').style.display = "block";
                         window.document.getElementById("getKKM").style.display = "block";
                         modalShowHide = 'hide';
@@ -262,7 +271,6 @@
                 modalShowHide = 'hide';
             }
             else window.document.getElementById("getKKM").style.display = "block";
-
         }
 
         function closeShift(){
