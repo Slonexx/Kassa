@@ -298,7 +298,7 @@ class TicketService
                         }else {
                             $sumVat = $sumPrice * ($row->vat / 100); //Цена выключает НДС
                         }
-
+                        if ($sumVat != 0)
                         $position["commodity"]["taxes"] = [
                             0 => [
                                 "sum" => [
