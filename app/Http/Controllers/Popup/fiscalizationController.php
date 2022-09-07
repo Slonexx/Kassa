@@ -108,6 +108,9 @@ class fiscalizationController extends Controller
         if ($request->money_cash === null) $money_cash = 0;
         else $money_cash = $request->money_cash;
 
+        if ($request->money_mobile === null) $money_mobile = 0;
+        else $money_mobile = $request->money_mobile;
+
         $pay_type = $request->pay_type;
         $position = json_decode($request->position);
         $positions = [];
@@ -123,6 +126,7 @@ class fiscalizationController extends Controller
             'entity_type' => $entity_type,
             'money_card' => $money_card,
             'money_cash' => $money_cash,
+            'money_mobile' => $money_mobile,
             'pay_type' => $pay_type,
             'positions' => $positions,
         ];
