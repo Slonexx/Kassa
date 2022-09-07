@@ -168,6 +168,7 @@
             let button_hide = '';
             if (pay_type == 'return') button_hide = 'refundCheck';
             if (pay_type == 'sell') button_hide = 'getKKM';
+            window.document.getElementById(button_hide).style.display = "none";
             let modalShowHide = 'show';
 
             let money_card = window.document.getElementById('card').value;
