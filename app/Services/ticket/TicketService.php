@@ -39,17 +39,19 @@ class TicketService
         $positions = $data['positions'];
         $money_card = $data['money_card'];
         $money_cash = $data['money_cash'];
+        $money_mobile = $data['money_mobile'];
         $payType = $data['pay_type'];
 
-        $tookSum = $money_card+$money_cash;
+        $tookSum = $money_card+$money_cash+$money_mobile;
         $money_cash_product = 0;
 
         if (is_null($money_card)) $money_card = 0;
         if (is_null($money_cash)) $money_cash = 0;
+        if (is_null($money_mobile)) $money_mobile = 0;
 
         //dd($data);
 
-        if ($money_card <= 0 && $money_cash <= 0 )
+        if ($money_card <= 0 && $money_cash <= 0 && $money_mobile <= 0)
             return [
                 "res" => [
                     "message" => "Please enter money!",
@@ -101,26 +103,62 @@ class TicketService
             if (count($items) > 0 ){
 
                 $payments = [];
+                $tempSum = $totalSum;
 
-                if (intval($money_cash) > 0 ){
+                if (intval($money_cash) > 0 && $tempSum > 0){
+                    if ($tempSum > $money_cash){
+                        $pay = $money_cash;
+                        $tempSum -= $pay;
+                    } else {
+                        $pay = $tempSum;
+                        $tempSum = 0;
+                    }
                     $payments [] = [
                         "type" => $this->getMoneyType("Наличные"),
                         "sum" => [
-                            "bills" => intval($money_cash),
-                            "coins" => intval(round(floatval($money_cash)-intval($money_cash),2)*100),
+                            "bills" => intval($pay),
+                            "coins" => intval(round(floatval($pay)-intval($pay),2)*100),
                         ],
                     ];
                 }
 
-                if (intval($money_card) > 0 ){
+                if (intval($money_card) > 0 && $tempSum > 0){
+                    if ($tempSum > $money_card){
+                        $pay = $money_card;
+                        $tempSum -= $pay;
+                    } else {
+                        $pay = $tempSum;
+                        $tempSum = 0;
+                    }
+
+                    //$tempSum = 0;
+
                     $payments[] =  [
                         "type" => $this->getMoneyType("Банковская карта"),
                         "sum" => [
-                            "bills" => intval($money_card),
-                            "coins" => intval(round(floatval($money_card)-intval($money_card),2)*100),
+                            "bills" => intval($pay),
+                            "coins" => intval(round(floatval($pay)-intval($pay),2)*100),
                         ],
                     ];
                 }
+
+                if (intval($money_mobile) > 0 && $tempSum > 0){
+                    if ($tempSum > $money_mobile){
+                        $pay = $money_mobile;
+                    } else {
+                        $pay = $tempSum;
+                    }
+
+                    $payments[] =  [
+                        "type" => $this->getMoneyType("Мобильные"),
+                        "sum" => [
+                            "bills" => intval($pay),
+                            "coins" => intval(round(floatval($pay)-intval($pay),2)*100),
+                        ],
+                    ];
+
+                }
+
 
                 $amounts = [
                     "total" => [
@@ -129,7 +167,7 @@ class TicketService
                         ],
                     "taken" => [
                             "bills" => intval($money_cash),
-                            "coins" => intval(round(floatval($tookSum)-intval($tookSum),2)*100),
+                            "coins" => intval(round(floatval($money_cash)-intval($money_cash),2)*100),
                     ],
                     "change" => [
                             "bills" => intval($change),
@@ -200,7 +238,12 @@ class TicketService
                 "code" => 400,
             ];
         }
-        return [];
+        return [
+            "res" => [
+                "message" => "Some error",
+            ],
+            "code" => 400,
+        ];
     }
 
     private function getItemsByHrefPositions($href,$positionsEntity,$jsonEntity,$apiKeyMs){
@@ -444,7 +487,7 @@ class TicketService
 
                 if ($checkUOM->name == "шт"){
                     $discount = $position->discount;
-                    $positionPrice = $position->price / 100;
+                    $positionPrice = $position->quantity * $position->price / 100;
                     $sumPrice = $positionPrice - ( $positionPrice * ($discount/100) ) ;
                 } else {
                     $discount = $position->discount;
