@@ -416,13 +416,13 @@
             <div class="col-3">
                 <div class="row">
                     <div class="col-3">
-                        <button onclick="sendKKM('return')" id="refundCheck" class="btn btn-danger">возврат</button>
+
                     </div>
                     <div class="col-6">
                         <button id="closeButtonId" type="button" class="btn btn-danger"
                                 data-bs-toggle="modal" data-bs-target="#modal" >Закрыть смену</button>
                     </div>
-                    <div class="col-3 text-center">
+                    <div class="col-3 text-right">
                         <button type="submit" onclick="updatePopup()" class="myButton btn "> <i class="fa-solid fa-arrow-rotate-right"></i> </button>
                     </div>
                 </div>
@@ -500,6 +500,7 @@
 
                 </div>
                 <div class="col-2 d-flex justify-content-end">
+                    <button onclick="sendKKM('return')" id="refundCheck" class="btn btn-danger">возврат</button>
                     <button onclick="sendKKM('sell')" id="getKKM" class="mx-3 btn btn-success">Отправить в ККМ</button>
                 </div>
 
