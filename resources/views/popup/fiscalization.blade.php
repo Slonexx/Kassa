@@ -338,6 +338,9 @@
         }
 
         function SelectorSum(Selector){
+            window.document.getElementById("cash").value = ''
+            window.document.getElementById("card").value = ''
+            window.document.getElementById("mobile").value = ''
             let option = Selector.options[Selector.selectedIndex];
             if (option.value === "0") {
                 document.getElementById('Visibility_Cash').style.display = 'block';
@@ -348,11 +351,13 @@
                 document.getElementById('Visibility_Card').style.display = 'block';
                 document.getElementById('Visibility_Cash').style.display = 'none';
                 document.getElementById('Visibility_Mobile').style.display = 'none';
+                window.document.getElementById("card").value = window.document.getElementById("sum").innerText
             }
             if (option.value === "2") {
                 document.getElementById('Visibility_Cash').style.display = 'none';
                 document.getElementById('Visibility_Card').style.display = 'none';
                 document.getElementById('Visibility_Mobile').style.display = 'block';
+                window.document.getElementById("mobile").value = window.document.getElementById("sum").innerText
             }
             if (option.value === "3") {
                 document.getElementById('Visibility_Cash').style.display = 'block';
