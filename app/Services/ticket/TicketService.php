@@ -159,6 +159,8 @@ class TicketService
 
                 }
 
+                $taken = 0;
+                if ($payType != 'return') $taken = $money_cash;
 
                 $amounts = [
                     "total" => [
@@ -166,8 +168,8 @@ class TicketService
                         "coins" => intval(round(floatval($totalSum)-intval($totalSum),2)*100),
                         ],
                     "taken" => [
-                            "bills" => intval($money_cash),
-                            "coins" => intval(round(floatval($money_cash)-intval($money_cash),2)*100),
+                            "bills" => intval($taken),
+                            "coins" => intval(round(floatval($taken)-intval($taken),2)*100),
                     ],
                     "change" => [
                             "bills" => intval($change),
