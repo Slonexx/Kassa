@@ -13,7 +13,7 @@
         let entity_type = '';
         let id_ticket = '';
 
-        window.addEventListener("message", function(event) { //openDown();
+        window.addEventListener("message", function(event) { openDown();
             var receivedMessage = event.data;
             newPopup();
             if (receivedMessage.name === 'OpenPopup') {
