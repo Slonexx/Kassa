@@ -166,7 +166,11 @@
         }
 
         function sendKKM(pay_type){
-            window.document.getElementById("getKKM").style.display = "none";
+            let button_hide = '';
+                if (pay_type == 'return') button_hide = 'refundCheck';
+                if (pay_type == 'sell') button_hide = 'getKKM';
+
+            window.document.getElementById(button_hide).style.display = "none";
             let modalShowHide = 'show';
 
             let money_card = window.document.getElementById('card').value;
@@ -251,7 +255,7 @@
                 xmlHttpRequest.send();
                 modalShowHide = 'hide';
             }
-            else window.document.getElementById("getKKM").style.display = "block";
+            else window.document.getElementById(button_hide).style.display = "block";
         }
 
         function closeShift(){
