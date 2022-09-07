@@ -538,7 +538,7 @@
                     </div>
                     <div class="col-1"></div>
                     <div class="col-2 d-flex justify-content-end">
-                        <button onclick="ShowCheck()" id="ShowCheck" class="mx-3 btn btn-success">Показать чек</button>
+                        <button onclick="ShowCheck()" id="ShowCheck" class="btn btn-success">Показать чек</button>
                     </div>
                 </div>
             </div>
