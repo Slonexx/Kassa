@@ -292,13 +292,12 @@ class TicketService
                     }
 
                     if (property_exists($row,'vat') && property_exists($jsonEntity,'vatIncluded')){
-
                         if ($jsonEntity->vatIncluded){
                             $sumVat = $sumPrice * ( $row->vat / (100+$row->vat) ); //Цена включает НДС
                         }else {
                             $sumVat = $sumPrice * ($row->vat / 100); //Цена выключает НДС
                         }
-                        if ($sumVat != 0)
+                        if ($row->vat != 0)
                         $position["commodity"]["taxes"] = [
                             0 => [
                                 "sum" => [
