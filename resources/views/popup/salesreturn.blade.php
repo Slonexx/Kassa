@@ -84,16 +84,6 @@
             let final = document.getElementById('productFinal_' + Object).innerHTML;
             window.document.getElementById("sum").innerHTML = sum-final;
 
-            if (window.document.getElementById("vat").style.display === 'block')  {
-                let quantity = document.getElementById('productQuantity_' + Object).innerHTML;
-                let price = document.getElementById("productPrice_" + Object).innerHTML;
-                let vatProsent = document.getElementById("productVat_" + Object).innerHTML;
-                let vatId = price * quantity / 100 * vatProsent.replace(/%/g, '');
-                let vat = window.document.getElementById("vat").innerHTML;
-
-                window.document.getElementById("vat").innerHTML = vat - vatId;
-            }
-
 
             window.document.getElementById('productName_' + Object).innerHTML = '';
             window.document.getElementById('productQuantity_' + Object).innerHTML = '';
