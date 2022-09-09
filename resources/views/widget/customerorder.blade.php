@@ -28,7 +28,7 @@
                     var json = JSON.parse(this.responseText);
                     console.log(json.ticket_id);
                     let btnF = window.document.getElementById('btnF')
-                    if (json.ticket_id === undefined){
+                    if (json.ticket_id == null){
                         btnF.innerText = 'Фискализация';
                     } else btnF.innerText = 'Действие с чеком';
 
