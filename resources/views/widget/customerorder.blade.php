@@ -20,7 +20,7 @@
                     entity_type: Global_object_Id,
                     objectId: entity_type,
                 };
-                let url = 'https://smartrekassa.kz/widgetInfoAttributes';
+                let url = 'https://smartrekassa.kz/widget/InfoAttributes/';
                 let final = url + formatParams(params);
                 console.log('final = ' + final);
 

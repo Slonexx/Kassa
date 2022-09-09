@@ -27,7 +27,7 @@ Route::get('setAttributes/{accountId}/{tokenMs}', [AttributeController::class, '
 Route::get('/', [indexController::class, 'index']);
 Route::get('/{accountId}/', [indexController::class, 'indexShow'])->name('main');
 
-Route::get('/widgetInfoAttributes/', [indexController::class, 'widgetInfoAttributes']);
+Route::get('/widget/InfoAttributes/', [indexController::class, 'widgetInfoAttributes']);
 
 Route::get('/widget/customerorder', [customerorderEditController::class, 'customerorder']);
 Route::get('/widget/demand', [demandEditController::class, 'demand']);
