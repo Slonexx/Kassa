@@ -26,10 +26,13 @@
 
                 const xmlHttpRequest = new XMLHttpRequest();
                 xmlHttpRequest.addEventListener("load", function() {
-                    var json = this.responseText;
-                    logSendingMessage(json.ticket_id);
+                    var json = this.responseText
+                    let btnF = window.document.getElementById('btnF')
+                    if (json.ticket_id == undefined){
+                        btnF.innerText = 'Фискализация';
+                    } else btnF.innerText = 'Действие с чеком';
 
-                    let btnF = window.document.getElementById('btnF');
+
 
 
 
@@ -104,7 +107,7 @@
         </div>
         <div id="workerAccess_yes" class="row mt-2 rounded bg-white" style="display:none;">
             <div class="col-1"></div>
-            <button id="btnF" onclick="fiscalization()" class="col-10 btn btn-warning text-black rounded-pill"> Фискализация </button>
+            <button id="btnF" onclick="fiscalization()" class="col-10 btn btn-warning text-black rounded-pill">  </button>
         </div>
         <div id="workerAccess_no" class="row mt-2 rounded bg-white" style="display: none">
             <div class="col-1"></div>
