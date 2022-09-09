@@ -16,8 +16,9 @@
             if (receivedMessage.name === 'Open') {
                 Global_object_Id = receivedMessage.objectId;
                 let params = {
-                    accountId: accountId,
-                    id_ticket: id_ticket,
+                    accountId: Global_accountId,
+                    entity_type: Global_object_Id,
+                    objectId: entity_type,
                 };
                 let url = 'https://smartrekassa.kz/widgetInfoAttributes';
                 let final = url + formatParams(params);
