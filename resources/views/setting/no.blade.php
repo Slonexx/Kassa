@@ -14,7 +14,7 @@
         </div>
 
             <div class="mt-2 alert alert-danger text-center"> <i class="fa-solid fa-screwdriver-wrench"></i>
-              Доступ к этим настройкам, пока что закрыт, сначала нужно настроить кассовый аппарат.
+              Сначала нужно подключить кассовый аппарат
             </div>
 
     </div>
