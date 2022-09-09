@@ -57,7 +57,7 @@ class indexController extends Controller
                 }
             }
         }
-        return $ticket_id;
+        return response()->json($ticket_id);
     }
 
     private function getUrlEntity($enType,$enId){

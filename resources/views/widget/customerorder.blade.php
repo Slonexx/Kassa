@@ -36,7 +36,6 @@
                         name: "OpenFeedback",
                         correlationId: receivedMessage.messageId
                     };
-                    logSendingMessage(sendingMessage);
                     hostWindow.postMessage(sendingMessage, '*');
                 });
                 xmlHttpRequest.open("GET", final);
