@@ -246,7 +246,7 @@
         }
 
         function ShowCheck(){
-            let urlrekassa = 'https://app-test.rekassa.kz/'
+            let urlrekassa = 'https://app.rekassa.kz/partner'
             let url = 'https://smartrekassa.kz/api/ticket';
             let params = {
                 accountId: accountId,
