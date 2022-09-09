@@ -27,7 +27,7 @@
                 const xmlHttpRequest = new XMLHttpRequest();
                 xmlHttpRequest.addEventListener("load", function() {
                     var json = this.responseText;
-                    logSendingMessage(json);
+                    logSendingMessage(json.ticket_id);
 
                     let btnF = window.document.getElementById('btnF');
 
