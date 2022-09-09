@@ -226,15 +226,15 @@
                         window.document.getElementById("messageGoodAlert").innerText = "Чек создан";
                         window.document.getElementById("messageGood").style.display = "block";
                         window.document.getElementById("ShowCheck").style.display = "block";
-                        window.document.getElementById("refundCheck").style.display = "block";
                         window.document.getElementById("closeShift").style.display = "block";
+                        window.document.getElementById(button_hide).style.display = "block";
                         modalShowHide = 'hide';
                         let response = json.response;
                         id_ticket = response.id;
                     } else {
                         window.document.getElementById('messageAlert').innerText = "Ошибка 400";
                         window.document.getElementById('message').style.display = "block";
-                        window.document.getElementById("getKKM").style.display = "block";
+                        window.document.getElementById(button_hide).style.display = "block";
                         modalShowHide = 'hide';
                     }
                 });

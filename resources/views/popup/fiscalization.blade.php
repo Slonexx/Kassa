@@ -324,7 +324,9 @@
                 document.getElementById('Visibility_Card').style.display = 'block';
                 document.getElementById('Visibility_Cash').style.display = 'none';
                 document.getElementById('Visibility_Mobile').style.display = 'none';
-                window.document.getElementById("card").value = window.document.getElementById("sum").innerText
+                let card =  window.document.getElementById("card");
+                card.value = window.document.getElementById("sum").innerText
+                card.disabled;
             }
             if (option.value === "2") {
                 document.getElementById('Visibility_Cash').style.display = 'none';
