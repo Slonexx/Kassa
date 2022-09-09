@@ -29,7 +29,7 @@
                     var json = this.responseText
                     let btnF = window.document.getElementById('btnF')
                     if (json.ticket_id === undefined){
-                        btnF.innerText = 'Фискализация';
+                        btnF.innerText = 'цвФЦВцфВЦ';
                     } else btnF.innerText = 'Действие с чеком';
 
 
