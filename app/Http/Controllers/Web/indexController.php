@@ -44,7 +44,6 @@ class indexController extends Controller
         $objectId = $request->objectId;
 
         $url = $this->getUrlEntity($entity_type, $objectId);
-
         $Setting = new getSetting($accountId);
         $Client = new MsClient($Setting->tokenMs);
         $body = $Client->get($url);
@@ -61,19 +60,12 @@ class indexController extends Controller
     }
 
     private function getUrlEntity($enType,$enId){
-        $url = null;
-        switch ($enType){
-            case "customerorder":
-                $url = "https://online.moysklad.ru/api/remap/1.2/entity/customerorder/".$enId;
-                break;
-            case "demand":
-                $url = "https://online.moysklad.ru/api/remap/1.2/entity/demand/".$enId;
-                break;
-            case "salesreturn":
-                $url = "https://online.moysklad.ru/api/remap/1.2/entity/salesreturn/".$enId;
-                break;
-        }
-        return $url;
+        return match ($enType) {
+            "customerorder" => "https://online.moysklad.ru/api/remap/1.2/entity/customerorder/" . $enId,
+            "demand" => "https://online.moysklad.ru/api/remap/1.2/entity/demand/" . $enId,
+            "salesreturn" => "https://online.moysklad.ru/api/remap/1.2/entity/salesreturn/" . $enId,
+            default => null,
+        };
     }
 
 }

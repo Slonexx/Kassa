@@ -17,8 +17,8 @@
                 Global_object_Id = receivedMessage.objectId;
                 let params = {
                     accountId: Global_accountId,
-                    entity_type: Global_object_Id,
-                    objectId: entity_type,
+                    entity_type: entity_type,
+                    objectId: Global_object_Id,
                 };
                 let url = 'https://smartrekassa.kz/widget/InfoAttributes/';
                 let final = url + formatParams(params);
