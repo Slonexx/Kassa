@@ -14,22 +14,31 @@
             const receivedMessage = event.data;
             workerAccess();
             if (receivedMessage.name === 'Open') {
-
-                console.log('Global_object_Id = ' + receivedMessage.objectId );
                 Global_object_Id = receivedMessage.objectId;
-
-                var sendingMessage = {
-                    name: "OpenFeedback",
-                    correlationId: receivedMessage.messageId
+                let params = {
+                    accountId: Global_accountId,
+                    entity_type: entity_type,
+                    objectId: Global_object_Id,
                 };
-                logSendingMessage(sendingMessage);
-                hostWindow.postMessage(sendingMessage, '*');
+                let url = 'https://smartrekassa.kz/widget/InfoAttributes/';
+                let final = url + formatParams(params);
 
                 const xmlHttpRequest = new XMLHttpRequest();
                 xmlHttpRequest.addEventListener("load", function() {
+                    var json = JSON.parse(this.responseText);
+                    console.log(json.ticket_id);
+                    let btnF = window.document.getElementById('btnF')
+                    if (json.ticket_id == null){
+                        btnF.innerText = 'Фискализация';
+                    } else btnF.innerText = 'Действие с чеком';
 
+                    var sendingMessage = {
+                        name: "OpenFeedback",
+                        correlationId: receivedMessage.messageId
+                    };
+                    hostWindow.postMessage(sendingMessage, '*');
                 });
-                xmlHttpRequest.open("GET", "");
+                xmlHttpRequest.open("GET", final);
                 xmlHttpRequest.send();
             }
 

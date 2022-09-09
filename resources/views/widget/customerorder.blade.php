@@ -32,10 +32,6 @@
                         btnF.innerText = 'Фискализация';
                     } else btnF.innerText = 'Действие с чеком';
 
-
-
-
-
                     var sendingMessage = {
                         name: "OpenFeedback",
                         correlationId: receivedMessage.messageId
