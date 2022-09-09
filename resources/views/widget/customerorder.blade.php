@@ -22,11 +22,12 @@
                 };
                 let url = 'https://smartrekassa.kz/widgetInfoAttributes';
                 let final = url + formatParams(params);
-
+                console.log('final = ' + final);
 
                 const xmlHttpRequest = new XMLHttpRequest();
                 xmlHttpRequest.addEventListener("load", function() {
-                    logSendingMessage(this.responseText);
+                    var json = this.responseText;
+                    logSendingMessage(json);
 
                     let btnF = window.document.getElementById('btnF');
 
