@@ -101,7 +101,7 @@
     </div>
     <div id="workerAccess_yes" class="row mt-2 rounded bg-white" style="display:none;">
         <div class="col-1"></div>
-        <button onclick="fiscalization()" class="col-10 btn btn-warning text-black rounded-pill"> Фискализация </button>
+        <button id="btnF" onclick="fiscalization()" class="col-10 btn btn-warning text-black rounded-pill"> </button>
     </div>
     <div id="workerAccess_no" class="row mt-2 rounded bg-white" style="display: none">
         <div class="col-1"></div>
