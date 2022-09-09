@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Storage;
 
 class DeleteVendorApiController extends Controller
 {
-    public function delete($appId, $accountId){
+    public function delete($accountId){
 
         $path = public_path().'/Config/data/'.$accountId.'.json';
         unlink($path);

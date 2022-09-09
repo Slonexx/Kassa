@@ -26,4 +26,12 @@ class AttributeController extends Controller
 
         $this->attributeService->setAllAttributesMs($data);
     }
+
+    public function setAllAttributesVendor(Request $request, $accountId, $tokenMs)
+    {
+        $data = ['tokenMs'=> $tokenMs, 'accountId'=>$accountId];
+
+        $this->attributeService->setAllAttributesMs($data);
+    }
+
 }

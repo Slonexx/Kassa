@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AttributeController;
 use App\Http\Controllers\Config\DeleteVendorApiController;
 use App\Http\Controllers\deleteData\deleteDevice;
 use App\Http\Controllers\Popup\demandController;
@@ -20,7 +21,8 @@ use App\Http\Controllers\Widget\demandEditController;
 use App\Http\Controllers\Widget\salesreturnEditController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('delete/{accountId}', [DeleteVendorApiController::class, 'delete']);
+Route::get('delete/{accountId}/', [DeleteVendorApiController::class, 'delete']);
+Route::get('setAttributes/{accountId}/{tokenMs}', [AttributeController::class, 'setAllAttributesVendor']);
 
 Route::get('/', [indexController::class, 'index']);
 Route::get('/{accountId}/', [indexController::class, 'indexShow'])->name('main');

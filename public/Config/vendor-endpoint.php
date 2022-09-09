@@ -27,14 +27,16 @@ switch ($method) {
             $app->TokenMoySklad = $accessToken;
             $app->status = AppInstanceContoller::SETTINGS_REQUIRED;
             $app->persist();
-        }
 
+        }
+        $url = 'https://smartrekassa.kz/setAttributes/' . $accountId . '/' . $accessToken;
+        $install = file_get_contents($url);
         break;
     case 'GET':
         break;
     case 'DELETE':
         //Тут так же
-        $url = 'https://smartrekassa.kz/api/delete/'.$accountId;
+        $url = 'https://smartrekassa.kz/delete/'.$accountId;
         $install = file_get_contents($url);
 
         $replyStatus = false;
