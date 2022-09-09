@@ -293,18 +293,24 @@
                 document.getElementById('Visibility_Card').style.display = 'block';
                 document.getElementById('Visibility_Cash').style.display = 'none';
                 document.getElementById('Visibility_Mobile').style.display = 'none';
-                window.document.getElementById("card").value = window.document.getElementById("sum").innerText
+                let card =  window.document.getElementById("card");
+                card.value = window.document.getElementById("sum").innerText
+                window.document.getElementById("card").disabled = true
             }
             if (option.value === "2") {
                 document.getElementById('Visibility_Cash').style.display = 'none';
                 document.getElementById('Visibility_Card').style.display = 'none';
                 document.getElementById('Visibility_Mobile').style.display = 'block';
-                window.document.getElementById("mobile").value = window.document.getElementById("sum").innerText
+                let mobile =  window.document.getElementById("mobile");
+                mobile.value = window.document.getElementById("sum").innerText
+                window.document.getElementById("mobile").disabled = true
             }
             if (option.value === "3") {
                 document.getElementById('Visibility_Cash').style.display = 'block';
                 document.getElementById('Visibility_Card').style.display = 'block';
                 document.getElementById('Visibility_Mobile').style.display = 'block';
+                window.document.getElementById("card").disabled = false
+                window.document.getElementById("mobile").disabled = false
             }
 
         }
