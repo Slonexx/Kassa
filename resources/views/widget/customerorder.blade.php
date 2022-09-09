@@ -25,7 +25,7 @@
 
                 const xmlHttpRequest = new XMLHttpRequest();
                 xmlHttpRequest.addEventListener("load", function() {
-                    var json = this.responseText
+                    var json = JSON.parse(this.responseText);
                     console.log(json.ticket_id);
                     let btnF = window.document.getElementById('btnF')
                     if (json.ticket_id === undefined){
