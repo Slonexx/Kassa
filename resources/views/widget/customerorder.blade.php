@@ -22,14 +22,14 @@
                 };
                 let url = 'https://smartrekassa.kz/widget/InfoAttributes/';
                 let final = url + formatParams(params);
-                console.log('final = ' + final);
 
                 const xmlHttpRequest = new XMLHttpRequest();
                 xmlHttpRequest.addEventListener("load", function() {
                     var json = this.responseText
+                    console.log(json.ticket_id);
                     let btnF = window.document.getElementById('btnF')
                     if (json.ticket_id === undefined){
-                        btnF.innerText = 'цвФЦВцфВЦ';
+                        btnF.innerText = 'Фискализация';
                     } else btnF.innerText = 'Действие с чеком';
 
 
