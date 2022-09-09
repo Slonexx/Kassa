@@ -14,26 +14,44 @@
             const receivedMessage = event.data;
             workerAccess();
             if (receivedMessage.name === 'Open') {
-
-                console.log('Global_object_Id = ' + receivedMessage.objectId );
                 Global_object_Id = receivedMessage.objectId;
-
-                var sendingMessage = {
-                    name: "OpenFeedback",
-                    correlationId: receivedMessage.messageId
+                let params = {
+                    accountId: accountId,
+                    id_ticket: id_ticket,
                 };
-                logSendingMessage(sendingMessage);
-                hostWindow.postMessage(sendingMessage, '*');
+                let url = 'https://smartrekassa.kz/widgetInfoAttributes';
+                let final = url + formatParams(params);
+
 
                 const xmlHttpRequest = new XMLHttpRequest();
                 xmlHttpRequest.addEventListener("load", function() {
+                    logSendingMessage(this.responseText);
 
+                    let btnF = window.document.getElementById('btnF');
+
+
+
+                    var sendingMessage = {
+                        name: "OpenFeedback",
+                        correlationId: receivedMessage.messageId
+                    };
+                    logSendingMessage(sendingMessage);
+                    hostWindow.postMessage(sendingMessage, '*');
                 });
-                xmlHttpRequest.open("GET", "");
+                xmlHttpRequest.open("GET", final);
                 xmlHttpRequest.send();
             }
 
         });
+
+        function formatParams(params) {
+            return "?" + Object
+                .keys(params)
+                .map(function (key) {
+                    return key + "=" + encodeURIComponent(params[key])
+                })
+                .join("&")
+        }
 
         function fiscalization(){
 
@@ -85,7 +103,7 @@
         </div>
         <div id="workerAccess_yes" class="row mt-2 rounded bg-white" style="display:none;">
             <div class="col-1"></div>
-            <button onclick="fiscalization()" class="col-10 btn btn-warning text-black rounded-pill"> Фискализация </button>
+            <button id="btnF" onclick="fiscalization()" class="col-10 btn btn-warning text-black rounded-pill"> Фискализация </button>
         </div>
         <div id="workerAccess_no" class="row mt-2 rounded bg-white" style="display: none">
             <div class="col-1"></div>
