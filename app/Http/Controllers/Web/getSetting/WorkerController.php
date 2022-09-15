@@ -60,12 +60,13 @@ class WorkerController extends Controller
         $responses = Http::pool($pools);
         $count = 0;
         foreach ($Body_employee as $id=>$item){
-            if ( array_key_exists('role', $responses[$count]->object()) ){
+            if ( isset($responses[$count]->object()->role) ){
                 $Body_security = $responses[$count]->object()->role;
                 $security[$item->id] = mb_substr ($Body_security->meta->href, 53);
             } else {
                 $security[$item->id] = 'cashier';
             }
+
             $count++;
         }
 
