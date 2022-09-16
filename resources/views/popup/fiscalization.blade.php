@@ -48,7 +48,7 @@
 
                             let sum = window.document.getElementById("sum").innerHTML;
                             if (!sum) sum = 0;
-                            window.document.getElementById("sum").innerHTML = parseFloat(sum).toFixed(3) + parseFloat(products[i].final);
+                            window.document.getElementById("sum").innerHTML = roundToTwo(parseFloat(sum) + parseFloat(products[i].final));
                             window.document.getElementById(i).style.display = "block";
                         } else {
                             window.document.getElementById("messageAlert").innerText = "Позиции у которых нет ед. изм. не добавились ";
@@ -96,7 +96,9 @@
                 window.document.getElementById(Object).style.display = "none";
             }
 
-
+        function roundToTwo(num) {
+            return +(Math.round(num + "e+2")  + "e-2");
+        }
         function isNumberKeyCash(evt){
             var charCode = (evt.which) ? evt.which : event.keyCode
             if (charCode == 46){
