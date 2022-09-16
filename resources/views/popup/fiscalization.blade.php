@@ -277,6 +277,7 @@
             xmlHttpRequest.open("GET", final);
             xmlHttpRequest.send();
         }
+
         function ShowCheck(){
             let urlrekassa = 'https://rekassa.kz/'
             //let url = 'http://rekassa/Popup/customerorder/closeShift';

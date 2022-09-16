@@ -247,6 +247,7 @@
             else window.document.getElementById(button_hide).style.display = "block";
         }
 
+
         function ShowCheck(){
             let urlrekassa = 'https://rekassa.kz/'
             let url = 'https://smartrekassa.kz/api/ticket';

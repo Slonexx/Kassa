@@ -244,9 +244,11 @@
             }
             else window.document.getElementById(button_hide).style.display = "block";
         }
+
         function roundToTwo(num) {
             return +(Math.round(num + "e+2")  + "e-2");
         }
+
         function ShowCheck(){
             let urlrekassa = 'https://rekassa.kz/'
             let url = 'https://smartrekassa.kz/api/ticket';

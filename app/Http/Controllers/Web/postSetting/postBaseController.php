@@ -12,6 +12,7 @@ class postBaseController extends Controller
 {
     public function postBase(Request $request, $accountId): \Illuminate\Http\RedirectResponse
     {
+
         $isAdmin = $request->isAdmin;
         $apiKey = '6784dad7-6679-4950-b257-2711ff63f9bb';
         $Setting = new getSettingVendorController($accountId);

@@ -30,6 +30,7 @@ class KassClient
         ]);
     }
 
+
     /**
      * @throws GuzzleException
      */
