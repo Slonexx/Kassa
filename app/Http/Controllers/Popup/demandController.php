@@ -71,11 +71,11 @@ class demandController extends Controller
                 'propety' => $propety_uom,
                 'name' => $Client->get($item->assortment->meta->href)->name,
                 'quantity' => $item->quantity,
-                'price' => $item->price / 100 ?: 0,
+                'price' => round($item->price / 100, 2) ?: 0,
                 'vatEnabled' => $item->vatEnabled,
                 'vat' => $item->vat,
                 'discount' => round($item->discount, 2),
-                'final' => $final - ( $final * ($item->discount/100) ),
+                'final' => round($final - ( $final * ($item->discount/100) ), 2),
             ];
         }
 
