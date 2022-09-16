@@ -248,7 +248,7 @@
             return +(Math.round(num + "e+2")  + "e-2");
         }
         function ShowCheck(){
-            let urlrekassa = 'https://api-test.rekassa.kz/'
+            let urlrekassa = 'https://app-test.rekassa.kz/'
             let url = 'https://smartrekassa.kz/api/ticket';
             let params = {
                 accountId: accountId,
