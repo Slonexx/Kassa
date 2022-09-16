@@ -47,7 +47,7 @@
 
                             let sum = window.document.getElementById("sum").innerHTML;
                             if (!sum) sum = 0;
-                            window.document.getElementById("sum").innerHTML = parseFloat(sum) + parseFloat(products[i].final);
+                            window.document.getElementById("sum").innerHTML = roundToTwo(parseFloat(sum) + parseFloat(products[i].final));
                             window.document.getElementById(i).style.display = "block";
                         } else {
                             window.document.getElementById("messageAlert").innerText = "Позиции у которых нет ед. изм. не добавились ";
@@ -69,7 +69,9 @@
                 xmlHttpRequest.send();
             }
         });
-
+        function roundToTwo(num) {
+            return +(Math.round(num + "e+2")  + "e-2");
+        }
         function formatParams(params) {
             return "?" + Object
                 .keys(params)
