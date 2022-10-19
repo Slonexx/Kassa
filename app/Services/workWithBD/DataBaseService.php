@@ -17,7 +17,7 @@ class DataBaseService
             'saleChannel' => $saleChannel,
             'paymentDocument' => $paymentDocument,
             'project' => $project,
-            'apiKey' => $apiKey,
+            'apiKey' => "6784dad7-6679-4950-b257-2711ff63f9bb",
         ]);
     }
 
@@ -120,7 +120,7 @@ class DataBaseService
            'saleChannel' => $saleChannel,
            'paymentDocument' => $paymentDocument,
            'project' => $project,
-           'apiKey' => $apiKey,
+           'apiKey' => "6784dad7-6679-4950-b257-2711ff63f9bb",
        ]);
     }
 
