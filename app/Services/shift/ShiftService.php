@@ -3,6 +3,9 @@
 namespace App\Services\shift;
 
 use App\Clients\KassClient;
+use App\Http\Controllers\Config\getSettingVendorController;
+use App\Http\Controllers\getData\getDevices;
+use App\Http\Controllers\getData\getSetting;
 use Illuminate\Support\Str;
 
 class ShiftService
@@ -17,10 +20,13 @@ class ShiftService
         $pincode = $data['pincode'];
 
         //take settings by accountId
-        $apiKeyMs = "f59a9e8d8011257f92f13ac0ad12a2d25c1e668f";
-        $apiKey = "f5ac6559-b5cd-4e0e-89e5-7fd32a6d60a5";
-        $numKassa = "VTH5DEV4-AQM";
-        $password = "Qi1_CS0y5weXk09Lg3erA4*72dMuqYFM";
+        $setting  = new getSettingVendorController($accountId);
+        $settingDevice = new getDevices($accountId);
+        $settingDevice = $settingDevice->devices;
+        $apiKeyMs = $setting->TokenMoySklad;
+        $apiKey = "6784dad7-6679-4950-b257-2711ff63f9bb";
+        $numKassa = $settingDevice->znm;
+        $password = $settingDevice->password;
 
         $openedShift = $this->getOpenedShift($numKassa,$password,$apiKey);
 
