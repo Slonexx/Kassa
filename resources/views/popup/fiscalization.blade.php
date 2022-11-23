@@ -258,7 +258,7 @@
             };
             //let url = 'http://rekassa/Popup/customerorder/closeShift';
             let url = 'https://smartrekassa.kz/Popup/customerorder/closeShift';
-            let final = url + formatParams(params);
+let final = url + formatParams(params);
 
             console.log("final = " + final);
 
