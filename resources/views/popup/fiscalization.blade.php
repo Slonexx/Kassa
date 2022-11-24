@@ -279,7 +279,7 @@ let final = url + formatParams(params);
         }
 
         function ShowCheck(){
-            let urlrekassa = 'https://app-test.rekassa.kz/'
+            let urlrekassa = 'https://api-test.rekassa.kz/'
             //let url = 'http://rekassa/Popup/customerorder/closeShift';
             let url = 'https://dev.smartrekassa.kz/api/ticket';
             let params = {
@@ -394,7 +394,7 @@ let final = url + formatParams(params);
     <div class="main-container">
         <div class="row gradient rounded p-2">
             <div class="col-9">
-                <div class="mx-2"> <img src="https://app-test.rekassa.kz/static/logo.png" width="35" height="35"  alt="">
+                <div class="mx-2"> <img src="https://api-test.rekassa.kz/static/logo.png" width="35" height="35"  alt="">
                     <span class="text-white"> re:Kassa </span>
                     <span class="mx-5 text-white">Заказ покупателя №</span>
                     <span id="numberOrder" class="text-white"></span>

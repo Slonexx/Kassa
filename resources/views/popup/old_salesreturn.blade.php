@@ -271,7 +271,7 @@
         }
 
         function ShowCheck(){
-            let urlrekassa = 'https://app-test.rekassa.kz/'
+            let urlrekassa = 'https://api-test.rekassa.kz/'
             let url = 'https://dev.smartrekassa.kz/api/ticket';
             let params = {
                 accountId: accountId,
@@ -335,7 +335,7 @@
             <div class="col-9">
                 <div class="mx-2 row">
                     <div class="col-2">
-                        <img src="https://app-test.rekassa.kz/static/logo.png" width="35" height="35"  alt="">
+                        <img src="https://api-test.rekassa.kz/static/logo.png" width="35" height="35"  alt="">
                         <span class="text-white mt-1"> re:Kassa </span>
                     </div>
                     <div class="col-3 mt-1">

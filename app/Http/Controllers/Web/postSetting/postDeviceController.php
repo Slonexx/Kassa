@@ -16,7 +16,9 @@ use Illuminate\Http\Request;
 
 class postDeviceController extends Controller
 {
-    public function postDevice(Request $request, $accountId){ $isAdmin = $request->isAdmin;
+    public function postDevice(Request $request, $accountId): \Illuminate\Contracts\View\View|\Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\Contracts\Foundation\Application
+    {
+        $isAdmin = $request->isAdmin;
         $this->createBDAccess($accountId);
         $Setting = new getSetting($accountId);
 
