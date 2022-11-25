@@ -62,8 +62,8 @@
                 password: idKassa,
             };
 
-            //let url = 'https://dev.smarttis.kz/kassa/get_shift_report/info/'+accountId;
-            let url = 'https://rekassa/kassa/get_shift_report/info/'+accountId;
+            let url = 'https://dev.smartrekassa.kz/kassa/get_shift_report/info/'+accountId;
+            //let url = 'https://rekassa/kassa/get_shift_report/info/'+accountId;
 
 
             let final = url + formatParams(params);
@@ -104,8 +104,9 @@
                 operations: window.document.getElementById('operations').value,
                 sum:inputSum,
             };
-            //let url = 'https://dev.smarttis.kz/kassa/change/'+accountId;
-            let url = 'https://rekassa/kassa/change/'+accountId;
+
+            let url = 'https://dev.smartrekassa.kz/kassa/change/'+accountId;
+           // let url = 'https://rekassa/kassa/change/'+accountId;
 
             let final = url + formatParams(params);
             console.log(final)
@@ -151,8 +152,8 @@
                 pin_code:pin_code,
             };
 
-            //let url = 'https://dev.smarttis.kz/kassa/get_shift_report/info/'+accountId;
-            let url = 'https://rekassa/kassa/get_close_report/'+accountId;
+            let url = 'https://dev.smartrekassa.kz/kassa/get_close_report/'+accountId;
+            //let url = 'https://rekassa/kassa/get_close_report/'+accountId;
 
 
             let final = url + formatParams(params);
@@ -299,8 +300,8 @@
                     password: idKassa,
                 };
 
-                //let url = 'https://dev.smartrekassa.kz/kassa/get_shift_report/'+accountId;
-                let url = 'https://rekassa/kassa/get_shift_report/'+accountId;
+                let url = 'https://dev.smartrekassa.kz/kassa/get_shift_report/'+accountId;
+                //let url = 'https://rekassa/kassa/get_shift_report/'+accountId;
                 let final = url + formatParams(params);
 
                 const xmlHttpRequest = new XMLHttpRequest()
