@@ -12,14 +12,16 @@ use Illuminate\Http\Request;
 
 class fiscalizationController extends Controller
 {
-    public function fiscalizationPopup(Request $request){
+    public function fiscalizationPopup(Request $request): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
+    {
 
         return view( 'popup.fiscalization', [
 
         ] );
     }
 
-    public function ShowFiscalizationPopup(Request $request){
+    public function ShowFiscalizationPopup(Request $request): \Illuminate\Http\JsonResponse
+    {
         $object_Id = $request->object_Id;
         $accountId = $request->accountId;
         $Setting = new getSetting($accountId);
@@ -61,9 +63,15 @@ class fiscalizationController extends Controller
                 }
             }
             $uom_body = $Client->get($item->assortment->meta->href);
+            //dd($uom_body);
             if (property_exists($uom_body, 'uom')){
                $propety_uom = true;
-            } else $propety_uom = false;
+            } else {
+                if (property_exists($uom_body, 'characteristics')){
+                    $check_uom = $Client->get($uom_body->product->meta->href);
+                    if (property_exists($check_uom, 'uom')){ $propety_uom = true; } else $propety_uom = false;
+                } else $propety_uom = false;
+            }
 
 
             $products[$id] = [
@@ -98,7 +106,8 @@ class fiscalizationController extends Controller
 
 
 
-    public function SendFiscalizationPopup(Request $request){
+    public function SendFiscalizationPopup(Request $request): \Illuminate\Http\JsonResponse
+    {
         $accountId = $request->accountId;
         $object_Id = $request->object_Id;
         $entity_type = $request->entity_type;
@@ -152,7 +161,8 @@ class fiscalizationController extends Controller
         }
     }
 
-    public function closeShiftPopup(Request $request){
+    public function closeShiftPopup(Request $request): array
+    {
         $accountId = $request->accountId;
         $pincode = $request->pincode;
 
