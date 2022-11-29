@@ -61,9 +61,15 @@ class demandController extends Controller
                 }
             }
             $uom_body = $Client->get($item->assortment->meta->href);
+            //dd($uom_body);
             if (property_exists($uom_body, 'uom')){
                 $propety_uom = true;
-            } else $propety_uom = false;
+            } else {
+                if (property_exists($uom_body, 'characteristics')){
+                    $check_uom = $Client->get($uom_body->product->meta->href);
+                    if (property_exists($check_uom, 'uom')){ $propety_uom = true; } else $propety_uom = false;
+                } else $propety_uom = false;
+            }
 
 
             $products[$id] = [
