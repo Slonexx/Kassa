@@ -5,42 +5,35 @@ namespace App\Http\Controllers\Popup;
 use App\Clients\MsClient;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\getData\getSetting;
-use App\Services\ticket\TicketService;
+use App\Http\Controllers\getData\getWorkerID;
+use App\Http\Controllers\TicketController;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 
 class fiscalizationController extends Controller
 {
-    public function fiscalizationPopup(Request $request): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
-    {
+    public function fiscalizationPopup(Request $request){
 
         return view( 'popup.fiscalization', [
 
         ] );
     }
 
-    public function ShowFiscalizationPopup(Request $request): \Illuminate\Http\JsonResponse
-    {
+    public function ShowFiscalizationPopup(Request $request){
         $object_Id = $request->object_Id;
         $accountId = $request->accountId;
         $Setting = new getSetting($accountId);
 
         $json = $this->info_object_Id($object_Id, $Setting);
 
-        $payment_type = $Setting->payment_type;
-        if ($payment_type == null or $payment_type == '') $payment_type = 1;
-
-        $json['application']['payment_type'] = (int) $payment_type ;
-
         return response()->json($json);
     }
 
-    public function info_object_Id($object_Id, getSetting $Setting){
-
-
+    public function info_object_Id($object_Id, $Setting){
         $url = "https://online.moysklad.ru/api/remap/1.2/entity/customerorder/".$object_Id;
         $Client = new MsClient($Setting->tokenMs);
         $Body = $Client->get($url);
+        $positions = $Client->get($Body->positions->meta->href)->rows;
         $attributes = null;
         if (property_exists($Body, 'attributes')){
             $attributes = [
@@ -56,38 +49,26 @@ class fiscalizationController extends Controller
         $vatEnabled = $Body->vatEnabled;
         $vat = null;
         $products = [];
-        $positions = $Client->get($Body->positions->meta->href)->rows;
 
         foreach ($positions as $id=>$item){
+
             $final = $item->price / 100 * $item->quantity;
 
-            if ($vatEnabled == true) {if ($Body->vatIncluded == false) {
-                $final = $item->price / 100 * $item->quantity;
-                $final = $final + ( $final * ($item->vat/100) );
-            }}
+            if ($vatEnabled == true) {
+                if ($Body->vatIncluded == false) {
+                    $final = $item->price / 100 * $item->quantity;
+                    $final = $final + ( $final * ($item->vat/100) );
+                }
+            }
             $uom_body = $Client->get($item->assortment->meta->href);
-
+            //dd($uom_body);
             if (property_exists($uom_body, 'uom')){
                 $propety_uom = true;
-                $uom = $Client->get($uom_body->uom->meta->href);
-                $uom = ['id' => $uom->code, 'name' => $uom->name];
             } else {
-
                 if (property_exists($uom_body, 'characteristics')){
                     $check_uom = $Client->get($uom_body->product->meta->href);
-
-                    if ( property_exists($check_uom, 'uom') ) {
-                        $propety_uom = true;
-                        $uom = $Client->get($check_uom->uom->meta->href);
-                        $uom = ['id' => $uom->code, 'name' => $uom->name];
-                    } else {
-                        $propety_uom = false;
-                        $uom = ['id' => 796, 'name' => 'шт'];
-                    }
-                } else {
-                    $propety_uom = false;
-                    $uom = ['id' => 796, 'name' => 'шт'];
-                }
+                    if (property_exists($check_uom, 'uom')){ $propety_uom = true; } else $propety_uom = false;
+                } else $propety_uom = false;
             }
 
 
@@ -96,7 +77,6 @@ class fiscalizationController extends Controller
                 'propety' => $propety_uom,
                 'name' => $Client->get($item->assortment->meta->href)->name,
                 'quantity' => $item->quantity,
-                'uom' => $uom,
                 'price' => round($item->price / 100, 2) ?: 0,
                 'vatEnabled' => $item->vatEnabled,
                 'vat' => $item->vat,
@@ -112,11 +92,9 @@ class fiscalizationController extends Controller
                 'vatSum' => $Body->vatSum / 100 ,
             ];
         };
-
         return [
             'id' => $Body->id,
             'name' => $Body->name,
-            //'payment_type' => (int) $payment_type,
             'sum' => $Body->sum / 100,
             'vat' => $vat,
             'attributes' => $attributes,
@@ -126,8 +104,7 @@ class fiscalizationController extends Controller
 
 
 
-    public function SendFiscalizationPopup(Request $request): \Illuminate\Http\JsonResponse
-    {
+    public function SendFiscalizationPopup(Request $request){
         $accountId = $request->accountId;
         $object_Id = $request->object_Id;
         $entity_type = $request->entity_type;
@@ -140,14 +117,8 @@ class fiscalizationController extends Controller
         if ($request->money_mobile === null) $money_mobile = 0;
         else $money_mobile = $request->money_mobile;
 
-        if ($request->total === null) $total = 0;
-        else $total = $request->total;
-
-
         $pay_type = $request->pay_type;
-
         $position = json_decode($request->position);
-
         $positions = [];
         foreach ($position as $item){
             if ($item != null){
@@ -155,37 +126,39 @@ class fiscalizationController extends Controller
             }
         }
 
-
-
-        $data = [
+        $body = [
             'accountId' => $accountId,
             'id_entity' => $object_Id,
             'entity_type' => $entity_type,
-
             'money_card' => $money_card,
             'money_cash' => $money_cash,
             'money_mobile' => $money_mobile,
-
-            'total' => $total,
             'pay_type' => $pay_type,
-
             'positions' => $positions,
         ];
 
-        //dd($data);
+        $Client = new Client();
+        $url = 'https://smartrekassa.kz/api/ticket';
+        //$url = 'http://rekassa/api/ticket';
+        try {
+            $ClinetPost = $Client->post( $url, [
+                'headers' => [
+                    'Accept' => 'application/json',
+                    'http_errors' => false,
+                    ],
+                'form_params' => $body,
+            ]);
 
-        //try {
+            $res = json_decode($ClinetPost->getBody());
 
-            $res = app(TicketService::class)->createTicket($data);
             return response()->json($res);
 
-       // } catch (\Throwable $e){
-       //     return response()->json($e->getMessage());
-      //  }
+        } catch (\Throwable $e){
+            return response()->json($e->getMessage());
+        }
     }
 
-    public function closeShiftPopup(Request $request): array
-    {
+    public function closeShiftPopup(Request $request){
         $accountId = $request->accountId;
         $pincode = $request->pincode;
 
@@ -196,7 +169,7 @@ class fiscalizationController extends Controller
 
         $Client = new Client();
         //$url = 'http://rekassa/api/closeShift';
-        $url = 'https://dev.smartrekassa.kz/api/closeShift';
+        $url = 'https://smartrekassa.kz/api/closeShift';
         try {
             $tmp = $Client->post( $url, [
                 'headers' => [
