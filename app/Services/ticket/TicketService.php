@@ -267,7 +267,11 @@ class TicketService
             //$sumPriceCoins = $row->price - ( $row->price * ($discount/100) ) ;
 
             $product = $this->getProductByAssortMeta($row->assortment->meta->href,$apiKeyMs);
-            $ProductByUOM= $this->getProductByUOM($product->uom->meta->href,$apiKeyMs);
+
+            if (property_exists($product, 'characteristics')){
+                $check_uom = $client->get($product->product->meta->href);
+                $ProductByUOM = $this->getProductByUOM($check_uom->uom->meta->href,$apiKeyMs);
+            } else  $ProductByUOM = $this->getProductByUOM($product->uom->meta->href,$apiKeyMs);
 
             if ( $ProductByUOM->name == "шт"){
                 for ($i = 1; $i <= $row->quantity; $i++){
@@ -284,8 +288,13 @@ class TicketService
                             "bills" => "".intval($sumPrice),
                             "coins" => intval(round(floatval($sumPrice)-intval($sumPrice),2)*100),
                         ],
-                        "measureUnitCode" => $this->getUomCode($product->uom->meta->href,$apiKeyMs),
+                        "measureUnitCode" => null,
                     ];
+
+                    if (property_exists($product, 'characteristics')){
+                        $check_uom = $client->get($product->product->meta->href);
+                        $position["commodity"]['measureUnitCode'] = $this->getUomCode($check_uom->uom->meta->href,$apiKeyMs);
+                    } else  $position["commodity"]['measureUnitCode'] = $this->getUomCode($product->uom->meta->href,$apiKeyMs);
 
                     if (property_exists($row,'trackingCodes')){
                         $position["commodity"]["excise_stamp"] = $row->trackingCodes[$i-1]->cis;
@@ -328,8 +337,14 @@ class TicketService
                         "bills" => "".intval($sumPrice) * $row->quantity,
                         "coins" => intval(round(floatval($sumPrice)-intval($sumPrice),2)*100) * $row->quantity,
                     ],
-                    "measureUnitCode" => $this->getUomCode($product->uom->meta->href,$apiKeyMs),
+                    "measureUnitCode" => null,
                 ];
+
+                if (property_exists($product, 'characteristics')){
+                    $check_uom = $client->get($product->product->meta->href);
+                    $position["commodity"]['measureUnitCode'] = $this->getUomCode($check_uom->uom->meta->href,$apiKeyMs);
+                } else  $position["commodity"]['measureUnitCode'] = $this->getUomCode($product->uom->meta->href,$apiKeyMs);
+
 
                 if (property_exists($row,'trackingCodes')){
                     $position["commodity"]["excise_stamp"] = $row->trackingCodes[$i-1]->cis;
@@ -363,6 +378,7 @@ class TicketService
 
             //dd(json_decode(json_encode($positions)));
         }
+        //dd($positions);
         return $positions;
     }
 
@@ -482,9 +498,15 @@ class TicketService
 
         foreach ($jsonPositions->rows as $position){
             if (in_array($position->id, $positions)){
+
                 $href = $position->assortment->meta->href;
                 $product = $client->get($href);
-                $checkUOM = $this->getProductByUOM($product->uom->meta->href,$apiKeyMs);
+                //dd($product);
+
+                if (property_exists($product, 'characteristics')){
+                    $check_uom = $client->get($product->product->meta->href);
+                    $checkUOM = $this->getProductByUOM($check_uom->uom->meta->href,$apiKeyMs);
+                } else  $checkUOM = $this->getProductByUOM($product->uom->meta->href,$apiKeyMs);
 
                 if ($checkUOM->name == "шт"){
                     $discount = $position->discount;
