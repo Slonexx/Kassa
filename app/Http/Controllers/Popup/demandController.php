@@ -137,6 +137,8 @@ class demandController extends Controller
             'positions' => $positions,
         ];
 
+        //dd($body, json_encode($body));
+
         $Client = new Client();
         $url = 'https://dev.smartrekassa.kz/api/ticket';
         //$url = 'http://rekassa/api/ticket';

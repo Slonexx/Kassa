@@ -365,7 +365,7 @@
     <div class="main-container">
         <div class="row gradient rounded p-2">
             <div class="col-9">
-                <div class="mx-2"> <img src="https://app.kz/static/logo.png" width="35" height="35"  alt="">
+                <div class="mx-2"> <img src="https://app.rekassa.kz/static/logo.png" width="35" height="35"  alt="">
                     <span class="text-white"> re:Kassa </span>
                     <span class="mx-5 text-white">Отгрузка №</span>
                     <span id="numberOrder" class="text-white"></span>

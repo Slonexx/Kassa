@@ -23,9 +23,11 @@ class TicketController extends Controller
             "accountId" => "required|string",
             "id_entity" => "required||string",
             "entity_type" => "required|string",
+
             "money_card" => "required",
             "money_cash" => "required",
             "money_mobile" => "required",
+
             "pay_type" => "required|string",
             "positions" => "required|array",
         ]);
