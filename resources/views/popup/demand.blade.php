@@ -26,6 +26,8 @@
                 };
                 let final = url + formatParams(params);
 
+                console.log('Запрос на атрибуты = ' + final)
+
                 let xmlHttpRequest = new XMLHttpRequest();
                 xmlHttpRequest.addEventListener("load", function () { $('#lDown').modal('hide');
                     let json = JSON.parse(this.responseText);

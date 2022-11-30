@@ -70,6 +70,7 @@ class salesreturnController extends Controller
             }
 
 
+
             $products[$id] = [
                 'position' => $item->id,
                 'propety' => $propety_uom,

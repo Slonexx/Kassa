@@ -72,6 +72,7 @@ class demandController extends Controller
             }
 
 
+
             $products[$id] = [
                 'position' => $item->id,
                 'propety' => $propety_uom,
