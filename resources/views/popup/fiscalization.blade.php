@@ -39,26 +39,27 @@
                     for (var i = 0; i < products.length; i++) {
 
                         if (products[i].propety === true) {
-                            window.document.getElementById('productId_' + i).innerHTML = products[i].position;
-                            window.document.getElementById('productName_' + i).innerHTML = products[i].name;
-                            window.document.getElementById('productQuantity_' + i).innerHTML = products[i].quantity;
-                            window.document.getElementById('productPrice_' + i).innerHTML = products[i].price;
-                            if (products[i].vat === 0)  window.document.getElementById('productVat_' + i).innerHTML = "без НДС";
-                            else window.document.getElementById('productVat_' + i).innerHTML = products[i].vat + '%';
-                            window.document.getElementById('productDiscount_' + i).innerHTML = products[i].discount + '%';
-                            window.document.getElementById('productFinal_' + i).innerHTML = products[i].final;
+                            if ( products[i].propety_code == false ){
+                                window.document.getElementById("messageAlert").innerText = "Позиции у которых цифрового кода в ед. изм. не добавились ";
+                                window.document.getElementById("message").style.display = "block";
+                            } else {
+                                window.document.getElementById('productId_' + i).innerHTML = products[i].position;
+                                window.document.getElementById('productName_' + i).innerHTML = products[i].name;
+                                window.document.getElementById('productQuantity_' + i).innerHTML = products[i].quantity;
+                                window.document.getElementById('productPrice_' + i).innerHTML = products[i].price;
+                                if (products[i].vat === 0)  window.document.getElementById('productVat_' + i).innerHTML = "без НДС";
+                                else window.document.getElementById('productVat_' + i).innerHTML = products[i].vat + '%';
+                                window.document.getElementById('productDiscount_' + i).innerHTML = products[i].discount + '%';
+                                window.document.getElementById('productFinal_' + i).innerHTML = products[i].final;
 
-                            let sum = window.document.getElementById("sum").innerHTML;
-                            if (!sum) sum = 0;
-                            window.document.getElementById("sum").innerHTML = roundToTwo(parseFloat(sum) + parseFloat(products[i].final));
-                            window.document.getElementById(i).style.display = "block";
+                                let sum = window.document.getElementById("sum").innerHTML;
+                                if (!sum) sum = 0;
+                                window.document.getElementById("sum").innerHTML = roundToTwo(parseFloat(sum) + parseFloat(products[i].final));
+                                window.document.getElementById(i).style.display = "block";
+                            }
                         } else {
                             window.document.getElementById("messageAlert").innerText = "Позиции у которых нет ед. изм. не добавились ";
                             window.document.getElementById("message").style.display = "block";
-                            if (products[i].propety_code == false){
-                                window.document.getElementById("messageAlert").innerText = "Позиции у которых цифрового кода в ед. изм. не добавились ";
-                                window.document.getElementById("message").style.display = "block";
-                            }
                         }
                     }
 
