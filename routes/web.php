@@ -27,6 +27,28 @@ Route::get('setAttributes/{accountId}/{tokenMs}', [AttributeController::class, '
 Route::get('/', [indexController::class, 'index']);
 Route::get('/{accountId}/', [indexController::class, 'indexShow'])->name('main');
 
+Route::get('/kassa/change/{accountId}', [changeController::class, 'getChange']);
+Route::post('/kassa/change/{accountId}', [changeController::class, 'postChange']);
+Route::get('/kassa/get_shift_report/info/{accountId}', [changeController::class, 'getInfoIdShift']);
+
+Route::post('/kassa/get_shift_report/{accountId}', [changeController::class, 'getXReport']);
+Route::post('/kassa/get_close_report/{accountId}', [changeController::class, 'getZReport']);
+
+
+
+Route::get('/Setting/Device/{accountId}', [DeviceController::class, 'getDevice'])->name('getDevices');
+Route::post('/Setting/Device/{accountId}', [postDeviceController::class, 'postDevice']);
+
+Route::get('/Setting/Document/{accountId}', [DocumentController::class, 'getDocument'])->name('getDocument');
+Route::post('/Setting/Document/{accountId}', [postDocumentController::class, 'postDocument']);
+
+Route::get('/Setting/Worker/{accountId}', [WorkerController::class, 'getWorker'])->name('getWorker');
+Route::post('/Setting/Worker/{accountId}', [postWorkerController::class, 'postWorker']);
+
+Route::get('/delete/Device/{znm}', [deleteDevice::class, 'delete']);
+
+
+
 Route::get('/widget/InfoAttributes/', [indexController::class, 'widgetInfoAttributes']);
 
 Route::get('/widget/customerorder', [customerorderEditController::class, 'customerorder']);
@@ -47,17 +69,3 @@ Route::get('/Popup/salesreturn/show', [salesreturnController::class, 'ShowSalesr
 Route::get('/Popup/salesreturn/send', [salesreturnController::class, 'SendSalesreturnPopup']);
 
 
-
-Route::get('/Setting/Device/{accountId}', [DeviceController::class, 'getDevice'])->name('getDevices');
-Route::post('/Setting/Device/{accountId}', [postDeviceController::class, 'postDevice']);
-
-
-Route::get('/Setting/Document/{accountId}', [DocumentController::class, 'getDocument'])->name('getDocument');
-Route::post('/Setting/Document/{accountId}', [postDocumentController::class, 'postDocument']);
-
-
-Route::get('/Setting/Worker/{accountId}', [WorkerController::class, 'getWorker'])->name('getWorker');
-Route::post('/Setting/Worker/{accountId}', [postWorkerController::class, 'postWorker']);
-
-
-Route::get('/delete/Device/{znm}', [deleteDevice::class, 'delete']);
