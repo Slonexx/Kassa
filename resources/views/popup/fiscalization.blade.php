@@ -55,6 +55,10 @@
                         } else {
                             window.document.getElementById("messageAlert").innerText = "Позиции у которых нет ед. изм. не добавились ";
                             window.document.getElementById("message").style.display = "block";
+                            if (products[i].propety_code == false){
+                                window.document.getElementById("messageAlert").innerText = "Позиции у которых цифрового кода в ед. изм. не добавились ";
+                                window.document.getElementById("message").style.display = "block";
+                            }
                         }
                     }
 
