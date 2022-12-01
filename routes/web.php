@@ -6,6 +6,7 @@ use App\Http\Controllers\deleteData\deleteDevice;
 use App\Http\Controllers\Popup\demandController;
 use App\Http\Controllers\Popup\fiscalizationController;
 use App\Http\Controllers\Popup\salesreturnController;
+use App\Http\Controllers\Web\changeController;
 use App\Http\Controllers\Web\getSetting\BaseController;
 use App\Http\Controllers\Web\getSetting\DeviceController;
 use App\Http\Controllers\Web\getSetting\DocumentController;
