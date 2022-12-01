@@ -210,26 +210,4 @@ class changeController extends Controller
         }
     }
 
-    public function getTest(Request $request, $accountId){
-        $Setting = new getSetting($accountId);
-
-        $Device = new getDevices($accountId);
-        $Device = $Device->devices;
-
-        foreach ($Device as $item){
-            $znm = $item->znm;
-            $password = $item->password;
-        }
-
-        $clientK = new KassClient($znm, $password, $Setting->apiKey);
-        $id = $clientK->getNewJwtToken()->id;
-
-        $id_ticket = '91338';
-
-        $getBody = $clientK->post('/api/crs/'.$id.'/tickets/'.$id_ticket.'/receipts', ['type'=>'PRINTER']);
-        return response()->json($getBody);
-        dd($getBody);
-
-    }
-
 }
