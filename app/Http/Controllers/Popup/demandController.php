@@ -60,21 +60,37 @@ class demandController extends Controller
                     $final = $final + ( $final * ($item->vat/100) );
                 }
             }
+
             $uom_body = $Client->get($item->assortment->meta->href);
+            $propety_uom_code = false;
             //dd($uom_body);
-            if (property_exists($uom_body, 'uom')){
+            if ( property_exists($uom_body, 'uom') ){
                 $propety_uom = true;
+
+                $check_uom_fickal_number = $Client->get($uom_body->uom->meta->href);
+                if ( property_exists($check_uom_fickal_number, 'code') ){
+                    $propety_uom_code = true;
+                } else $propety_uom_code = false;
+
             } else {
-                if (property_exists($uom_body, 'characteristics')){
+                if ( property_exists($uom_body, 'characteristics') ){
                     $check_uom = $Client->get($uom_body->product->meta->href);
-                    if (property_exists($check_uom, 'uom')){ $propety_uom = true; } else $propety_uom = false;
+                    if (property_exists($check_uom, 'uom')){
+                        $propety_uom = true;
+                        $check_uom_fickal_number = $Client->get($uom_body->uom->meta->href);
+                        if ( property_exists($check_uom_fickal_number, 'code') ){
+                            $propety_uom_code = true;
+                        } else $propety_uom_code = false;
+                    } else $propety_uom = false;
                 } else $propety_uom = false;
             }
+
 
 
             $products[$id] = [
                 'position' => $item->id,
                 'propety' => $propety_uom,
+                'propety_code' => $propety_uom_code,
                 'name' => $Client->get($item->assortment->meta->href)->name,
                 'quantity' => $item->quantity,
                 'price' => round($item->price / 100, 2) ?: 0,

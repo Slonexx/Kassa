@@ -60,6 +60,7 @@ class fiscalizationController extends Controller
                     $final = $final + ( $final * ($item->vat/100) );
                 }
             }
+
             $uom_body = $Client->get($item->assortment->meta->href);
             $propety_uom_code = false;
             //dd($uom_body);
@@ -89,6 +90,7 @@ class fiscalizationController extends Controller
             $products[$id] = [
                 'position' => $item->id,
                 'propety' => $propety_uom,
+                'propety_code' => $propety_uom_code,
                 'name' => $Client->get($item->assortment->meta->href)->name,
                 'quantity' => $item->quantity,
                 'price' => round($item->price / 100, 2) ?: 0,

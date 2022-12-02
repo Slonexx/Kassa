@@ -5,44 +5,33 @@
 
     <script>
 
+        //const url = 'http://rekassa/Popup/customerorder/show';
 
-        //const url = 'https://rekassa/Popup/demand/show'
-        const url = 'https://dev.smartrekassa.kz/Popup/demand/show'
+        const url = 'https://smartrekassa.kz/Popup/demand/show';
+        let object_Id = '';
+        let accountId = '';
+        let entity_type = '';
+        let id_ticket = '';
 
-        let object_Id = ''
-        let accountId = ''
-        let entity_type = ''
-        let id_ticket = ''
+        window.addEventListener("message", function(event) { openDown();newPopup();
 
-        /* let receivedMessage = {
-             "name":"OpenPopup","messageId":1,"popupName":"fiscalizationPopup","popupParameters":
-                 {"object_Id":"4037cab5-7496-11ed-0a80-0fcb003d9e39","entity_type":"demand","accountId":"1dd5bd55-d141-11ec-0a80-055600047495"}
-         };*/
+            let receivedMessage = event.data;
 
-
-        window.addEventListener("message", function(event) {
-            openDown()
-            newPopup()
-            let receivedMessage = event.data
             if (receivedMessage.name === 'OpenPopup') {
-
                 object_Id = receivedMessage.popupParameters.object_Id;
                 accountId = receivedMessage.popupParameters.accountId;
                 entity_type = receivedMessage.popupParameters.entity_type;
-                let data = { object_Id: object_Id, accountId: accountId, };
+                let params = { object_Id: object_Id,  accountId: accountId, };
+                let final = url + formatParams(params);
 
-                let settings = ajax_settings(url, "GET", data);
-                console.log(url + ' settings ↓ ')
-                console.log(settings)
-
-                $.ajax(settings).done(function (json) {
-                    console.log(url + ' response ↓ ')
-                    console.log(json)
+                let xmlHttpRequest = new XMLHttpRequest();
+                xmlHttpRequest.addEventListener("load", function () {
                     $('#lDown').modal('hide')
+                    let json = JSON.parse(this.responseText)
 
                     id_ticket = json.attributes.ticket_id
-                    window.document.getElementById("numberOrder").innerHTML = json.name;
-                    let products = json.products;
+                    window.document.getElementById("numberOrder").innerHTML = json.name
+                    let products = json.products
 
                     for (let i = 0; i < products.length; i++) {
                         if (products[i].propety === true) {
@@ -54,14 +43,8 @@
                                 window.document.getElementById('productId_' + i).innerHTML = products[i].position;
                                 window.document.getElementById('productName_' + i).innerHTML = products[i].name;
                                 window.document.getElementById('productQuantity_' + i).innerHTML = products[i].quantity;
-                                if (products[i].trackingCodes == true) {
-                                    window.document.getElementById('trackingCodes_minus_' + i).innerText = ''
-                                    window.document.getElementById('trackingCodes_plus_' + i).innerText = ''
-                                }
-                                window.document.getElementById('productUOM_' + i).innerHTML = products[i].uom['name']
-                                window.document.getElementById('productIDUOM_' + i).innerHTML = products[i].uom['id'];
                                 window.document.getElementById('productPrice_' + i).innerHTML = products[i].price;
-                                if (products[i].vat === 0)  window.document.getElementById('productVat_' + i).innerHTML = "без НДС";
+                                if (products[i].vat === 0) window.document.getElementById('productVat_' + i).innerHTML = "без НДС";
                                 else window.document.getElementById('productVat_' + i).innerHTML = products[i].vat + '%';
                                 window.document.getElementById('productDiscount_' + i).innerHTML = products[i].discount + '%';
                                 window.document.getElementById('productFinal_' + i).innerHTML = products[i].final;
@@ -71,152 +54,237 @@
                                 window.document.getElementById("sum").innerHTML = roundToTwo(parseFloat(sum) + parseFloat(products[i].final));
                                 window.document.getElementById(i).style.display = "block";
                             }
-
                         } else {
                             window.document.getElementById("messageAlert").innerText = "Позиции у которых нет ед. изм. не добавились ";
                             window.document.getElementById("message").style.display = "block";
                         }
                     }
-                    window.document.getElementById('cash').value = window.document.getElementById("sum").innerHTML
-                    if (json.attributes.ticket_id != null){
-                        window.document.getElementById("ShowCheck").style.display = "block";
-                        window.document.getElementById("refundCheck").style.display = "block";
-                    } else {
-                        window.document.getElementById("getKKM").style.display = "block";
-                    }
 
+                    if (json.attributes != null){
+                        if (json.attributes.ticket_id != null){
+                            window.document.getElementById("ShowCheck").style.display = "block";
+                            window.document.getElementById("refundCheck").style.display = "block";
+                        } else {
+                            window.document.getElementById("getKKM").style.display = "block";
+                        }
+                    } else  window.document.getElementById("getKKM").style.display = "block";
                     window.document.getElementById("closeButtonId").style.display = "block";
-                })
-
+                });
+                xmlHttpRequest.open("GET", final);
+                xmlHttpRequest.send();
             }
         });
+        function roundToTwo(num) {
+            return +(Math.round(num + "e+2")  + "e-2");
+        }
+        function formatParams(params) {
+            return "?" + Object
+                .keys(params)
+                .map(function (key) {
+                    return key + "=" + encodeURIComponent(params[key])
+                })
+                .join("&")
+        }
+        function deleteBTNClick(Object){
+
+
+            let sum = document.getElementById("sum").innerHTML;
+            let final = document.getElementById('productFinal_' + Object).innerHTML;
+            window.document.getElementById("sum").innerHTML = sum-final;
+
+
+            window.document.getElementById('productName_' + Object).innerHTML = '';
+            window.document.getElementById('productQuantity_' + Object).innerHTML = '';
+            window.document.getElementById('productPrice_' + Object).innerHTML = '';
+            window.document.getElementById('productVat_' + Object).innerHTML = '';
+            window.document.getElementById('productDiscount_' + Object).innerHTML = '';
+            window.document.getElementById('productFinal_' + Object).innerHTML = '';
+            window.document.getElementById(Object).style.display = "none";
+        }
+
+
+        function isNumberKeyCash(evt){
+            var charCode = (evt.which) ? evt.which : event.keyCode
+            if (charCode == 46){
+                var inputValue = $("#cash").val();
+                var count = (inputValue.match(/'.'/g) || []).length;
+                if(count<1){
+                    if (inputValue.indexOf('.') < 1){
+                        return true;
+                    }
+                    return false;
+                }else{
+                    return false;
+                }
+            }
+            if (charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57)){
+                return false;
+            }
+            return true;
+        }
+        function isNumberKeyCard(evt){
+            var charCode = (evt.which) ? evt.which : event.keyCode
+            if (charCode == 46){
+                var inputValue = $("#card").val();
+                var count = (inputValue.match(/'.'/g) || []).length;
+                if(count<1){
+                    if (inputValue.indexOf('.') < 1){
+                        return true;
+                    }
+                    return false;
+                }else{
+                    return false;
+                }
+            }
+            if (charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57)){
+                return false;
+            }
+            return true;
+        }
+        function isNumberKeyMobile(evt){
+            var charCode = (evt.which) ? evt.which : event.keyCode
+            if (charCode == 46){
+                var inputValue = $("#mobile").val();
+                var count = (inputValue.match(/'.'/g) || []).length;
+                if(count<1){
+                    if (inputValue.indexOf('.') < 1){
+                        return true;
+                    }
+                    return false;
+                }else{
+                    return false;
+                }
+            }
+            if (charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57)){
+                return false;
+            }
+            return true;
+        }
 
         function sendKKM(pay_type){
-            let url = 'https://dev.smartrekassa.kz/Popup/demand/send';
-
-            let button_hide = ''
-            if (pay_type === 'return') button_hide = 'refundCheck'
-            if (pay_type === 'sell') button_hide = 'getKKM'
-
+            let button_hide = '';
+            if (pay_type == 'return') button_hide = 'refundCheck';
+            if (pay_type == 'sell') button_hide = 'getKKM';
             window.document.getElementById(button_hide).style.display = "none";
             let modalShowHide = 'show';
 
-            let total = window.document.getElementById('sum').innerText
             let money_card = window.document.getElementById('card').value;
             let money_cash = window.document.getElementById('cash').value;
             let money_mobile = window.document.getElementById('mobile').value;
             let SelectorInfo = document.getElementById('valueSelector');
             let option = SelectorInfo.options[SelectorInfo.selectedIndex];
 
-            let error_what = option_value_error_fu(option.value, money_cash, money_card, money_mobile)
-            if (error_what === true){
-                modalShowHide = 'hide'
-            }
-
-
-            if (total-0.01 <= money_card+money_cash+money_mobile) {
-                if (modalShowHide === 'show'){
-
-                    $('#downL').modal('toggle')
-                    let products = []
-                    for (let i = 0; i < 99; i++) {
-                        if ( window.document.getElementById(i).style.display === 'block' ) {
-                            products[i] = {
-                                id:window.document.getElementById('productId_'+i).innerText,
-                                name:window.document.getElementById('productName_'+i).innerText,
-                                quantity:window.document.getElementById('productQuantity_'+i).innerText,
-                                UOM:window.document.getElementById('productIDUOM_'+i).innerText,
-                                price:window.document.getElementById('productPrice_'+i).innerText,
-                                is_nds:window.document.getElementById('productVat_'+i).innerText,
-                                discount:window.document.getElementById('productDiscount_'+i).innerText
-                            }
-                        }
-                    }
-
-                    let data =  {
-                        "accountId": accountId,
-                        "object_Id": object_Id,
-                        "entity_type": entity_type,
-
-                        "money_card": money_card,
-                        "money_cash": money_cash,
-                        "money_mobile": money_mobile,
-
-                        "pay_type": pay_type,
-                        "total": total,
-
-                        "position": JSON.stringify(products),
-                    }
-                    console.log(url + ' data ↓ ')
-                    console.log(data)
-
-                    $.ajax({
-                        url: url,
-                        method: 'post',
-                        dataType: 'json',
-                        data: data,
-                        success: function(response){
-                            $('#downL').modal('hide')
-                            console.log(url + ' response ↓ ')
-                            console.log(response)
-                            if (response.code === 200){
-                                window.document.getElementById("messageGoodAlert").innerText = "Чек создан";
-                                window.document.getElementById("messageGood").style.display = "block";
-                                window.document.getElementById("ShowCheck").style.display = "block";
-                                window.document.getElementById("closeShift").style.display = "block";
-                                modalShowHide = 'hide';
-                                id_ticket = response.res.response.id;
-                            } else {
-                                if (response.res.hasOwnProperty('error')) {
-                                    if (response.res.error.code === 'CASH_REGISTER_SHIFT_PERIOD_EXPIRED') {
-                                        window.document.getElementById('messageAlert').innerText = "Предыдущая смена не закрыта !";
-                                        window.document.getElementById('message').style.display = "block";
-                                        window.document.getElementById(button_hide).style.display = "block";
-                                        modalShowHide = 'hide';
-                                    } else  {
-                                        window.document.getElementById('messageAlert').innerText = response.res.error.code;
-                                        window.document.getElementById('message').style.display = "block";
-                                        window.document.getElementById(button_hide).style.display = "block";
-                                        modalShowHide = 'hide';
-                                    }
-                                } else {
-                                    window.document.getElementById('messageAlert').innerText = "Ошибка 400";
-                                    window.document.getElementById('message').style.display = "block";
-                                    window.document.getElementById(button_hide).style.display = "block";
-                                    modalShowHide = 'hide';
-                                }
-                            }
-                        }
-                    });
-                    modalShowHide = 'hide';
+            if (option.value == 0){
+                if (!money_cash) {
+                    window.document.getElementById('messageAlert').innerText = 'Вы не ввели сумму наличных';
+                    window.document.getElementById('message').style.display = "block";
+                    modalShowHide = 'hide'
                 }
-                else window.document.getElementById(button_hide).style.display = "block";
-            } else {
-                window.document.getElementById('messageAlert').innerText = 'Сумма некорректна, введите больше';
-                window.document.getElementById('message').style.display = "block";
-                window.document.getElementById(button_hide).style.display = "block";
-                modalShowHide = 'hide'
             }
+            if (option.value == 1){
+                if (!money_card) {
+                    window.document.getElementById('messageAlert').innerText = 'Вы не ввели сумму карты';
+                    window.document.getElementById('message').style.display = "block";
+                    modalShowHide = 'hide'
+                }
+            }
+            if (option.value == 2){
+                if (!money_mobile){
+                    window.document.getElementById('messageAlert').innerText = 'Вы не ввели сумму мобильных';
+                    window.document.getElementById('message').style.display = "block";
+                    modalShowHide = 'hide'
+                }
+            }
+            if (option.value == 3){
+                if (!money_card && !money_cash && !money_mobile){
+                    window.document.getElementById('messageAlert').innerText = 'Вы не ввели сумму';
+                    window.document.getElementById('message').style.display = "block";
+                    modalShowHide = 'hide'
+                }
+            }
+
+            let url = 'https://smartrekassa.kz/Popup/demand/send';
+
+            if (modalShowHide === 'show'){
+                $('#downL').modal('toggle');
+                let products = [];
+                for (let i = 0; i < 20; i++) {
+                    if ( window.document.getElementById(i).style.display === 'block' ) {
+                        products[i] = window.document.getElementById('productId_'+i).innerText
+                    }
+                }
+                let params = {
+                    accountId: accountId,
+                    object_Id: object_Id,
+                    entity_type: entity_type,
+                    money_card: money_card,
+                    money_cash: money_cash,
+                    money_mobile: money_mobile,
+                    pay_type: pay_type,
+                    position: JSON.stringify(products),
+                };
+                let final = url + formatParams(params);
+                console.log('send to kkm = ' + final);
+                let xmlHttpRequest = new XMLHttpRequest();
+                xmlHttpRequest.addEventListener("load", function () {
+                    $('#downL').modal('hide');
+                    let json = JSON.parse(this.responseText);
+                    if (json.message === 'Ticket created!'){
+                        window.document.getElementById("messageGoodAlert").innerText = "Чек создан";
+                        window.document.getElementById("messageGood").style.display = "block";
+                        window.document.getElementById("ShowCheck").style.display = "block";
+                        window.document.getElementById("closeShift").style.display = "block";
+                        window.document.getElementById(button_hide).style.display = "block";
+                        modalShowHide = 'hide';
+                        let response = json.response;
+                        id_ticket = response.id;
+                    } else {
+                        window.document.getElementById('messageAlert').innerText = "Ошибка 400";
+                        window.document.getElementById('message').style.display = "block";
+                        window.document.getElementById(button_hide).style.display = "block";
+                        modalShowHide = 'hide';
+                    }
+                });
+                xmlHttpRequest.open("GET", final);
+                xmlHttpRequest.send();
+                modalShowHide = 'hide';
+            }
+            else window.document.getElementById(button_hide).style.display = "block";
         }
 
+
         function ShowCheck(){
-            let urlrekassa = 'https://app-test.rekassa.kz/'
-            //let url = 'http://rekassa/Popup/customerorder/closeShift';
-            let url = 'https://dev.smartrekassa.kz/api/ticket';
-            let data = {
+            let urlrekassa = 'https://app.rekassa.kz/'
+            let url = 'https://smartrekassa.kz/api/ticket';
+            let params = {
                 accountId: accountId,
                 id_ticket: id_ticket,
             };
+            let final = url + formatParams(params);
+            let xmlHttpRequest = new XMLHttpRequest();
+            xmlHttpRequest.addEventListener("load", function () {
+                window.open(urlrekassa + this.responseText);
+            });
+            xmlHttpRequest.open("GET", final);
+            xmlHttpRequest.send();
+        }
 
-            let settings = ajax_settings(url, "GET", data);
-            console.log(url + ' settings ↓ ')
-            console.log(settings)
+        function updatePopup(){
+            let params = {
+                object_Id: object_Id,
+                accountId: accountId,
+            };
+            let final = url + formatParams(params);
 
-            $.ajax(settings).done(function (response) {
-                console.log(url + ' response ↓ ')
-                console.log(response)
-                window.open(urlrekassa + response);
-            })
+            let xmlHttpRequest = new XMLHttpRequest();
+            xmlHttpRequest.addEventListener("load", function () {
+
+                let json = JSON.parse(this.responseText);
+
+
+            });
+            xmlHttpRequest.open("GET", final);
+            xmlHttpRequest.send();
         }
 
         function SelectorSum(Selector){
@@ -254,38 +322,45 @@
             }
 
         }
-
-        function updateQuantity(id, params){
-            let object_Quantity = window.document.getElementById('productQuantity_'+id);
-            let Quantity = parseInt(object_Quantity.innerText)
-
-            if (Quantity >= 0 ){
-
-                let object_price = window.document.getElementById('productPrice_'+id).innerText;
-                let object_Final = window.document.getElementById('productFinal_'+id);
-
-                let object_sum = window.document.getElementById('sum');
-                let sum = parseFloat(object_sum.innerText - object_Final.innerText)
-
-                if (params === 'plus'){
-                    object_Quantity.innerText = Quantity + 1
-                    object_Final.innerText = object_Quantity.innerText * object_price
-                    object_sum.innerText = parseFloat(sum + parseFloat(object_Final.innerText))
-                }
-                if (params === 'minus'){
-                    object_Quantity.innerText = Quantity - 1
-                    object_Final.innerText = object_Quantity.innerText * object_price
-                    object_sum.innerText = parseFloat(sum + parseFloat(object_Final.innerText))
-                    if (parseInt(object_Quantity.innerText) === 0){
-                        deleteBTNClick( id )
-                    }
-                }
-            } else deleteBTNClick( id )
+        function openDown(){
+            $('#lDown').modal('show');
+        }
+        function closeDown(){
+            $('#lDown').modal('hide');
+            $('#downL').modal('hide');
+        }
 
 
 
+        function newPopup(){
+            window.document.getElementById("sum").innerHTML = ''
 
+            window.document.getElementById("message").style.display = "none"
+            window.document.getElementById("messageGood").style.display = "none"
+            window.document.getElementById("closeButtonId").style.display = "none"
 
+            window.document.getElementById("refundCheck").style.display = "none"
+            window.document.getElementById("getKKM").style.display = "none"
+            window.document.getElementById("ShowCheck").style.display = "none"
+
+            window.document.getElementById("cash").value = ''
+            window.document.getElementById("card").value = ''
+            window.document.getElementById("mobile").value = ''
+
+            window.document.getElementById("cash").style.display = "block"
+            let thisSelectorSum = window.document.getElementById("valueSelector")
+            thisSelectorSum.value = 0;
+            SelectorSum(thisSelectorSum)
+
+            for (var i = 0; i < 20; i++) {
+                window.document.getElementById(i).style.display = "none"
+                window.document.getElementById('productName_' + i).innerHTML = ''
+                window.document.getElementById('productQuantity_' + i).innerHTML = ''
+                window.document.getElementById('productPrice_' + i).innerHTML = ''
+                window.document.getElementById('productVat_' + i).innerHTML = ''
+                window.document.getElementById('productDiscount_' + i).innerHTML = ''
+                window.document.getElementById('productFinal_' + i).innerHTML = ''
+            }
         }
     </script>
 
@@ -293,16 +368,23 @@
     <div class="main-container">
         <div class="row gradient rounded p-2">
             <div class="col-9">
-                <div class="mx-2"> <img src="https://app.rekassa.kz/static/logo.png" width="45" height="45"  alt="">
-                    <span class="text-white"> reKassa </span>
+                <div class="mx-2"> <img src="https://app.rekassa.kz/static/logo.png" width="35" height="35"  alt="">
+                    <span class="text-white"> re:Kassa </span>
                     <span class="mx-5 text-white">Отгрузка №</span>
                     <span id="numberOrder" class="text-white"></span>
                 </div>
             </div>
             <div class="col-3">
-                <div class="row"> <div class="col-6"></div>
+                <div class="row">
+                    <div class="col-3">
+
+                    </div>
                     <div class="col-6">
-                        <button id="closeButtonId" type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modal" >Закрыть смену</button>
+                        <button id="closeButtonId" type="button" class="btn btn-danger"
+                                data-bs-toggle="modal" data-bs-target="#modal" >Закрыть смену</button>
+                    </div>
+                    <div class="col-3 text-right">
+                        <button type="submit" onclick="updatePopup()" class="myButton btn "> <i class="fa-solid fa-arrow-rotate-right"></i> </button>
                     </div>
                 </div>
             </div>
@@ -324,36 +406,30 @@
                 <div id="main" class="row p-3">
                     <div class="col-12">
                         <div class="row">
-                            <div class="col-1 text-black">№</div>
-                            <div class="col-4 text-black">Наименование</div>
-                            <div class="col-1 text-black">Кол-во</div>
-                            <div class="col-1 text-black">Ед. Изм.</div>
-                            <div class="col-1 text-black">Цена</div>
-                            <div class="col-1 text-black">НДС</div>
-                            <div class="col-1 text-black">Скидка</div>
-                            <div class="col-1 text-black">Сумма</div>
-                            <div class="col-1 text-black">Учитывать </div>
-                            <div class="buttons-container-head mt-1"></div>
+                            <div class="col-1 text-success">№</div>
+                            <div class="col-5 text-success">Наименование</div>
+                            <div class="col-1 text-success">Кол-во</div>
+                            <div class="col-1 text-success">Цена</div>
+                            <div class="col-1 text-success">НДС</div>
+                            <div class="col-1 text-success">Скидка</div>
+                            <div class="col-1 text-success">Сумма</div>
+                            <div class="col-1 text-success">Учитывать </div>
+                            <hr class="mt-1 text-success" style="background-color: #0c7d70; height: 3px; border: 0;">
                         </div>
                     </div>
                     <div id="products" class="col-12 text-black">
-                        @for( $i=0; $i<99; $i++)
-                            <div id="{{ $i }}" class="mt-2" style="display:block;">
+                        @for( $i=0; $i<20; $i++)
+                            <div id="{{ $i }}" class="row mt-2" style="display:block;">
                                 <div class="row">
-                                    <div class="col-1">{{ $i + 1 }}</div> <div id="{{'productId_'.$i}}" style="display:none;"></div>
-                                    <div id="{{ 'productName_'.$i }}"  class="col-4" ></div>
-                                    <div class="col-1 text-center row">
-                                        <div id="{{ 'trackingCodes_minus_'.$i }}" class="col-4"><i onclick="updateQuantity( '{{ $i }}', 'minus')" class="fa-solid fa-circle-minus text-danger" style="cursor: pointer"></i></div>
-                                        <div id="{{ 'productQuantity_'.$i }}" class="col-4"></div>
-                                        <div id="{{ 'trackingCodes_plus_'.$i }}" class="col-4"><i onclick="updateQuantity( '{{ $i }}', 'plus')" class="fa-solid fa-circle-plus text-success" style="cursor: pointer"></i></div>
-                                    </div>
-                                    <div id="{{ 'productUOM_'.$i }}"  class="col-1 text-center"></div>
-                                    <div id="{{ 'productIDUOM_'.$i }}"  class="col-1 text-center" style="display: none"></div>
+                                    <div class="col-1">{{ $i + 1 }}</div>
+                                    <div id="{{'productId_'.$i}}" style="display:none;"></div>
+                                    <div id="{{ 'productName_'.$i }}"  class="col-5"></div>
+                                    <div id="{{ 'productQuantity_'.$i }}"  class="col-1 text-center"></div>
                                     <div id="{{ 'productPrice_'.$i }}"  class="col-1 text-center"></div>
                                     <div id="{{ 'productVat_'.$i }}"  class="col-1 text-center"></div>
                                     <div id="{{ 'productDiscount_'.$i }}"  class="col-1 text-center"></div>
                                     <div id="{{ 'productFinal_'.$i }}"  class="col-1 text-center"></div>
-                                    <div class="col-1 d-flex justify-content-end">
+                                    <div class="col-1 text-center">
                                         <button onclick="deleteBTNClick( {{ $i }} )" class="btn btn-danger">Убрать</button>
                                     </div>
                                 </div>
@@ -469,7 +545,7 @@
                 </div>
                 <div class="modal-body text-center" style="background-color: #e5eff1">
                     <div class="row">
-                        <img style="width: 100%" src="https://smartrekassa.kz/Config/download.gif" alt="">
+                        <img style="width: 100%" src="https://i.gifer.com/1uoA.gif" alt="">
                     </div>
                 </div>
             </div>
@@ -486,7 +562,7 @@
                 </div>
                 <div class="modal-body text-center" style="background-color: #e5eff1">
                     <div class="row">
-                        <img style="width: 100%" src="https://smartrekassa.kz/Config/download.gif" alt="">
+                        <img style="width: 100%" src="https://i.gifer.com/1uoA.gif" alt="">
                     </div>
                 </div>
             </div>
@@ -494,197 +570,49 @@
     </div>
 
 @endsection
-<script>
 
-    function ajax_settings(url, method, data){
-        return {
-            "url": url,
-            "method": method,
-            "timeout": 0,
-            "headers": {"Content-Type": "application/json",},
-            "data": data,
-        }
+<style>
+
+    body {
+        overflow: hidden;
+    }
+    .main-container {
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+    }
+    .content-container {
+        overflow-y: auto;
+        overflow-x: hidden;
+        flex-grow: 1;
+    }
+    .buttons-container-head{
+        background-color: rgba(12, 125, 112, 0.27);
+        padding-top: 3px;
+        min-height: 3px;
+    }
+    .buttons-container {
+        padding-top: 10px;
+        min-height: 100px;
     }
 
-    function newPopup(){
-        window.document.getElementById("sum").innerHTML = ''
-
-        window.document.getElementById("message").style.display = "none"
-        window.document.getElementById("messageGood").style.display = "none"
-        window.document.getElementById("closeButtonId").style.display = "none"
-
-        window.document.getElementById("refundCheck").style.display = "none"
-        window.document.getElementById("getKKM").style.display = "none"
-        window.document.getElementById("ShowCheck").style.display = "none"
-
-        window.document.getElementById("cash").value = ''
-        window.document.getElementById("card").value = ''
-        window.document.getElementById("mobile").value = ''
-
-        window.document.getElementById("cash").style.display = "block"
-        let thisSelectorSum = window.document.getElementById("valueSelector")
-        thisSelectorSum.value = 0;
-        SelectorSum(thisSelectorSum)
-
-        for (let i = 0; i < 99; i++) {
-            window.document.getElementById(i).style.display = "none"
-            window.document.getElementById('productName_' + i).innerHTML = ''
-            window.document.getElementById('productQuantity_' + i).innerHTML = ''
-            window.document.getElementById('productPrice_' + i).innerHTML = ''
-            window.document.getElementById('productVat_' + i).innerHTML = ''
-            window.document.getElementById('productDiscount_' + i).innerHTML = ''
-            window.document.getElementById('productFinal_' + i).innerHTML = ''
-        }
+    .myButton {
+        box-shadow: 0px 4px 5px 0px #5d5d5d !important;
+        background-image: radial-gradient( circle farthest-corner at 10% 20%,  rgba(14,174,87,1) 0%, rgba(12,116,117,1) 90% ) !important;
+        color: white !important;
+        border-radius:50px !important;
+        display:inline-block !important;
+        cursor:pointer !important;
+        padding:5px 5px !important;
+        text-decoration:none !important;
     }
+    .myButton:hover {
+        filter: invert(1);
 
-    function openDown(){
-        $('#lDown').modal('show');
+        color: #111111 !important;
     }
-    function closeDown(){
-        $('#lDown').modal('hide');
-        $('#downL').modal('hide');
+    .myButton:active {
+        position: relative !important;
+        top: 1px !important;
     }
-
-    function formatParams(params) {
-        return "?" + Object
-            .keys(params)
-            .map(function (key) {
-                return key + "=" + encodeURIComponent(params[key])
-            })
-            .join("&")
-    }
-
-    function option_value_error_fu(index_option, money_card, money_cash, money_mobile){
-        console.log(index_option)
-        let params = false
-        switch (index_option) {
-            case 0 && "0": {
-                if (!money_cash) {
-                    window.document.getElementById('messageAlert').innerText = 'Вы не ввели сумму наличных'
-                    window.document.getElementById('message').style.display = "block"
-                    params = true
-                }
-                break
-            }
-            case 1 && "1": {
-                if (!money_cash) {
-                    window.document.getElementById('messageAlert').innerText = 'Вы не ввели сумму карты'
-                    window.document.getElementById('message').style.display = "block"
-                    params = true
-                }
-                break
-            }
-            case 2 && "2": {
-                if (!money_mobile){
-                    window.document.getElementById('messageAlert').innerText = 'Вы не ввели сумму мобильных'
-                    window.document.getElementById('message').style.display = "block"
-                    params = true
-                }
-                break
-            }
-            case 3 && "3": {
-                if (!money_card && !money_cash && !money_mobile){
-                    window.document.getElementById('messageAlert').innerText = 'Вы не ввели сумму'
-                    window.document.getElementById('message').style.display = "block"
-                    params = true
-                }
-                break
-            }
-            default: {
-
-            }
-
-        }
-        return params
-    }
-
-    function roundToTwo(num) { return +(Math.round(num + "e+2")  + "e-2"); }
-
-    function isNumberKeyCash(evt){
-        let charCode = (evt.which) ? evt.which : event.keyCode;
-        if (charCode == 46){
-            let inputValue = $("#cash").val();
-            let count = (inputValue.match(/'.'/g) || []).length;
-            if(count<1){
-                return inputValue.indexOf('.') < 1;
-
-            }else{
-                return false;
-            }
-        }
-        return !(charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57));
-
-    }
-    function isNumberKeyCard(evt){
-        let charCode = (evt.which) ? evt.which : event.keyCode;
-        if (charCode == 46){
-            let inputValue = $("#card").val();
-            let count = (inputValue.match(/'.'/g) || []).length;
-            if(count<1){
-                return inputValue.indexOf('.') < 1;
-
-            }else{
-                return false;
-            }
-        }
-        return !(charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57));
-
-    }
-    function isNumberKeyMobile(evt){
-        let charCode = (evt.which) ? evt.which : event.keyCode;
-        if (charCode == 46){
-            let inputValue = $("#mobile").val();
-            let count = (inputValue.match(/'.'/g) || []).length;
-            if(count<1){
-                return inputValue.indexOf('.') < 1;
-
-            }else{
-                return false;
-            }
-        }
-        return !(charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57));
-
-    }
-
-    function deleteBTNClick(Object){
-        let sum = document.getElementById("sum").innerHTML;
-        let final = document.getElementById('productFinal_' + Object).innerHTML;
-        window.document.getElementById("sum").innerHTML = sum-final;
-
-        window.document.getElementById('productName_' + Object).innerHTML = '';
-        window.document.getElementById('productQuantity_' + Object).innerHTML = '';
-        window.document.getElementById('productPrice_' + Object).innerHTML = '';
-        window.document.getElementById('productVat_' + Object).innerHTML = '';
-        window.document.getElementById('productDiscount_' + Object).innerHTML = '';
-        window.document.getElementById('productFinal_' + Object).innerHTML = '';
-        window.document.getElementById(Object).style.display = "none";
-    }
-
-    function closeShift(){
-
-        let pinCode = window.document.getElementById('pin_code').value;
-
-        let params = {
-            accountId: accountId,
-            pincode: pinCode,
-        };
-        let url = 'https://dev.smartrekassa.kz/Popup/customerorder/closeShift';
-        let settings = ajax_settings(url, "GET", params);
-        console.log(url + ' settings ↓ ')
-        console.log(settings)
-
-        $.ajax(settings).done(function (json) {
-            console.log(url + ' response ↓ ')
-            console.log(json)
-
-            if (json.statusCode === 200){
-                window.document.getElementById('messageAlert').innerText = json.message;
-                window.document.getElementById('message').style.display = "block";
-            } else {
-                console.log(' Error = ' + url + ' message = ' + JSON.stringify(json.message))
-                window.document.getElementById('messageAlert').innerText = "ошибка";
-                window.document.getElementById('message').style.display = "block";
-            }
-        })
-    }
-</script>
+</style>
