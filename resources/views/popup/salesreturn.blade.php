@@ -11,10 +11,9 @@
         let entity_type = '';
         let id_ticket = '';
 
-        window.addEventListener("message", function(event) { openDown();
-            //var receivedMessage = {"name":"OpenPopup","messageId":1,"popupName":"fiscalizationPopup","popupParameters":{"object_Id":"4b1034eb-28e1-11ed-0a80-02ab00186962","accountId":"1dd5bd55-d141-11ec-0a80-055600047495"}}; /*event.data;*/
-            var receivedMessage = event.data;
-            newPopup();
+        window.addEventListener("message", function(event) { openDown(); newPopup();
+           let receivedMessage = event.data;
+
             if (receivedMessage.name === 'OpenPopup') {
                 object_Id = receivedMessage.popupParameters.object_Id;
                 accountId = receivedMessage.popupParameters.accountId;
@@ -26,28 +25,35 @@
                 let final = url + formatParams(params);
 
                 let xmlHttpRequest = new XMLHttpRequest();
-                xmlHttpRequest.addEventListener("load", function () { $('#lDown').modal('hide');
-                    let json = JSON.parse(this.responseText);
+                xmlHttpRequest.addEventListener("load", function () {
+                    $('#lDown').modal('hide')
+                    let json = JSON.parse(this.responseText)
+
                     id_ticket = json.attributes.ticket_id;
                     window.document.getElementById("numberOrder").innerHTML = json.name;
-
                     let products = json.products;
-                    for (var i = 0; i < products.length; i++) {
 
+                    for (let i = 0; i < products.length; i++) {
                         if (products[i].propety === true) {
-                            window.document.getElementById('productId_' + i).innerHTML = products[i].position;
-                            window.document.getElementById('productName_' + i).innerHTML = products[i].name;
-                            window.document.getElementById('productQuantity_' + i).innerHTML = products[i].quantity;
-                            window.document.getElementById('productPrice_' + i).innerHTML = products[i].price;
-                            if (products[i].vat === 0)  window.document.getElementById('productVat_' + i).innerHTML = "без НДС";
-                            else window.document.getElementById('productVat_' + i).innerHTML = products[i].vat + '%';
-                            window.document.getElementById('productDiscount_' + i).innerHTML = products[i].discount + '%';
-                            window.document.getElementById('productFinal_' + i).innerHTML = products[i].final;
 
-                            let sum = window.document.getElementById("sum").innerHTML;
-                            if (!sum) sum = 0;
-                            window.document.getElementById("sum").innerHTML = roundToTwo(parseFloat(sum) + parseFloat(products[i].final));
-                            window.document.getElementById(i).style.display = "block";
+                            if ( products[i].propety_code == false ){
+                                window.document.getElementById("messageAlert").innerText = "Позиции, у которых не системные единицы измерения не могут быть добавлены";
+                                window.document.getElementById("message").style.display = "block";
+                            } else {
+                                window.document.getElementById('productId_' + i).innerHTML = products[i].position;
+                                window.document.getElementById('productName_' + i).innerHTML = products[i].name;
+                                window.document.getElementById('productQuantity_' + i).innerHTML = products[i].quantity;
+                                window.document.getElementById('productPrice_' + i).innerHTML = products[i].price;
+                                if (products[i].vat === 0) window.document.getElementById('productVat_' + i).innerHTML = "без НДС";
+                                else window.document.getElementById('productVat_' + i).innerHTML = products[i].vat + '%';
+                                window.document.getElementById('productDiscount_' + i).innerHTML = products[i].discount + '%';
+                                window.document.getElementById('productFinal_' + i).innerHTML = products[i].final;
+
+                                let sum = window.document.getElementById("sum").innerHTML;
+                                if (!sum) sum = 0;
+                                window.document.getElementById("sum").innerHTML = roundToTwo(parseFloat(sum) + parseFloat(products[i].final));
+                                window.document.getElementById(i).style.display = "block";
+                            }
                         } else {
                             window.document.getElementById("messageAlert").innerText = "Позиции у которых нет ед. изм. не добавились ";
                             window.document.getElementById("message").style.display = "block";
