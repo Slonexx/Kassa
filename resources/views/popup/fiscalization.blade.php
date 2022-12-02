@@ -13,34 +13,35 @@
         let entity_type = '';
         let id_ticket = '';
 
-        window.addEventListener("message", function(event) { openDown();
-            //var receivedMessage = {"name":"OpenPopup","messageId":1,"popupName":"fiscalizationPopup","popupParameters":{"object_Id":"4b1034eb-28e1-11ed-0a80-02ab00186962","accountId":"1dd5bd55-d141-11ec-0a80-055600047495"}}; /*event.data;*/
-            var receivedMessage = event.data;
-            newPopup();
+        window.addEventListener("message", function(event) {
+            openDown()
+            newPopup()
+
+            let receivedMessage = event.data
             if (receivedMessage.name === 'OpenPopup') {
+
                 object_Id = receivedMessage.popupParameters.object_Id;
                 accountId = receivedMessage.popupParameters.accountId;
                 entity_type = receivedMessage.popupParameters.entity_type;
-                let params = {
-                    object_Id: object_Id,
-                    accountId: accountId,
-                };
+                let params = { object_Id: object_Id, accountId: accountId, };
                 let final = url + formatParams(params);
 
                 console.log('Запрос на атрибуты = ' + final)
 
                 let xmlHttpRequest = new XMLHttpRequest();
-                xmlHttpRequest.addEventListener("load", function () { $('#lDown').modal('hide');
-                    let json = JSON.parse(this.responseText);
-                    id_ticket = json.attributes.ticket_id;
+                xmlHttpRequest.addEventListener("load", function () {
+                    $('#lDown').modal('hide')
+                    let json = JSON.parse(this.responseText)
+
+                    id_ticket = json.attributes.ticket_id
                     window.document.getElementById("numberOrder").innerHTML = json.name;
-
                     let products = json.products;
-                    for (var i = 0; i < products.length; i++) {
 
+                    for (var i = 0; i < products.length; i++) {
                         if (products[i].propety === true) {
+
                             if ( products[i].propety_code == false ){
-                                window.document.getElementById("messageAlert").innerText = "Позиции у которых цифрового кода в ед. изм. не добавились ";
+                                window.document.getElementById("messageAlert").innerText = "Позиции, у которых не системные единицы измерения не могут быть добавлены";
                                 window.document.getElementById("message").style.display = "block";
                             } else {
                                 window.document.getElementById('productId_' + i).innerHTML = products[i].position;
