@@ -45,6 +45,8 @@ class TicketService
         $tookSum = $money_card+$money_cash+$money_mobile;
         $money_cash_product = 0;
 
+        dd($data);
+
         if (is_null($money_card)) $money_card = 0;
         if (is_null($money_cash)) $money_cash = 0;
         if (is_null($money_mobile)) $money_mobile = 0;

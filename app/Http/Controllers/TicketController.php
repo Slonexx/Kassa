@@ -18,7 +18,8 @@ class TicketController extends Controller
         $this->ticketService = $ticketService;
     }
 
-    public function initTicket(Request $request){
+    public function initTicket(Request $request): \Illuminate\Http\Response|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory
+    {
         $data = $request->validate([
             "accountId" => "required|string",
             "id_entity" => "required||string",
@@ -38,7 +39,15 @@ class TicketController extends Controller
 
     }
 
-    public function getUrlTicket(Request $request){
+    public function createTicket($data): \Illuminate\Http\Response|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory
+    {
+        $serviceRes =  $this->ticketService->createTicket($data);
+        return response($serviceRes["res"],$serviceRes["code"]);
+    }
+
+
+    public function getUrlTicket(Request $request): \Illuminate\Http\Response|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory
+    {
         $data = $request->validate([
             "accountId" => "required|string",
             "id_ticket" => "required||string",

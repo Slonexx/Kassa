@@ -31,18 +31,17 @@ class fiscalizationController extends Controller
         return response()->json($json);
     }
 
-    public function info_object_Id($object_Id, $Setting){
+    public function info_object_Id($object_Id, getSetting $Setting){
         $url = "https://online.moysklad.ru/api/remap/1.2/entity/customerorder/".$object_Id;
         $Client = new MsClient($Setting->tokenMs);
         $Body = $Client->get($url);
-        $positions = $Client->get($Body->positions->meta->href)->rows;
         $attributes = null;
         if (property_exists($Body, 'attributes')){
             $attributes = [
                 'ticket_id' => null,
             ];
             foreach ($Body->attributes as $item){
-                if ($item->name == 'id-билета (ReKassa)'){
+                if ($item->name == 'фискальный номер (ТИС)'){
                     $attributes['ticket_id'] = $item->value;
                     break;
                 }
@@ -51,50 +50,47 @@ class fiscalizationController extends Controller
         $vatEnabled = $Body->vatEnabled;
         $vat = null;
         $products = [];
+        $positions = $Client->get($Body->positions->meta->href)->rows;
 
         foreach ($positions as $id=>$item){
-
             $final = $item->price / 100 * $item->quantity;
 
-            if ($vatEnabled == true) {
-                if ($Body->vatIncluded == false) {
-                    $final = $item->price / 100 * $item->quantity;
-                    $final = $final + ( $final * ($item->vat/100) );
-                }
-            }
-
+            if ($vatEnabled == true) {if ($Body->vatIncluded == false) {
+                $final = $item->price / 100 * $item->quantity;
+                $final = $final + ( $final * ($item->vat/100) );
+            }}
             $uom_body = $Client->get($item->assortment->meta->href);
-            $propety_uom_code = false;
-            //dd($uom_body);
-            if ( property_exists($uom_body, 'uom') ){
+
+            if (property_exists($uom_body, 'uom')){
                 $propety_uom = true;
-
-                $check_uom_fickal_number = $Client->get($uom_body->uom->meta->href);
-                if ( property_exists($check_uom_fickal_number, 'code') ){
-                    $propety_uom_code = true;
-                } else $propety_uom_code = false;
-
+                $uom = $Client->get($uom_body->uom->meta->href);
+                $uom = ['id' => $uom->code, 'name' => $uom->name];
             } else {
-                if ( property_exists($uom_body, 'characteristics') ){
+
+                if (property_exists($uom_body, 'characteristics')){
                     $check_uom = $Client->get($uom_body->product->meta->href);
-                    //dd($check_uom);
-                    if (property_exists($check_uom, 'uom')){
+
+                    if ( property_exists($check_uom, 'uom') ) {
                         $propety_uom = true;
-                        $check_uom_fickal_number = $Client->get($check_uom->uom->meta->href);
-                        if ( property_exists($check_uom_fickal_number, 'code') ){
-                            $propety_uom_code = true;
-                        } else $propety_uom_code = false;
-                    } else $propety_uom = false;
-                } else $propety_uom = false;
+                        $uom = $Client->get($check_uom->uom->meta->href);
+                        $uom = ['id' => $uom->code, 'name' => $uom->name];
+                    } else {
+                        $propety_uom = false;
+                        $uom = ['id' => 796, 'name' => 'шт'];
+                    }
+                } else {
+                    $propety_uom = false;
+                    $uom = ['id' => 796, 'name' => 'шт'];
+                }
             }
 
 
             $products[$id] = [
                 'position' => $item->id,
                 'propety' => $propety_uom,
-                'propety_code' => $propety_uom_code,
                 'name' => $Client->get($item->assortment->meta->href)->name,
                 'quantity' => $item->quantity,
+                'uom' => $uom,
                 'price' => round($item->price / 100, 2) ?: 0,
                 'vatEnabled' => $item->vatEnabled,
                 'vat' => $item->vat,
@@ -145,7 +141,7 @@ class fiscalizationController extends Controller
             }
         }
 
-        $body = [
+        $data = [
             'accountId' => $accountId,
             'id_entity' => $object_Id,
             'entity_type' => $entity_type,
@@ -156,20 +152,11 @@ class fiscalizationController extends Controller
             'positions' => $positions,
         ];
 
-        $Client = new Client();
-        $url = 'https://dev.smartrekassa.kz/api/ticket';
-        //$url = 'http://rekassa/api/ticket';
+
         try {
-            $ClinetPost = $Client->post( $url, [
-                'headers' => [
-                    'Accept' => 'application/json',
-                    'http_errors' => false,
-                    ],
-                'form_params' => $body,
-            ]);
 
-            $res = json_decode($ClinetPost->getBody());
-
+            $res = app(TicketController::class)->createTicket($data);
+            $res = json_decode($res);
             return response()->json($res);
 
         } catch (\Throwable $e){
