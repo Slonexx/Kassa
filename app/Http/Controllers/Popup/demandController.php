@@ -75,9 +75,10 @@ class demandController extends Controller
             } else {
                 if ( property_exists($uom_body, 'characteristics') ){
                     $check_uom = $Client->get($uom_body->product->meta->href);
+                    //dd($check_uom);
                     if (property_exists($check_uom, 'uom')){
                         $propety_uom = true;
-                        $check_uom_fickal_number = $Client->get($uom_body->uom->meta->href);
+                        $check_uom_fickal_number = $Client->get($check_uom->uom->meta->href);
                         if ( property_exists($check_uom_fickal_number, 'code') ){
                             $propety_uom_code = true;
                         } else $propety_uom_code = false;
