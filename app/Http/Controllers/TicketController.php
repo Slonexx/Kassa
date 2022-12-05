@@ -40,15 +40,12 @@ class TicketController extends Controller
 
     }
 
-    #[ArrayShape(["res" => "mixed", "code" => "mixed"])] public function createTicket($data): array
+    public function createTicket($data): array
     {
 
         $serviceRes =  $this->ticketService->createTicket($data);
 
-        return [
-            "res"=>$serviceRes["res"],
-            "code"=>$serviceRes["code"],
-        ];
+        return $serviceRes['res'];
     }
 
 
