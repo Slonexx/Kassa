@@ -132,6 +132,10 @@ class fiscalizationController extends Controller
         if ($request->money_mobile === null) $money_mobile = 0;
         else $money_mobile = $request->money_mobile;
 
+        if ($request->total === null) $total = 0;
+        else $total = $request->total;
+
+
         $pay_type = $request->pay_type;
         $position = json_decode($request->position);
         $positions = [];
@@ -141,22 +145,26 @@ class fiscalizationController extends Controller
             }
         }
 
+
+
         $data = [
             'accountId' => $accountId,
             'id_entity' => $object_Id,
             'entity_type' => $entity_type,
+
             'money_card' => $money_card,
             'money_cash' => $money_cash,
             'money_mobile' => $money_mobile,
+
+            'total' => $total,
             'pay_type' => $pay_type,
+
             'positions' => $positions,
         ];
-
 
         try {
 
             $res = app(TicketController::class)->createTicket($data);
-            $res = json_decode($res);
             return response()->json($res);
 
         } catch (\Throwable $e){

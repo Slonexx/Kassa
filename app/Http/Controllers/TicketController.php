@@ -41,8 +41,9 @@ class TicketController extends Controller
 
     public function createTicket($data): \Illuminate\Http\Response|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory
     {
+
         $serviceRes =  $this->ticketService->createTicket($data);
-        return response($serviceRes["res"],$serviceRes["code"]);
+        return response($serviceRes);
     }
 
 

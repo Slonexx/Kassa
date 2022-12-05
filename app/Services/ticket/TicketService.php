@@ -32,34 +32,35 @@ class TicketService
     }
 
     // Create ticket
-    public function createTicket($data) {
+    public function createTicket($data): array
+    {
         $accountId = $data['accountId'];
         $id_entity = $data['id_entity'];
         $entity_type = $data['entity_type'];
-        $positions = $data['positions'];
+
+
         $money_card = $data['money_card'];
         $money_cash = $data['money_cash'];
         $money_mobile = $data['money_mobile'];
+
+        $total = $data['total'];
         $payType = $data['pay_type'];
 
-        $tookSum = $money_card+$money_cash+$money_mobile;
-        $money_cash_product = 0;
+        $positions = $data['positions'];
 
-        dd($data);
+        $tookSum = $total;
 
         if (is_null($money_card)) $money_card = 0;
         if (is_null($money_cash)) $money_cash = 0;
         if (is_null($money_mobile)) $money_mobile = 0;
 
-        //dd($data);
-
-        if ($money_card <= 0 && $money_cash <= 0 && $money_mobile <= 0)
-            return [
+        if ($money_card <= 0 && $money_cash <= 0 && $money_mobile <= 0) return [
                 "res" => [
                     "message" => "Please enter money!",
                 ],
                 "code" => 400
             ];
+
 
         $Setting = new getSetting($accountId);
 
@@ -69,7 +70,6 @@ class TicketService
         $apiKey = $Setting->apiKey;
 
         $Device = new getDevices($accountId);
-        //dd($Device);
         $znm = $Device->devices[0]->znm;
         $Device = new getDeviceFirst($znm);
 
@@ -83,11 +83,9 @@ class TicketService
 
         //dd($jsonEntity);
 
-        //$sumOrder = $jsonEntity->sum / 100;
-
         if (property_exists($jsonEntity,'positions')){
 
-            $totalSum = $this->getTotalSum($positions,$urlEntity,$jsonEntity,$apiKeyMs);
+            $totalSum = $this->getTotalSum($positions, $urlEntity, $jsonEntity, $apiKeyMs);
 
             if ($tookSum < $totalSum){
                 return [
@@ -187,12 +185,6 @@ class TicketService
                     "payments" => $payments,
                     "amounts" => $amounts,
                 ];
-                //dd($body);
-/*                if (property_exists($jsonEntity,'vatSum')){
-                }*/
-
-
-                //dd($body);
 
                 $isPayIn = null;
                 if ($payType == "sell"){
@@ -250,7 +242,9 @@ class TicketService
         ];
     }
 
-    private function getItemsByHrefPositions($href,$positionsEntity,$jsonEntity,$apiKeyMs){
+    private function getItemsByHrefPositions($href,$positionsEntity,$jsonEntity,$apiKeyMs): array
+    {
+        //dd($href,$positionsEntity,$jsonEntity,$apiKeyMs);
         $positions = [];
         $client = new MsClient($apiKeyMs);
         $jsonPositions = $client->get($href);
@@ -258,129 +252,125 @@ class TicketService
 
         foreach ($jsonPositions->rows as $row){
 
-            if (!in_array($row->id,$positionsEntity)) continue;
+            foreach ($positionsEntity as $item){
+                if ($row->id == $item->id){
 
-            $discount = $row->discount;
-
-            $positionPrice = $row->price / 100;
-            //$positionPriceCoins = $row->price;
-
-            $sumPrice = $positionPrice - ( $positionPrice * ($discount/100) ) ;
-            //$sumPriceCoins = $row->price - ( $row->price * ($discount/100) ) ;
-
-            $product = $this->getProductByAssortMeta($row->assortment->meta->href,$apiKeyMs);
-
-            if (property_exists($product, 'characteristics')){
-                $check_uom = $client->get($product->product->meta->href);
-                $ProductByUOM = $this->getProductByUOM($check_uom->uom->meta->href,$apiKeyMs);
-            } else  $ProductByUOM = $this->getProductByUOM($product->uom->meta->href,$apiKeyMs);
-
-            if ( $ProductByUOM->name == "шт"){
-                for ($i = 1; $i <= $row->quantity; $i++){
-                    $position["type"] = "ITEM_TYPE_COMMODITY";
-                    $position["commodity"] = [
-                        "name" => $product->name,
-                        "sectionCode" => "0",
-                        "quantity" => 1000,
-                        "price" => [
-                            "bills" => "".intval($positionPrice),
-                            "coins" => intval(round(floatval($positionPrice)-intval($positionPrice),2)*100),
-                        ],
-                        "sum" => [
-                            "bills" => "".intval($sumPrice),
-                            "coins" => intval(round(floatval($sumPrice)-intval($sumPrice),2)*100),
-                        ],
-                        "measureUnitCode" => null,
-                    ];
+                    $discount = $row->discount;
+                    $positionPrice = $row->price / 100;
+                    $sumPrice = $positionPrice - ( $positionPrice * ($discount/100) ) ;
+                    $product = $this->getProductByAssortMeta($row->assortment->meta->href,$apiKeyMs);
 
                     if (property_exists($product, 'characteristics')){
                         $check_uom = $client->get($product->product->meta->href);
-                        $position["commodity"]['measureUnitCode'] = $this->getUomCode($check_uom->uom->meta->href,$apiKeyMs);
-                    } else  $position["commodity"]['measureUnitCode'] = $this->getUomCode($product->uom->meta->href,$apiKeyMs);
+                        $ProductByUOM = $this->getProductByUOM($check_uom->uom->meta->href,$apiKeyMs);
+                    } else  $ProductByUOM = $this->getProductByUOM($product->uom->meta->href,$apiKeyMs);
 
-                    if (property_exists($row,'trackingCodes')){
-                        $position["commodity"]["excise_stamp"] = $row->trackingCodes[$i-1]->cis;
-                    }
 
-                    if (property_exists($row,'vat') && property_exists($jsonEntity,'vatIncluded')){
-                        if ($jsonEntity->vatIncluded){
-                            $sumVat = $sumPrice * ( $row->vat / (100+$row->vat) ); //Цена включает НДС
-                        }else {
-                            $sumVat = $sumPrice * ($row->vat / 100); //Цена выключает НДС
-                        }
-                        if ($row->vat != 0)
-                        $position["commodity"]["taxes"] = [
-                            0 => [
-                                "sum" => [
-                                    "bills" => "".intval($sumVat),
-                                    "coins" => intval(round(floatval($sumVat)-intval($sumVat),2)*100),
-                                ],
-                                "percent" => $row->vat * 1000,
-                                "taxType" => 100,
-                                "isInTotalSum" => $jsonEntity->vatIncluded,
-                                "taxationType" => 100,
-                            ],
-                        ];
-                    }
+                   if (!property_exists($row, 'trackingCodes')){
+                       $position["type"] = "ITEM_TYPE_COMMODITY";
+                       $position["commodity"] = [
+                           "name" => $product->name,
+                           "sectionCode" => "0",
+                           "quantity" => (integer)($item->quantity * 1000),
+                           "price" => [
+                               "bills" => "".intval($positionPrice),
+                               "coins" => intval(round(floatval($positionPrice)-intval($positionPrice),2)*100),
+                           ],
+                           "sum" => [
+                               "bills" => "".intval($sumPrice) * $item->quantity,
+                               "coins" => intval(round(floatval($sumPrice)-intval($sumPrice),2)*100) * $item->quantity,
+                           ],
+                           "measureUnitCode" => null,
+                       ];
 
-                    $positions [] = $position;
+                       if (property_exists($product, 'characteristics')){
+                           $check_uom = $client->get($product->product->meta->href);
+                           $position["commodity"]['measureUnitCode'] = $this->getUomCode($check_uom->uom->meta->href,$apiKeyMs);
+                       } else  $position["commodity"]['measureUnitCode'] = $this->getUomCode($product->uom->meta->href,$apiKeyMs);
+
+                       if (property_exists($row,'vat') && property_exists($jsonEntity,'vatIncluded')){
+
+                           if ($jsonEntity->vatIncluded){
+                               $sumVat = $sumPrice * ( $row->vat / (100+$row->vat) ); //Цена включает НДС
+                           }else {
+                               $sumVat = $sumPrice * ($row->vat / 100); //Цена выключает НДС
+                           }
+                           if ($row->vat != 0)
+                               $position["commodity"]["taxes"] = [
+                                   0 => [
+                                       "sum" => [
+                                           "bills" => "".intval($sumVat),
+                                           "coins" => intval(round(floatval($sumVat)-intval($sumVat),2)*100),
+                                       ],
+                                       "percent" => $row->vat * 1000,
+                                       "taxType" => 100,
+                                       "isInTotalSum" => $jsonEntity->vatIncluded,
+                                       "taxationType" => 100,
+                                   ],
+                               ];
+                       }
+
+                       $positions [] = $position;
+                   }
+                   else {
+                       for ($i = 1; $i <= $row->quantity; $i++){
+                           $position["type"] = "ITEM_TYPE_COMMODITY";
+                           $position["commodity"] = [
+                               "name" => $product->name,
+                               "sectionCode" => "0",
+                               "quantity" => 1000,
+                               "price" => [
+                                   "bills" => "".intval($positionPrice),
+                                   "coins" => intval(round(floatval($positionPrice)-intval($positionPrice),2)*100),
+                               ],
+                               "sum" => [
+                                   "bills" => "".intval($sumPrice),
+                                   "coins" => intval(round(floatval($sumPrice)-intval($sumPrice),2)*100),
+                               ],
+                               "measureUnitCode" => null,
+                           ];
+
+                           if (property_exists($product, 'characteristics')){
+                               $check_uom = $client->get($product->product->meta->href);
+                               $position["commodity"]['measureUnitCode'] = $this->getUomCode($check_uom->uom->meta->href,$apiKeyMs);
+                           } else  $position["commodity"]['measureUnitCode'] = $this->getUomCode($product->uom->meta->href,$apiKeyMs);
+
+                           if (property_exists($row,'trackingCodes')){
+                               $position["commodity"]["excise_stamp"] = $row->trackingCodes[$i-1]->cis;
+                           }
+
+                           if (property_exists($row,'vat') && property_exists($jsonEntity,'vatIncluded')){
+                               if ($jsonEntity->vatIncluded){
+                                   $sumVat = $sumPrice * ( $row->vat / (100+$row->vat) ); //Цена включает НДС
+                               }else {
+                                   $sumVat = $sumPrice * ($row->vat / 100); //Цена выключает НДС
+                               }
+                               if ($row->vat != 0)
+                                   $position["commodity"]["taxes"] = [
+                                       0 => [
+                                           "sum" => [
+                                               "bills" => "".intval($sumVat),
+                                               "coins" => intval(round(floatval($sumVat)-intval($sumVat),2)*100),
+                                           ],
+                                           "percent" => $row->vat * 1000,
+                                           "taxType" => 100,
+                                           "isInTotalSum" => $jsonEntity->vatIncluded,
+                                           "taxationType" => 100,
+                                       ],
+                                   ];
+                           }
+
+                           $positions [] = $position;
+                       }
+                   }
+
+
                 }
-            } else {
-                $position["type"] = "ITEM_TYPE_COMMODITY";
-                $position["commodity"] = [
-                    "name" => $product->name,
-                    "sectionCode" => "0",
-                    "quantity" => (integer)($row->quantity * 1000),
-                    "price" => [
-                        "bills" => "".intval($positionPrice),
-                        "coins" => intval(round(floatval($positionPrice)-intval($positionPrice),2)*100),
-                    ],
-                    "sum" => [
-                        "bills" => "".intval($sumPrice) * $row->quantity,
-                        "coins" => intval(round(floatval($sumPrice)-intval($sumPrice),2)*100) * $row->quantity,
-                    ],
-                    "measureUnitCode" => null,
-                ];
-
-                if (property_exists($product, 'characteristics')){
-                    $check_uom = $client->get($product->product->meta->href);
-                    $position["commodity"]['measureUnitCode'] = $this->getUomCode($check_uom->uom->meta->href,$apiKeyMs);
-                } else  $position["commodity"]['measureUnitCode'] = $this->getUomCode($product->uom->meta->href,$apiKeyMs);
-
-
-                if (property_exists($row,'trackingCodes')){
-                    $position["commodity"]["excise_stamp"] = $row->trackingCodes[$i-1]->cis;
-                }
-
-                if (property_exists($row,'vat') && property_exists($jsonEntity,'vatIncluded')){
-
-                    if ($jsonEntity->vatIncluded){
-                        $sumVat = $sumPrice * ( $row->vat / (100+$row->vat) ); //Цена включает НДС
-                    }else {
-                        $sumVat = $sumPrice * ($row->vat / 100); //Цена выключает НДС
-                    }
-                    if ($row->vat != 0)
-                    $position["commodity"]["taxes"] = [
-                        0 => [
-                            "sum" => [
-                                "bills" => "".intval($sumVat),
-                                "coins" => intval(round(floatval($sumVat)-intval($sumVat),2)*100),
-                            ],
-                            "percent" => $row->vat * 1000,
-                            "taxType" => 100,
-                            "isInTotalSum" => $jsonEntity->vatIncluded,
-                            "taxationType" => 100,
-                        ],
-                    ];
-                }
-
-                $positions [] = $position;
+                else continue;
             }
 
-
-            //dd(json_decode(json_encode($positions)));
         }
-        //dd($positions);
+
         return $positions;
     }
 
@@ -499,38 +489,42 @@ class TicketService
         $jsonPositions = $client->get($urlEntityWithPositions);
 
         foreach ($jsonPositions->rows as $position){
-            if (in_array($position->id, $positions)){
 
-                $href = $position->assortment->meta->href;
-                $product = $client->get($href);
-                //dd($product);
-
-                if (property_exists($product, 'characteristics')){
-                    $check_uom = $client->get($product->product->meta->href);
-                    $checkUOM = $this->getProductByUOM($check_uom->uom->meta->href,$apiKeyMs);
-                } else  $checkUOM = $this->getProductByUOM($product->uom->meta->href,$apiKeyMs);
-
-                if ($checkUOM->name == "шт"){
-                    $discount = $position->discount;
-                    $positionPrice = $position->quantity * $position->price / 100;
-                    $sumPrice = $positionPrice - ( $positionPrice * ($discount/100) ) ;
-                } else {
-                    $discount = $position->discount;
-                    $positionPrice = $position->quantity *  $position->price / 100;
-                    $sumPrice = $positionPrice - ( $positionPrice * ($discount/100) ) ;
-                }
+            foreach ($positions as $item){
+                if ($position->id == $item->id){
+                    $href = $position->assortment->meta->href;
+                    $product = $client->get($href);
 
 
-                if (property_exists($jsonEntity,'vatIncluded')){
-                    if ($jsonEntity->vatIncluded){
-                        $sumVat = $sumPrice * ( $position->vat / (100+$position->vat) ); //Цена включает НДС
-                    }else {
-                        $sumVat = $sumPrice * ($position->vat / 100); //Цена выключает НДС
-                        $sumPrice += $sumVat;
+                    if (property_exists($product, 'characteristics')){
+                        $check_uom = $client->get($product->product->meta->href);
+                        $checkUOM = $this->getProductByUOM($check_uom->uom->meta->href,$apiKeyMs);
                     }
-                }
+                    else  $checkUOM = $this->getProductByUOM($product->uom->meta->href,$apiKeyMs);
 
-                $total += $sumPrice;
+
+                    if ($checkUOM->name == "шт"){
+                        $discount = $position->discount;
+                        $positionPrice = $item->quantity * $position->price / 100;
+                        $sumPrice = $positionPrice - ( $positionPrice * ($discount/100) ) ;
+                    } else {
+                        $discount = $position->discount;
+                        $positionPrice = $item->quantity *  $position->price / 100;
+                        $sumPrice = $positionPrice - ( $positionPrice * ($discount/100) ) ;
+                    }
+
+
+                    if (property_exists($jsonEntity,'vatIncluded')){
+                        if ($jsonEntity->vatIncluded){
+                            $sumVat = $sumPrice * ( $position->vat / (100+$position->vat) ); //Цена включает НДС
+                        }else {
+                            $sumVat = $sumPrice * ($position->vat / 100); //Цена выключает НДС
+                            $sumPrice += $sumVat;
+                        }
+                    }
+
+                    $total += $sumPrice;
+                }
             }
         }
         return $total;
@@ -559,52 +553,107 @@ class TicketService
         return "print/".$idKassa."/".$idTicket;
     }
 
-    //Cancel ticket
-    /*public function cancelTicket($data){
-        $accountId = $data['accountId'];
-        $id_entity = $data['id_entity'];
-        $entity_type = $data['entity_type'];
-        //$positionDevice = $data['position'];
 
-        //take settings by accountId
-        $apiKeyMs = "f59a9e8d8011257f92f13ac0ad12a2d25c1e668f";
-        $apiKey = "f5ac6559-b5cd-4e0e-89e5-7fd32a6d60a5";
-        $numKassa = "VTH5DEV4-AQM";
-        $password = "Qi1_CS0y5weXk09Lg3erA4*72dMuqYFM";
+    /*  if ( $ProductByUOM->name == "шт"){
+                        for ($i = 1; $i <= $row->quantity; $i++){
+                            $position["type"] = "ITEM_TYPE_COMMODITY";
+                            $position["commodity"] = [
+                                "name" => $product->name,
+                                "sectionCode" => "0",
+                                "quantity" => 1000,
+                                "price" => [
+                                    "bills" => "".intval($positionPrice),
+                                    "coins" => intval(round(floatval($positionPrice)-intval($positionPrice),2)*100),
+                                ],
+                                "sum" => [
+                                    "bills" => "".intval($sumPrice),
+                                    "coins" => intval(round(floatval($sumPrice)-intval($sumPrice),2)*100),
+                                ],
+                                "measureUnitCode" => null,
+                            ];
 
-        //take id from entity
-        $url = $this->getUrlEntity($entity_type,$id_entity);
-        $client = new MsClient($apiKeyMs);
-        $json = $client->get($url);
-        //dd($json);
+                            if (property_exists($product, 'characteristics')){
+                                $check_uom = $client->get($product->product->meta->href);
+                                $position["commodity"]['measureUnitCode'] = $this->getUomCode($check_uom->uom->meta->href,$apiKeyMs);
+                            } else  $position["commodity"]['measureUnitCode'] = $this->getUomCode($product->uom->meta->href,$apiKeyMs);
 
-        if (property_exists($json,'attributes')){
-            $idTicket = null;
-            foreach ($json->attributes as $attribute){
-                if ($attribute->name == "id-билета (ReKassa)" && $attribute->type == "string"){
-                    $idTicket = $attribute->value;
-                    break;
-                }
-            }
-            if (!is_null($idTicket)){
-                try {
-                    $clientK = new KassClient($numKassa,$password,$apiKey);
-                    $id = $clientK->getNewJwtToken()->id;
-                    $response = $clientK->delete('crs/'.$id.'/tickets/'.$idTicket);
-                    $this->writeToAttrib(null,$url,$entity_type,$apiKeyMs);
-                    return [
-                        "message" => "Ticket not canceled!",
-                    ];
-                } catch (ClientException $exception){
-                    return [
-                        "message" => "Ticket not canceled!",
-                        "error" => json_decode($exception->getResponse()->getBody()),
-                    ];
-                    //dd($exception->getMessage());
-                }
-                //dd($response);
-            }
-        }
-        return [];
-    }*/
+                            if (property_exists($row,'trackingCodes')){
+                                $position["commodity"]["excise_stamp"] = $row->trackingCodes[$i-1]->cis;
+                            }
+
+                            if (property_exists($row,'vat') && property_exists($jsonEntity,'vatIncluded')){
+                                if ($jsonEntity->vatIncluded){
+                                    $sumVat = $sumPrice * ( $row->vat / (100+$row->vat) ); //Цена включает НДС
+                                }else {
+                                    $sumVat = $sumPrice * ($row->vat / 100); //Цена выключает НДС
+                                }
+                                if ($row->vat != 0)
+                                    $position["commodity"]["taxes"] = [
+                                        0 => [
+                                            "sum" => [
+                                                "bills" => "".intval($sumVat),
+                                                "coins" => intval(round(floatval($sumVat)-intval($sumVat),2)*100),
+                                            ],
+                                            "percent" => $row->vat * 1000,
+                                            "taxType" => 100,
+                                            "isInTotalSum" => $jsonEntity->vatIncluded,
+                                            "taxationType" => 100,
+                                        ],
+                                    ];
+                            }
+
+                            $positions [] = $position;
+                        }
+                    } else {
+                        $position["type"] = "ITEM_TYPE_COMMODITY";
+                        $position["commodity"] = [
+                            "name" => $product->name,
+                            "sectionCode" => "0",
+                            "quantity" => (integer)($item->quantity * 1000),
+                            "price" => [
+                                "bills" => "".intval($positionPrice),
+                                "coins" => intval(round(floatval($positionPrice)-intval($positionPrice),2)*100),
+                            ],
+                            "sum" => [
+                                "bills" => "".intval($sumPrice) * $row->quantity,
+                                "coins" => intval(round(floatval($sumPrice)-intval($sumPrice),2)*100) * $row->quantity,
+                            ],
+                            "measureUnitCode" => null,
+                        ];
+
+                        if (property_exists($product, 'characteristics')){
+                            $check_uom = $client->get($product->product->meta->href);
+                            $position["commodity"]['measureUnitCode'] = $this->getUomCode($check_uom->uom->meta->href,$apiKeyMs);
+                        } else  $position["commodity"]['measureUnitCode'] = $this->getUomCode($product->uom->meta->href,$apiKeyMs);
+
+
+                        if (property_exists($row,'trackingCodes')){
+                            $position["commodity"]["excise_stamp"] = $row->trackingCodes[$i-1]->cis;
+                        }
+
+                        if (property_exists($row,'vat') && property_exists($jsonEntity,'vatIncluded')){
+
+                            if ($jsonEntity->vatIncluded){
+                                $sumVat = $sumPrice * ( $row->vat / (100+$row->vat) ); //Цена включает НДС
+                            }else {
+                                $sumVat = $sumPrice * ($row->vat / 100); //Цена выключает НДС
+                            }
+                            if ($row->vat != 0)
+                                $position["commodity"]["taxes"] = [
+                                    0 => [
+                                        "sum" => [
+                                            "bills" => "".intval($sumVat),
+                                            "coins" => intval(round(floatval($sumVat)-intval($sumVat),2)*100),
+                                        ],
+                                        "percent" => $row->vat * 1000,
+                                        "taxType" => 100,
+                                        "isInTotalSum" => $jsonEntity->vatIncluded,
+                                        "taxationType" => 100,
+                                    ],
+                                ];
+                        }
+
+                        $positions [] = $position;
+                    }*/
+
 }
