@@ -57,8 +57,8 @@
                                 window.document.getElementById('productName_' + i).innerHTML = products[i].name;
                                 window.document.getElementById('productQuantity_' + i).innerHTML = products[i].quantity;
                                 if (products[i].trackingCodes == true) {
-                                    window.document.getElementById('trackingCodes_minus_' + i).style.display = 'none'
-                                    window.document.getElementById('trackingCodes_plus_' + i).style.display = 'none'
+                                    window.document.getElementById('trackingCodes_minus_' + i).innerText = ''
+                                    window.document.getElementById('trackingCodes_plus_' + i).innerText = ''
                                 }
                                 window.document.getElementById('productUOM_' + i).innerHTML = products[i].uom['name']
                                 window.document.getElementById('productIDUOM_' + i).innerHTML = products[i].uom['id'];
