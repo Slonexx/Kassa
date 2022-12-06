@@ -333,7 +333,7 @@
                     </div>
                     <div id="products" class="col-12 text-black">
                         @for( $i=0; $i<99; $i++)
-                            <div id="{{ $i }}" class="row mt-2" style="display:block;">
+                            <div id="{{ $i }}" class="mt-2" style="display:block;">
                                 <div class="row">
                                     <div class="col-1">{{ $i + 1 }}</div>
                                     <div id="{{'productId_'.$i}}" style="display:none;"></div>
@@ -349,7 +349,7 @@
                                     <div id="{{ 'productVat_'.$i }}"  class="col-1 text-center"></div>
                                     <div id="{{ 'productDiscount_'.$i }}"  class="col-1 text-center"></div>
                                     <div id="{{ 'productFinal_'.$i }}"  class="col-1 text-center"></div>
-                                    <div class="col-1 text-center">
+                                    <div class="col-1 d-flex justify-content-end">
                                         <button onclick="deleteBTNClick( {{ $i }} )" class="btn btn-danger">Убрать</button>
                                     </div>
                                 </div>
