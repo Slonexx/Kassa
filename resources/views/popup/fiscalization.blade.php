@@ -32,8 +32,9 @@
                 let final = url + formatParams(params);
 
                     //ДОБАВИЛ
-                    /*receivedMessage = null
-                    console.log('receivedMessage = ' + final)*/
+                    /*receivedMessage = null*/
+
+                console.log('receivedMessage = ' + final)
 
                 let xmlHttpRequest = new XMLHttpRequest();
                 xmlHttpRequest.addEventListener("load", function () {
