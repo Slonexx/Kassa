@@ -45,7 +45,7 @@
                         window.document.getElementById("numberOrder").innerHTML = json.name;
                         let products = json.products;
 
-                        for (var i = 0; i < products.length; i++) {
+                        for (let i = 0; i < products.length; i++) {
                             if (products[i].propety === true) {
 
                                 if ( products[i].propety_code == false ){
@@ -68,20 +68,20 @@
                                     window.document.getElementById("sum").innerHTML = roundToTwo(parseFloat(sum) + parseFloat(products[i].final));
                                     window.document.getElementById(i).style.display = "block";
                                 }
+
                             } else {
                                 window.document.getElementById("messageAlert").innerText = "Позиции у которых нет ед. изм. не добавились ";
                                 window.document.getElementById("message").style.display = "block";
                             }
                         }
-                        console.log(id_ticket, json.attributes.ticket_id)
-                        if (json.attributes != null){
-                            if (json.attributes.ticket_id != null){
-                                window.document.getElementById("ShowCheck").style.display = "block";
-                                window.document.getElementById("refundCheck").style.display = "block";
-                            } else {
-                                window.document.getElementById("getKKM").style.display = "block";
-                            }
-                        } else  window.document.getElementById("getKKM").style.display = "block";
+
+                    if (json.attributes.ticket_id != null){
+                        window.document.getElementById("ShowCheck").style.display = "block";
+                        window.document.getElementById("refundCheck").style.display = "block";
+                    } else {
+                        window.document.getElementById("getKKM").style.display = "block";
+                    }
+
                         window.document.getElementById("closeButtonId").style.display = "block";
                     });
                 xmlHttpRequest.open("GET", final);
