@@ -20,7 +20,7 @@
                     entity_type: entity_type,
                     objectId: Global_object_Id,
                 };
-                let url = 'https://dev.smartrekassa.kz/widget/InfoAttributes/';
+                let url = 'https://smartrekassa.kz/widget/InfoAttributes/';
                 let final = url + formatParams(params);
 
                 const xmlHttpRequest = new XMLHttpRequest();
@@ -91,37 +91,37 @@
     </script>
 
 
-        <div class="row gradient rounded p-2">
-            <div class="col-10">
-                <div class="mx-2"> <img src="https://app.rekassa.kz/static/logo.png" width="35" height="35"  alt="">
-                    <span class="text-white"> re:Kassa </span>
-                </div>
+    <div class="row gradient rounded p-2">
+        <div class="col-10">
+            <div class="mx-2"> <img src="https://app.rekassa.kz/static/logo.png" width="35" height="35"  alt="">
+                <span class="text-white"> re:Kassa </span>
             </div>
         </div>
-        <div id="workerAccess_yes" class="row mt-2 rounded bg-white" style="display:none;">
-            <div class="col-1"></div>
-            <button id="btnF" onclick="fiscalization()" class="col-10 btn btn-warning text-black rounded-pill">  </button>
-        </div>
-        <div id="workerAccess_no" class="row mt-2 rounded bg-white" style="display: none">
-            <div class="col-1"></div>
-            <div class="col-10">
-                <div class="text-center">
-                    <div class="p-3 mb-2 bg-danger text-white">
+    </div>
+    <div id="workerAccess_yes" class="row mt-2 rounded bg-white" style="display:none;">
+        <div class="col-1"></div>
+        <button id="btnF" onclick="fiscalization()" class="col-10 btn btn-warning text-black rounded-pill">  </button>
+    </div>
+    <div id="workerAccess_no" class="row mt-2 rounded bg-white" style="display: none">
+        <div class="col-1"></div>
+        <div class="col-10">
+            <div class="text-center">
+                <div class="p-3 mb-2 bg-danger text-white">
                         <span class="s-min-10">
                         У вас нет доступа к данному виджету, сообщите администратору, чтоб он вам предоставил доступ
                         <i class="fa-solid fa-ban "></i>
                     </span>
-                    </div>
                 </div>
             </div>
         </div>
+    </div>
 
 
 @endsection
 
-    <style>
-        .s-min-10 {
-            font-size: 12px;
-        }
-    </style>
+<style>
+    .s-min-10 {
+        font-size: 12px;
+    }
+</style>
 

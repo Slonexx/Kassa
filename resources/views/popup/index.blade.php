@@ -15,8 +15,8 @@
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
-  {{--  <script src="{{ asset("Config/js/uikit.js") }}"></script>
-    <link rel="stylesheet" href="{{ asset("Config/css/uikit.css") }}">--}}
+    {{--  <script src="{{ asset("Config/js/uikit.js") }}"></script>
+      <link rel="stylesheet" href="{{ asset("Config/css/uikit.css") }}">--}}
 
 
 </head>

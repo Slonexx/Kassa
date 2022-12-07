@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Services\ticket\TicketService;
 use Illuminate\Http\Request;
-use JetBrains\PhpStorm\ArrayShape;
 
 class TicketController extends Controller
 {
@@ -40,12 +39,11 @@ class TicketController extends Controller
 
     }
 
-    public function createTicket($data): array
+    public function createTicket($data): \Illuminate\Http\Response|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory
     {
 
         $serviceRes =  $this->ticketService->createTicket($data);
-
-        return $serviceRes['res'];
+        return response($serviceRes);
     }
 
 
@@ -61,15 +59,15 @@ class TicketController extends Controller
     }
 
     public function cancelTicket(Request $request){
-      /*  $data = $request->validate([
-            "accountId" => "required|string",
-            "id_entity" => "required||string",
-            "entity_type" => "required|string",
-        ]);
-        //"position" => "required|integer",
-        return response(
-            $this->ticketService->cancelTicket($data)
-        );*/
+        /*  $data = $request->validate([
+              "accountId" => "required|string",
+              "id_entity" => "required||string",
+              "entity_type" => "required|string",
+          ]);
+          //"position" => "required|integer",
+          return response(
+              $this->ticketService->cancelTicket($data)
+          );*/
     }
 
 }
