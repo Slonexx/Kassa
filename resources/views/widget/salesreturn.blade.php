@@ -79,9 +79,6 @@
                 <span class="text-white"> re:Kassa </span>
             </div>
         </div>
-        <div class="col-2 ">
-            <button type="submit" onclick="" class="myButton btn "> <i class="fa-solid fa-arrow-rotate-right"></i> </button>
-        </div>
     </div>
     <div id="workerAccess_yes" class="row mt-2 rounded bg-white" style="display:none;">
         <div class="col-1"></div>
@@ -105,25 +102,6 @@
 @endsection
 
 <style>
-    .myButton {
-        box-shadow: 0px 4px 5px 0px #5d5d5d !important;
-        background-image: radial-gradient( circle farthest-corner at 10% 20%,  rgba(14,174,87,1) 0%, rgba(12,116,117,1) 90% ) !important;
-        color: white !important;
-        border-radius:50px !important;
-        display:inline-block !important;
-        cursor:pointer !important;
-        padding:5px 5px !important;
-        text-decoration:none !important;
-    }
-    .myButton:hover {
-        filter: invert(1);
-
-        color: #111111 !important;
-    }
-    .myButton:active {
-        position: relative !important;
-        top: 1px !important;
-    }
     .s-min-10 {
         font-size: 12px;
     }
