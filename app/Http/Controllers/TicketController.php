@@ -39,13 +39,13 @@ class TicketController extends Controller
 
     }
 
-    public function createTicket($data): \Illuminate\Http\Response|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory
+    public function createTicket($data): array
     {
 
         $serviceRes =  $this->ticketService->createTicket($data);
-        return response($serviceRes);
-    }
 
+        return $serviceRes['res'];
+    }
 
     public function getUrlTicket(Request $request): \Illuminate\Http\Response|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory
     {
