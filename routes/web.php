@@ -42,6 +42,8 @@ Route::get('/Setting/Device/{accountId}', [DeviceController::class, 'getDevice']
 Route::post('/Setting/Device/{accountId}', [postDeviceController::class, 'postDevice']);
 
 
+Route::get('/test/print/{accountId}', [changeController::class, 'getTest']);
+
 Route::get('/kassa/change/{accountId}', [changeController::class, 'getChange']);
 Route::post('/kassa/change/{accountId}', [changeController::class, 'postChange']);
 Route::get('/kassa/get_shift_report/info/{accountId}', [changeController::class, 'getInfoIdShift']);
