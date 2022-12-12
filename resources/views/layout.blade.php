@@ -34,7 +34,7 @@
                         @endif
                     </div>
                     <a id="link_6" class="mt-1" href="/kassa/change/{{$accountId}}?isAdmin={{ request()->isAdmin }}"> Смена </a>
-                    <a id="link_7" class="mt-1" href="/test/print/{{$accountId}}?isAdmin={{ request()->isAdmin }}"> Смена </a>
+                    {{--<a id="link_7" class="mt-1" href="/test/print/{{$accountId}}?isAdmin={{ request()->isAdmin }}"> Смена </a>--}}
                 </div>
 
             <div class="mt-2 mb-2" >
