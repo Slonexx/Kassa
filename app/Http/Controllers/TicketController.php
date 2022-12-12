@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Services\ticket\TicketService;
 use Illuminate\Http\Request;
+use JetBrains\PhpStorm\ArrayShape;
 
 class TicketController extends Controller
 {
@@ -46,6 +47,7 @@ class TicketController extends Controller
 
         return $serviceRes['res'];
     }
+
 
     public function getUrlTicket(Request $request): \Illuminate\Http\Response|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory
     {
