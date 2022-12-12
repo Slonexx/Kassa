@@ -187,10 +187,18 @@
                         let response = json.response;
                         id_ticket = response.id;
                     } else {
-                        window.document.getElementById('messageAlert').innerText = "Ошибка 400";
-                        window.document.getElementById('message').style.display = "block";
-                        window.document.getElementById(button_hide).style.display = "block";
-                        modalShowHide = 'hide';
+                        if (json.error.code =='CASH_REGISTER_SHIFT_PERIOD_EXPIRED') {
+                            window.document.getElementById('messageAlert').innerText = "Предыдущая смена не закрыта !";
+                            window.document.getElementById('message').style.display = "block";
+                            window.document.getElementById(button_hide).style.display = "block";
+                            modalShowHide = 'hide';
+                        } else {
+                            window.document.getElementById('messageAlert').innerText = "Ошибка 400";
+                            window.document.getElementById('message').style.display = "block";
+                            window.document.getElementById(button_hide).style.display = "block";
+                            modalShowHide = 'hide';
+                        }
+
                     }
                 });
                 xmlHttpRequest.open("GET", final);
