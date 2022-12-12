@@ -13,14 +13,16 @@ use Illuminate\Http\Request;
 
 class demandController extends Controller
 {
-    public function demandPopup(Request $request){
+    public function demandPopup(Request $request): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
+    {
 
         return view( 'popup.demand', [
 
         ] );
     }
 
-    public function ShowDemandPopup(Request $request){
+    public function ShowDemandPopup(Request $request): \Illuminate\Http\JsonResponse
+    {
         $object_Id = $request->object_Id;
         $accountId = $request->accountId;
         $Setting = new getSetting($accountId);
@@ -121,7 +123,8 @@ class demandController extends Controller
     }
 
 
-    public function SendDemandPopup(Request $request){
+    public function SendDemandPopup(Request $request): \Illuminate\Http\JsonResponse
+    {
         $accountId = $request->accountId;
         $object_Id = $request->object_Id;
         $entity_type = $request->entity_type;
