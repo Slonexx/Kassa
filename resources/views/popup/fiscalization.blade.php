@@ -153,26 +153,27 @@
                         }
                     }
                 }
-                let params = {
-                    accountId: accountId,
-                    object_Id: object_Id,
-                    entity_type: entity_type,
 
-                    money_card: money_card,
-                    money_cash: money_cash,
-                    money_mobile: money_mobile,
+                let data = new FormData();
+                data.append("accountId", accountId)
+                data.append("object_Id", object_Id)
+                data.append("entity_type", entity_type);
 
-                    pay_type: pay_type,
-                    total: total,
+                data.append("money_card", money_card)
+                data.append("money_cash", money_cash)
+                data.append("money_mobile", money_mobile)
 
-                    position: JSON.stringify(products),
-                };
-                let final = url + formatParams(params);
-                console.log('send to kkm = ' + final);
-                let xmlHttpRequest = new XMLHttpRequest();
-                xmlHttpRequest.addEventListener("load", function () {
-                    $('#downL').modal('hide');
+                data.append("pay_type", pay_type)
+                data.append("total", total)
+
+                data.append("position", JSON.stringify(products))
+
+                console.log('send to kkm = ' + url)
+                let xmlHttpRequest = new XMLHttpRequest()
+                xmlHttpRequest.withCredentials = true
+                xmlHttpRequest.addEventListener("load", function () { $('#downL').modal('hide');
                     let json = JSON.parse(this.responseText);
+
                     if (json.message === 'Ticket created!'){
                         window.document.getElementById("messageGoodAlert").innerText = "Чек создан";
                         window.document.getElementById("messageGood").style.display = "block";
@@ -188,8 +189,8 @@
                         modalShowHide = 'hide';
                     }
                 });
-                xmlHttpRequest.open("GET", final);
-                xmlHttpRequest.send();
+                xmlHttpRequest.open("GET", url);
+                xmlHttpRequest.send(data);
                 modalShowHide = 'hide';
             }
             else window.document.getElementById(button_hide).style.display = "block";
