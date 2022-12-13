@@ -162,7 +162,7 @@
                     "method": "GET",
                     "timeout": 0,
                     "headers": {"Content-Type": "application/json",},
-                    "data": JSON.stringify({
+                    "data": {
                         "accountId": accountId,
                         "object_Id": object_Id,
                         "entity_type": entity_type,
@@ -175,7 +175,7 @@
                         "total": total,
 
                         "position": products,
-                    }),
+                    },
                 };
 
                 console.log(settings);
