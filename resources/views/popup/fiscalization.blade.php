@@ -199,8 +199,8 @@
                 });
 
                 xmlHttpRequest.open("GET", url);
-                console.log(JSON.stringify(data))
                 xmlHttpRequest.send(data);
+                console.log(JSON.stringify(data))
                 modalShowHide = 'hide';
             }
             else window.document.getElementById(button_hide).style.display = "block";
