@@ -168,7 +168,7 @@
 
                 data.append("position", JSON.stringify(products))
 
-                console.log('data =' + data)
+                console.log(data)
 
                 console.log('send to kkm = ' + url)
                 let xmlHttpRequest = new XMLHttpRequest()
