@@ -194,16 +194,9 @@
                 };
 
                 $.ajax(settings).done(function (response) {
-                    console.log(response);
-                });
-
-                /*xmlHttpRequest.open('GET', url, true);
-                xmlHttpRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-                xmlHttpRequest.send();
-                xmlHttpRequest.onload = function (){
                     $('#downL').modal('hide');
 
-                    let json = JSON.parse(this.responseText);
+                    let json = JSON.parse(response);
 
                     if (json.message === 'Ticket created!'){
                         window.document.getElementById("messageGoodAlert").innerText = "Чек создан";
@@ -219,7 +212,7 @@
                         window.document.getElementById(button_hide).style.display = "block";
                         modalShowHide = 'hide';
                     }
-                }*/
+                });
                 modalShowHide = 'hide';
             }
             else window.document.getElementById(button_hide).style.display = "block";
