@@ -171,10 +171,26 @@
 
                     "position": products,
                 });
+
+                let params = {
+                    accountId: accountId,
+                    object_Id: object_Id,
+                    entity_type: entity_type,
+
+                    money_card: money_card,
+                    money_cash: money_cash,
+                    money_mobile: money_mobile,
+
+                    pay_type: pay_type,
+                    total: total,
+
+                    position: JSON.stringify(products),
+                };
+
                 console.log(data)
 
-                xmlHttpRequest.open("GET", url);
-                xmlHttpRequest.send(data);
+                xmlHttpRequest.open('GET', url, true);
+                xmlHttpRequest.send(params);
                 xmlHttpRequest.onload = function (){
                     $('#downL').modal('hide');
 
