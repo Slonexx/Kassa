@@ -181,12 +181,8 @@
                 console.log(settings);
 
                 $.ajax(settings).done(function (response) {
-
-                    console.log(response)
-
-                    $('#downL').modal('hide');
-
-                   /* let json = JSON.parse(response);
+                    $('#downL').modal('hide')
+                    let json = response
 
                     if (json.message === 'Ticket created!'){
                         window.document.getElementById("messageGoodAlert").innerText = "Чек создан";
@@ -201,7 +197,7 @@
                         window.document.getElementById('message').style.display = "block";
                         window.document.getElementById(button_hide).style.display = "block";
                         modalShowHide = 'hide';
-                    }*/
+                    }
                 });
                 modalShowHide = 'hide';
             }
