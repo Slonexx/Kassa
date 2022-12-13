@@ -172,25 +172,6 @@
                     "position": products,
                 });
 
-                let Blob = new Blob(
-                    {
-                        "accountId": accountId,
-                        "object_Id": object_Id,
-                        "entity_type": entity_type,
-
-                        "money_card": money_card,
-                        "money_cash": money_cash,
-                        "money_mobile": money_mobile,
-
-                        "pay_type": pay_type,
-                        "total": total,
-
-                        "position": products,
-                    }
-                );
-
-                console.log(Blob)
-
                 let params = {
                     accountId: accountId,
                     object_Id: object_Id,
@@ -209,7 +190,8 @@
                 console.log(data)
 
                 xmlHttpRequest.open('GET', url, true);
-                xmlHttpRequest.send(Blob);
+                xmlHttpRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                xmlHttpRequest.send(data);
                 xmlHttpRequest.onload = function (){
                     $('#downL').modal('hide');
 
