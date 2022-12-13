@@ -154,6 +154,9 @@
                     }
                 }
 
+                let xmlHttpRequest = new XMLHttpRequest()
+                xmlHttpRequest.withCredentials = true
+
                 let data = JSON.stringify({
                     "accountId": accountId,
                     "object_Id": object_Id,
@@ -170,10 +173,6 @@
 
                 });
                 console.log(data)
-                console.log('send to kkm = ' + url)
-
-                let xmlHttpRequest = new XMLHttpRequest()
-                xmlHttpRequest.withCredentials = true
 
                 xmlHttpRequest.addEventListener("load", function () { $('#downL').modal('hide');
                     if(this.readyState === 4) {
