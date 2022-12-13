@@ -173,10 +173,10 @@
                 });
                 console.log(data)
 
-                xmlHttpRequest.addEventListener("load", function () { $('#downL').modal('hide');
-                    if(this.readyState === 4) {
-                        console.log(this.responseText);
-                    }
+                xmlHttpRequest.open("GET", url);
+                xmlHttpRequest.send(data);
+                xmlHttpRequest.onload = function (){
+                    $('#downL').modal('hide');
 
                     let json = JSON.parse(this.responseText);
 
@@ -194,11 +194,7 @@
                         window.document.getElementById(button_hide).style.display = "block";
                         modalShowHide = 'hide';
                     }
-                });
-
-                xmlHttpRequest.open("GET", url);
-                xmlHttpRequest.send(data);
-                console.log((data))
+                }
                 modalShowHide = 'hide';
             }
             else window.document.getElementById(button_hide).style.display = "block";
