@@ -166,7 +166,7 @@
                     "pay_type": pay_type,
                     "total": total,
 
-                    "position": JSON.stringify(position),
+                    "position": JSON.stringify(products),
 
                 });
                 console.log(data)
