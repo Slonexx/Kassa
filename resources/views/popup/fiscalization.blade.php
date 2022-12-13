@@ -181,6 +181,9 @@
                 console.log(settings);
 
                 $.ajax(settings).done(function (response) {
+
+                    console.log(response)
+
                     $('#downL').modal('hide');
 
                     let json = JSON.parse(response);
