@@ -191,7 +191,7 @@
 
                 xmlHttpRequest.open('GET', url, true);
                 xmlHttpRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-                xmlHttpRequest.send(data);
+                xmlHttpRequest.send('accountId='+accountId);
                 xmlHttpRequest.onload = function (){
                     $('#downL').modal('hide');
 
