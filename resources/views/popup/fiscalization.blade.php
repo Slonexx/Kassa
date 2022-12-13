@@ -170,14 +170,16 @@
 
                 });
                 console.log(data)
-
                 console.log('send to kkm = ' + url)
+
                 let xmlHttpRequest = new XMLHttpRequest()
                 xmlHttpRequest.withCredentials = true
+
                 xmlHttpRequest.addEventListener("load", function () { $('#downL').modal('hide');
                     if(this.readyState === 4) {
                         console.log(this.responseText);
                     }
+
                     let json = JSON.parse(this.responseText);
 
                     if (json.message === 'Ticket created!'){
