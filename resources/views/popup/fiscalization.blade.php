@@ -157,21 +157,6 @@
                 let xmlHttpRequest = new XMLHttpRequest()
                 xmlHttpRequest.withCredentials = true
 
-                let data = JSON.stringify({
-                    "accountId": accountId,
-                    "object_Id": object_Id,
-                    "entity_type": entity_type,
-
-                    "money_card": money_card,
-                    "money_cash": money_cash,
-                    "money_mobile": money_mobile,
-
-                    "pay_type": pay_type,
-                    "total": total,
-
-                    "position": products,
-                });
-
                 let settings = {
                     "url": url,
                     "method": "GET",
@@ -192,6 +177,8 @@
                         "position": products,
                     }),
                 };
+
+                console.log(settings);
 
                 $.ajax(settings).done(function (response) {
                     $('#downL').modal('hide');
