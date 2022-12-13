@@ -163,6 +163,8 @@ class fiscalizationController extends Controller
             'positions' => $positions,
         ];
 
+        //dd($data);
+
         try {
 
             $res = app(TicketController::class)->createTicket($data);

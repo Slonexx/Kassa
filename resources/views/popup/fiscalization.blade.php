@@ -175,6 +175,9 @@
                 let xmlHttpRequest = new XMLHttpRequest()
                 xmlHttpRequest.withCredentials = true
                 xmlHttpRequest.addEventListener("load", function () { $('#downL').modal('hide');
+                    if(this.readyState === 4) {
+                        console.log(this.responseText);
+                    }
                     let json = JSON.parse(this.responseText);
 
                     if (json.message === 'Ticket created!'){
@@ -193,6 +196,7 @@
                     }
                 });
                 xmlHttpRequest.open("GET", url);
+                xmlHttpRequest.setRequestHeader("Content-Type", "application/json");
                 xmlHttpRequest.send(data);
                 modalShowHide = 'hide';
             }
