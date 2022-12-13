@@ -154,7 +154,7 @@
                     }
                 }
 
-                var data = JSON.stringify({
+                let data = JSON.stringify({
                     "accountId": accountId,
                     "object_Id": object_Id,
                     "entity_type": entity_type,
@@ -166,7 +166,7 @@
                     "pay_type": pay_type,
                     "total": total,
 
-                    "position": position,
+                    "position": JSON.stringify(position),
 
                 });
                 console.log(data)
