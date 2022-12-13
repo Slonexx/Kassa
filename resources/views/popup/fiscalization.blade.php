@@ -169,8 +169,7 @@
                     "pay_type": pay_type,
                     "total": total,
 
-                    "position": JSON.stringify(products),
-
+                    "position": products,
                 });
                 console.log(data)
 
@@ -199,7 +198,7 @@
 
                 xmlHttpRequest.open("GET", url);
                 xmlHttpRequest.send(data);
-                console.log(JSON.stringify(data))
+                console.log((data))
                 modalShowHide = 'hide';
             }
             else window.document.getElementById(button_hide).style.display = "block";
