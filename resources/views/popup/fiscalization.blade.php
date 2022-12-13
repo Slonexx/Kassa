@@ -154,20 +154,21 @@
                     }
                 }
 
-                let data = new FormData();
-                data.append("accountId", accountId)
-                data.append("object_Id", object_Id)
-                data.append("entity_type", entity_type);
+                var data = JSON.stringify({
+                    "accountId": accountId,
+                    "object_Id": object_Id,
+                    "entity_type": entity_type,
 
-                data.append("money_card", money_card)
-                data.append("money_cash", money_cash)
-                data.append("money_mobile", money_mobile)
+                    "money_card": money_card,
+                    "money_cash": money_cash,
+                    "money_mobile": money_mobile,
 
-                data.append("pay_type", pay_type)
-                data.append("total", total)
+                    "pay_type": pay_type,
+                    "total": total,
 
-                data.append("position", JSON.stringify(products))
+                    "position": position,
 
+                });
                 console.log(data)
 
                 console.log('send to kkm = ' + url)

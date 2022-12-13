@@ -138,6 +138,7 @@ class fiscalizationController extends Controller
 
         $pay_type = $request->pay_type;
         $position = json_decode($request->position);
+
         $positions = [];
         foreach ($position as $item){
             if ($item != null){
