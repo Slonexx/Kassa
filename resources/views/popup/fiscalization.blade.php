@@ -197,9 +197,10 @@
                         modalShowHide = 'hide';
                     }
                 });
-                xmlHttpRequest.send(data);
+
                 xmlHttpRequest.open("GET", url);
-                xmlHttpRequest.setRequestHeader("Content-Type", "application/json");
+                console.log(JSON.stringify(data))
+                xmlHttpRequest.send(data);
                 modalShowHide = 'hide';
             }
             else window.document.getElementById(button_hide).style.display = "block";
