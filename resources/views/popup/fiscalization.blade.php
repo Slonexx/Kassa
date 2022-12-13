@@ -172,26 +172,34 @@
                     "position": products,
                 });
 
-                let params = {
-                    accountId: accountId,
-                    object_Id: object_Id,
-                    entity_type: entity_type,
+                let settings = {
+                    "url": url,
+                    "method": "GET",
+                    "timeout": 0,
+                    "headers": {"Content-Type": "application/json",},
+                    "data": JSON.stringify({
+                        "accountId": accountId,
+                        "object_Id": object_Id,
+                        "entity_type": entity_type,
 
-                    money_card: money_card,
-                    money_cash: money_cash,
-                    money_mobile: money_mobile,
+                        "money_card": money_card,
+                        "money_cash": money_cash,
+                        "money_mobile": money_mobile,
 
-                    pay_type: pay_type,
-                    total: total,
+                        "pay_type": pay_type,
+                        "total": total,
 
-                    position: JSON.stringify(products),
+                        "position": products,
+                    }),
                 };
 
-                console.log(data)
+                $.ajax(settings).done(function (response) {
+                    console.log(response);
+                });
 
-                xmlHttpRequest.open('GET', url, true);
+                /*xmlHttpRequest.open('GET', url, true);
                 xmlHttpRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-                xmlHttpRequest.send('accountId='+accountId);
+                xmlHttpRequest.send();
                 xmlHttpRequest.onload = function (){
                     $('#downL').modal('hide');
 
@@ -211,7 +219,7 @@
                         window.document.getElementById(button_hide).style.display = "block";
                         modalShowHide = 'hide';
                     }
-                }
+                }*/
                 modalShowHide = 'hide';
             }
             else window.document.getElementById(button_hide).style.display = "block";
