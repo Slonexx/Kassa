@@ -196,6 +196,12 @@ class TicketService
                     $body["operation"] = "OPERATION_SELL_RETURN";
                     $isPayIn = false;
                 }
+
+                $ExtensionOptions = $this->getUUH($Setting, $id_entity, $entity_type);
+                $body = $body + ['ExtensionOptions' => $ExtensionOptions];
+
+                dd($body);
+
                 try {
                     $response = $clientK->post("crs/".$id."/tickets",$body);
                     $jsonEntity = $this->writeToAttrib($response->id, $urlEntity, $entity_type, $apiKeyMs, $positions);
@@ -579,6 +585,20 @@ class TicketService
             }
        }
         return $data;
+    }
+
+    private function getUUH(getSetting $Setting, mixed $id_entity, mixed $entity_type): array
+    {
+        $Client = new MsClient($Setting->tokenMs);
+        $body = $Client->get('https://online.moysklad.ru/api/remap/1.2/entity/'.$entity_type.'/'.$id_entity);
+        $agent = $Client->get($body->agent->meta->href);
+        $result = [];
+
+        if (property_exists($agent, 'email')) { $result['customer_email'] = $agent->email; }
+        if (property_exists($agent, 'phone')) { $result['customer_phone'] = $agent->phone; }
+        if (property_exists($agent, 'inn')) { $result['customer_iin_or_bin'] = $agent->inn; }
+
+        return $result;
     }
 
 }
