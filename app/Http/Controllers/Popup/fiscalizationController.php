@@ -9,6 +9,7 @@ use App\Http\Controllers\getData\getWorkerID;
 use App\Http\Controllers\TicketController;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
+use function MongoDB\BSON\toJSON;
 
 class fiscalizationController extends Controller
 {
@@ -137,7 +138,9 @@ class fiscalizationController extends Controller
 
 
         $pay_type = $request->pay_type;
+
         $position = json_decode($request->position);
+
         $positions = [];
         foreach ($position as $item){
             if ($item != null){
@@ -161,6 +164,8 @@ class fiscalizationController extends Controller
 
             'positions' => $positions,
         ];
+
+        //dd($data);
 
         try {
 
