@@ -102,8 +102,7 @@
             let money_card = window.document.getElementById('card').value;
             let money_cash = window.document.getElementById('cash').value;
             let money_mobile = window.document.getElementById('mobile').value;
-            let SelectorInfo = document.getElementById('valueSelector');
-            let option = SelectorInfo.options[SelectorInfo.selectedIndex];
+            let option = document.getElementById('valueSelector').value;
 
             if (option.value == 0){
                 if (!money_cash) {
@@ -133,6 +132,7 @@
                     modalShowHide = 'hide'
                 }
             }
+
             console.log(money_card+money_cash+money_mobile)
             if (total-0.01 <= money_card+money_cash+money_mobile) {
                 let url = 'https://dev.smartrekassa.kz/Popup/customerorder/send';
@@ -206,6 +206,7 @@
             } else {
                 window.document.getElementById('messageAlert').innerText = 'Сумма некорректна, введите больше';
                 window.document.getElementById('message').style.display = "block";
+                window.document.getElementById(button_hide).style.display = "block";
                 modalShowHide = 'hide'
             }
         }
