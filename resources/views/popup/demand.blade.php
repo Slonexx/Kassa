@@ -94,7 +94,6 @@
             }
         });
 
-
         function sendKKM(pay_type){
             let button_hide = '';
             if (pay_type == 'return') button_hide = 'refundCheck';
@@ -107,8 +106,7 @@
             let money_card = window.document.getElementById('card').value;
             let money_cash = window.document.getElementById('cash').value;
             let money_mobile = window.document.getElementById('mobile').value;
-            let SelectorInfo = document.getElementById('valueSelector');
-            let option = SelectorInfo.options[SelectorInfo.selectedIndex];
+            let option = document.getElementById('valueSelector').value;
 
             if (option.value == 0){
                 if (!money_cash) {
@@ -139,73 +137,80 @@
                 }
             }
 
-            let url = 'https://smartrekassa.kz/Popup/demand/send';
-            //let url = 'https://rekassa/Popup/customerorder/send';
-
-            if (modalShowHide === 'show'){
-                $('#downL').modal('toggle');
-                let products = [];
-                for (let i = 0; i < 20; i++) {
-                    if ( window.document.getElementById(i).style.display === 'block' ) {
-                        products[i] = {
-                            id:window.document.getElementById('productId_'+i).innerText,
-                            name:window.document.getElementById('productName_'+i).innerText,
-                            quantity:window.document.getElementById('productQuantity_'+i).innerText,
-                            UOM:window.document.getElementById('productIDUOM_'+i).innerText,
-                            price:window.document.getElementById('productPrice_'+i).innerText,
-                            is_nds:window.document.getElementById('productVat_'+i).innerText,
-                            discount:window.document.getElementById('productDiscount_'+i).innerText
+            if (total-0.01 <= money_card+money_cash+money_mobile) {
+                let url = 'https://smartrekassa.kz/Popup/demand/send';
+                //let url = 'https://rekassa/Popup/customerorder/send';
+                if (modalShowHide === 'show'){
+                    $('#downL').modal('toggle');
+                    let products = [];
+                    for (let i = 0; i < 20; i++) {
+                        if ( window.document.getElementById(i).style.display === 'block' ) {
+                            products[i] = {
+                                id:window.document.getElementById('productId_'+i).innerText,
+                                name:window.document.getElementById('productName_'+i).innerText,
+                                quantity:window.document.getElementById('productQuantity_'+i).innerText,
+                                UOM:window.document.getElementById('productIDUOM_'+i).innerText,
+                                price:window.document.getElementById('productPrice_'+i).innerText,
+                                is_nds:window.document.getElementById('productVat_'+i).innerText,
+                                discount:window.document.getElementById('productDiscount_'+i).innerText
+                            }
                         }
                     }
-                }
-                let params = {
-                    accountId: accountId,
-                    object_Id: object_Id,
-                    entity_type: entity_type,
 
-                    money_card: money_card,
-                    money_cash: money_cash,
-                    money_mobile: money_mobile,
+                    let xmlHttpRequest = new XMLHttpRequest()
+                    xmlHttpRequest.withCredentials = true
 
-                    pay_type: pay_type,
-                    total: total,
+                    let settings = {
+                        "url": url,
+                        "method": "GET",
+                        "timeout": 0,
+                        "headers": {"Content-Type": "application/json",},
+                        "data": {
+                            "accountId": accountId,
+                            "object_Id": object_Id,
+                            "entity_type": entity_type,
 
-                    position: JSON.stringify(products),
-                };
-                let final = url + formatParams(params);
-                console.log('send to kkm = ' + final);
-                let xmlHttpRequest = new XMLHttpRequest();
-                xmlHttpRequest.addEventListener("load", function () {
-                    $('#downL').modal('hide');
-                    let json = JSON.parse(this.responseText);
-                    if (json.message === 'Ticket created!'){
-                        window.document.getElementById("messageGoodAlert").innerText = "Чек создан";
-                        window.document.getElementById("messageGood").style.display = "block";
-                        window.document.getElementById("ShowCheck").style.display = "block";
-                        window.document.getElementById("closeShift").style.display = "block";
-                        modalShowHide = 'hide';
-                        let response = json.response;
-                        id_ticket = response.id;
-                    } else {
-                        if (json.error.code =='CASH_REGISTER_SHIFT_PERIOD_EXPIRED') {
-                            window.document.getElementById('messageAlert').innerText = "Предыдущая смена не закрыта !";
-                            window.document.getElementById('message').style.display = "block";
-                            window.document.getElementById(button_hide).style.display = "block";
+                            "money_card": money_card,
+                            "money_cash": money_cash,
+                            "money_mobile": money_mobile,
+
+                            "pay_type": pay_type,
+                            "total": total,
+
+                            "position": JSON.stringify(products),
+                        },
+                    };
+
+                    console.log(settings);
+
+                    $.ajax(settings).done(function (response) {
+                        $('#downL').modal('hide')
+                        let json = response
+
+                        if (json.message === 'Ticket created!'){
+                            window.document.getElementById("messageGoodAlert").innerText = "Чек создан";
+                            window.document.getElementById("messageGood").style.display = "block";
+                            window.document.getElementById("ShowCheck").style.display = "block";
+                            window.document.getElementById("closeShift").style.display = "block";
                             modalShowHide = 'hide';
+                            let response = json.response;
+                            id_ticket = response.id;
                         } else {
                             window.document.getElementById('messageAlert').innerText = "Ошибка 400";
                             window.document.getElementById('message').style.display = "block";
                             window.document.getElementById(button_hide).style.display = "block";
                             modalShowHide = 'hide';
                         }
-
-                    }
-                });
-                xmlHttpRequest.open("GET", final);
-                xmlHttpRequest.send();
-                modalShowHide = 'hide';
+                    });
+                    modalShowHide = 'hide';
+                }
+                else window.document.getElementById(button_hide).style.display = "block";
+            } else {
+                window.document.getElementById('messageAlert').innerText = 'Сумма некорректна, введите больше';
+                window.document.getElementById('message').style.display = "block";
+                window.document.getElementById(button_hide).style.display = "block";
+                modalShowHide = 'hide'
             }
-            else window.document.getElementById(button_hide).style.display = "block";
         }
 
 
