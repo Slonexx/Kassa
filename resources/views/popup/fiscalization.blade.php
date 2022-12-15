@@ -102,30 +102,31 @@
             let money_card = window.document.getElementById('card').value;
             let money_cash = window.document.getElementById('cash').value;
             let money_mobile = window.document.getElementById('mobile').value;
-            let option = document.getElementById('valueSelector').value;
+            let SelectorInfo = document.getElementById('valueSelector');
+            let option = SelectorInfo.options[SelectorInfo.selectedIndex];
 
-            if (option == 0){
+            if (option.value == 0){
                 if (!money_cash) {
                     window.document.getElementById('messageAlert').innerText = 'Вы не ввели сумму наличных';
                     window.document.getElementById('message').style.display = "block";
                     modalShowHide = 'hide'
                 }
             }
-            if (option == 1){
+            if (option.value == 1){
                 if (!money_card) {
                     window.document.getElementById('messageAlert').innerText = 'Вы не ввели сумму карты';
                     window.document.getElementById('message').style.display = "block";
                     modalShowHide = 'hide'
                 }
             }
-            if (option == 2){
+            if (option.value == 2){
                 if (!money_mobile){
                     window.document.getElementById('messageAlert').innerText = 'Вы не ввели сумму мобильных';
                     window.document.getElementById('message').style.display = "block";
                     modalShowHide = 'hide'
                 }
             }
-            if (option == 3){
+            if (option.value == 3){
                 if (!money_card && !money_cash && !money_mobile){
                     window.document.getElementById('messageAlert').innerText = 'Вы не ввели сумму';
                     window.document.getElementById('message').style.display = "block";
