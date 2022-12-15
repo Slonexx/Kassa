@@ -106,7 +106,8 @@
             let money_card = window.document.getElementById('card').value;
             let money_cash = window.document.getElementById('cash').value;
             let money_mobile = window.document.getElementById('mobile').value;
-            let option = document.getElementById('valueSelector').value;
+            let SelectorInfo = document.getElementById('valueSelector');
+            let option = SelectorInfo.options[SelectorInfo.selectedIndex];
 
             if (option.value == 0){
                 if (!money_cash) {
