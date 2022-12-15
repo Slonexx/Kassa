@@ -133,7 +133,6 @@
                 }
             }
 
-            console.log(money_card+money_cash+money_mobile)
             if (total-0.01 <= money_card+money_cash+money_mobile) {
                 let url = 'https://dev.smartrekassa.kz/Popup/customerorder/send';
                 //let url = 'https://rekassa/Popup/customerorder/send';
