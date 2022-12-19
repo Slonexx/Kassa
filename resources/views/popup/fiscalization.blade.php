@@ -138,6 +138,8 @@
                 let url = 'https://dev.smartrekassa.kz/Popup/customerorder/send';
                 //let url = 'https://rekassa/Popup/customerorder/send';
 
+                console.log('url = ' + url);
+
                 if (modalShowHide === 'show'){
                     $('#downL').modal('toggle');
                     let products = [];
