@@ -198,7 +198,9 @@ class TicketService
                 }
 
                 $ExtensionOptions = $this->getUUH($Setting, $id_entity, $entity_type);
-                $body = $body + ['extension_options' => $ExtensionOptions];
+                if ($ExtensionOptions){
+                    $body = $body + ['extension_options' => $ExtensionOptions];
+                }
 
                 //dd($body);
 
