@@ -198,9 +198,9 @@ class TicketService
                 }
 
                 $ExtensionOptions = $this->getUUH($Setting, $id_entity, $entity_type);
-                $body = $body + ['ExtensionOptions' => $ExtensionOptions];
+                $body = $body + ['extension_options' => $ExtensionOptions];
 
-                dd($body);
+                //dd($body);
 
                 try {
                     $response = $clientK->post("crs/".$id."/tickets",$body);
