@@ -198,12 +198,16 @@ class TicketService
                 }
 
                 $ExtensionOptions = $this->getUUH($Setting, $id_entity, $entity_type);
-                $body = $body + ['extension_options' => $ExtensionOptions];
+                if ($ExtensionOptions){
+                    $body = $body + ['extension_options' => $ExtensionOptions];
+                }
+
 
                 //dd($body);
 
                 try {
                     $response = $clientK->post("crs/".$id."/tickets",$body);
+                    dd($response);
                     $jsonEntity = $this->writeToAttrib($response->id, $urlEntity, $entity_type, $apiKeyMs, $positions);
 
                     if ($isPayIn){
