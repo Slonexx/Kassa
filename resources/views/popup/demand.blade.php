@@ -193,7 +193,7 @@
                         modalShowHide = 'hide';
                     }
                 });
-                xmlHttpRequest.open("POST", final);
+                xmlHttpRequest.open("GET", final);
                 xmlHttpRequest.send();
                 modalShowHide = 'hide';
             }

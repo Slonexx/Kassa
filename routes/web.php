@@ -60,15 +60,15 @@ Route::get('/widget/salesreturn', [salesreturnEditController::class, 'salesretur
 
 Route::get('/Popup/customerorder', [fiscalizationController::class, 'fiscalizationPopup']);
 Route::get('/Popup/customerorder/show', [fiscalizationController::class, 'ShowFiscalizationPopup']);
-Route::post('/Popup/customerorder/send', [fiscalizationController::class, 'SendFiscalizationPopup']);
+Route::get('/Popup/customerorder/send', [fiscalizationController::class, 'SendFiscalizationPopup']);
 Route::get('/Popup/customerorder/closeShift', [fiscalizationController::class, 'closeShiftPopup']);
 
 Route::get('/Popup/demand', [demandController::class, 'DemandPopup']);
 Route::get('/Popup/demand/show', [demandController::class, 'ShowDemandPopup']);
-Route::post('/Popup/demand/send', [demandController::class, 'SendDemandPopup']);
+Route::get('/Popup/demand/send', [demandController::class, 'SendDemandPopup']);
 
 Route::get('/Popup/salesreturn', [salesreturnController::class, 'salesreturnPopup']);
 Route::get('/Popup/salesreturn/show', [salesreturnController::class, 'ShowSalesreturnPopup']);
-Route::post('/Popup/salesreturn/send', [salesreturnController::class, 'SendSalesreturnPopup']);
+Route::get('/Popup/salesreturn/send', [salesreturnController::class, 'SendSalesreturnPopup']);
 
 
