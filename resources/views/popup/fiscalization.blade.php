@@ -157,12 +157,9 @@
                         }
                     }
 
-                    let xmlHttpRequest = new XMLHttpRequest()
-                    xmlHttpRequest.withCredentials = true
-
                     let settings = {
                         "url": url,
-                        "method": "GET",
+                        "method": "POST",
                         "timeout": 0,
                         "headers": {"Content-Type": "application/json",},
                         "data": {
