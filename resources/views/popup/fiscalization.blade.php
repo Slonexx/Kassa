@@ -548,6 +548,7 @@
 
 
     function option_value_error_fu(index_option, money_card, money_cash, money_mobile){
+        console.log(index_option)
         let params = false
         switch (index_option) {
             case 0 && "0": {
