@@ -207,7 +207,7 @@ class TicketService
 
                 try {
                     $response = $clientK->post("crs/".$id."/tickets",$body);
-                    dd($response);
+                    //dd($response);
                     $jsonEntity = $this->writeToAttrib($response->id, $urlEntity, $entity_type, $apiKeyMs, $positions);
 
                     if ($isPayIn){
