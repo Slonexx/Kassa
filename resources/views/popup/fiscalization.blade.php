@@ -190,10 +190,17 @@
                                 let response = json.response;
                                 id_ticket = response.id;
                             } else {
-                                window.document.getElementById('messageAlert').innerText = "Ошибка 400";
-                                window.document.getElementById('message').style.display = "block";
-                                window.document.getElementById(button_hide).style.display = "block";
-                                modalShowHide = 'hide';
+                                if (json.error.code =='CASH_REGISTER_SHIFT_PERIOD_EXPIRED') {
+                                    window.document.getElementById('messageAlert').innerText = "Предыдущая смена не закрыта !";
+                                    window.document.getElementById('message').style.display = "block";
+                                    window.document.getElementById(button_hide).style.display = "block";
+                                    modalShowHide = 'hide';
+                                } else {
+                                    window.document.getElementById('messageAlert').innerText = "Ошибка 400";
+                                    window.document.getElementById('message').style.display = "block";
+                                    window.document.getElementById(button_hide).style.display = "block";
+                                    modalShowHide = 'hide';
+                                }
                             }
                         }
                     });
@@ -573,67 +580,55 @@
     function roundToTwo(num) { return +(Math.round(num + "e+2")  + "e-2"); }
 
     function isNumberKeyCash(evt){
-        var charCode = (evt.which) ? evt.which : event.keyCode
+        let charCode = (evt.which) ? evt.which : event.keyCode;
         if (charCode == 46){
-            var inputValue = $("#cash").val();
-            var count = (inputValue.match(/'.'/g) || []).length;
+            let inputValue = $("#cash").val();
+            let count = (inputValue.match(/'.'/g) || []).length;
             if(count<1){
-                if (inputValue.indexOf('.') < 1){
-                    return true;
-                }
-                return false;
+                return inputValue.indexOf('.') < 1;
+
             }else{
                 return false;
             }
         }
-        if (charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57)){
-            return false;
-        }
-        return true;
+        return !(charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57));
+
     }
     function isNumberKeyCard(evt){
-        var charCode = (evt.which) ? evt.which : event.keyCode
+        let charCode = (evt.which) ? evt.which : event.keyCode;
         if (charCode == 46){
-            var inputValue = $("#card").val();
-            var count = (inputValue.match(/'.'/g) || []).length;
+            let inputValue = $("#card").val();
+            let count = (inputValue.match(/'.'/g) || []).length;
             if(count<1){
-                if (inputValue.indexOf('.') < 1){
-                    return true;
-                }
-                return false;
+                return inputValue.indexOf('.') < 1;
+
             }else{
                 return false;
             }
         }
-        if (charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57)){
-            return false;
-        }
-        return true;
+        return !(charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57));
+
     }
     function isNumberKeyMobile(evt){
-        var charCode = (evt.which) ? evt.which : event.keyCode
+        let charCode = (evt.which) ? evt.which : event.keyCode;
         if (charCode == 46){
-            var inputValue = $("#mobile").val();
-            var count = (inputValue.match(/'.'/g) || []).length;
+            let inputValue = $("#mobile").val();
+            let count = (inputValue.match(/'.'/g) || []).length;
             if(count<1){
-                if (inputValue.indexOf('.') < 1){
-                    return true;
-                }
-                return false;
+                return inputValue.indexOf('.') < 1;
+
             }else{
                 return false;
             }
         }
-        if (charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57)){
-            return false;
-        }
-        return true;
+        return !(charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57));
+
     }
 
     function deleteBTNClick(Object){
         let sum = document.getElementById("sum").innerHTML;
         let final = document.getElementById('productFinal_' + Object).innerHTML;
-        window.document.getElementById("sum").innerHTML = sum-final;
+        window.document.getElementById("sum").innerHTML = toString(parseFloat(sum)-parseFloat(final));
 
         window.document.getElementById('productName_' + Object).innerHTML = '';
         window.document.getElementById('productQuantity_' + Object).innerHTML = '';
