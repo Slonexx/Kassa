@@ -157,7 +157,7 @@
                             $('#downL').modal('hide')
                             console.log(url + ' response ↓ ')
                             console.log(response)
-                            let json = response
+                            let json = response.res
 
                             if (json.status === 'Ticket created!'){
                                 window.document.getElementById("messageGoodAlert").innerText = "Чек создан";
