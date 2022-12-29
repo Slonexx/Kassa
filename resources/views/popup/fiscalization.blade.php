@@ -5,8 +5,6 @@
 
     <script>
 
-        //const url = 'https://rekassa/Popup/customerorder/show';
-
         const url = 'https://dev.smartrekassa.kz/Popup/customerorder/show';
         let object_Id = '';
         let accountId = '';
@@ -28,52 +26,50 @@
                 object_Id = receivedMessage.popupParameters.object_Id;
                 accountId = receivedMessage.popupParameters.accountId;
                 entity_type = receivedMessage.popupParameters.entity_type;
-                let params = { object_Id: object_Id, accountId: accountId, };
-                let final = url + formatParams(params);
+                let data = { object_Id: object_Id, accountId: accountId, };
 
-                    //ДОБАВИЛ
-                    /*receivedMessage = null*/
+                let settings = ajax_settings(url, "GET", data);
+                console.log(url + ' settings ↓ ')
+                console.log(settings)
 
-                console.log('receivedMessage = ' + final)
+                $.ajax(settings).done(function (json) {
+                    console.log(url + ' response ↓ ')
+                    console.log(json)
+                    $('#lDown').modal('hide')
 
-                let xmlHttpRequest = new XMLHttpRequest();
-                xmlHttpRequest.addEventListener("load", function () {
-                        $('#lDown').modal('hide')
-                        let json = JSON.parse(this.responseText)
+                    id_ticket = json.attributes.ticket_id
+                    window.document.getElementById("numberOrder").innerHTML = json.name;
+                    let products = json.products;
 
-                        id_ticket = json.attributes.ticket_id
-                        window.document.getElementById("numberOrder").innerHTML = json.name;
-                        let products = json.products;
+                    for (let i = 0; i < products.length; i++) {
+                        if (products[i].propety === true) {
 
-                        for (let i = 0; i < products.length; i++) {
-                            if (products[i].propety === true) {
-
-                                if ( products[i].propety_code == false ){
-                                    window.document.getElementById("messageAlert").innerText = "Позиции, у которых не системные единицы измерения не могут быть добавлены";
-                                    window.document.getElementById("message").style.display = "block";
-                                } else {
-                                    window.document.getElementById('productId_' + i).innerHTML = products[i].position;
-                                    window.document.getElementById('productName_' + i).innerHTML = products[i].name;
-                                    window.document.getElementById('productQuantity_' + i).innerHTML = products[i].quantity;
-                                    window.document.getElementById('productUOM_' + i).innerHTML = products[i].uom['name']
-                                    window.document.getElementById('productIDUOM_' + i).innerHTML = products[i].uom['id'];
-                                    window.document.getElementById('productPrice_' + i).innerHTML = products[i].price;
-                                    if (products[i].vat === 0)  window.document.getElementById('productVat_' + i).innerHTML = "без НДС";
-                                    else window.document.getElementById('productVat_' + i).innerHTML = products[i].vat + '%';
-                                    window.document.getElementById('productDiscount_' + i).innerHTML = products[i].discount + '%';
-                                    window.document.getElementById('productFinal_' + i).innerHTML = products[i].final;
-
-                                    let sum = window.document.getElementById("sum").innerHTML;
-                                    if (!sum) sum = 0;
-                                    window.document.getElementById("sum").innerHTML = roundToTwo(parseFloat(sum) + parseFloat(products[i].final));
-                                    window.document.getElementById(i).style.display = "block";
-                                }
-
-                            } else {
-                                window.document.getElementById("messageAlert").innerText = "Позиции у которых нет ед. изм. не добавились ";
+                            if ( products[i].propety_code == false ){
+                                window.document.getElementById("messageAlert").innerText = "Позиции, у которых не системные единицы измерения не могут быть добавлены";
                                 window.document.getElementById("message").style.display = "block";
+                            } else {
+                                window.document.getElementById('productId_' + i).innerHTML = products[i].position;
+                                window.document.getElementById('productName_' + i).innerHTML = products[i].name;
+                                window.document.getElementById('productQuantity_' + i).innerHTML = products[i].quantity;
+                                window.document.getElementById('productUOM_' + i).innerHTML = products[i].uom['name']
+                                window.document.getElementById('productIDUOM_' + i).innerHTML = products[i].uom['id'];
+                                window.document.getElementById('productPrice_' + i).innerHTML = products[i].price;
+                                if (products[i].vat === 0)  window.document.getElementById('productVat_' + i).innerHTML = "без НДС";
+                                else window.document.getElementById('productVat_' + i).innerHTML = products[i].vat + '%';
+                                window.document.getElementById('productDiscount_' + i).innerHTML = products[i].discount + '%';
+                                window.document.getElementById('productFinal_' + i).innerHTML = products[i].final;
+
+                                let sum = window.document.getElementById("sum").innerHTML;
+                                if (!sum) sum = 0;
+                                window.document.getElementById("sum").innerHTML = roundToTwo(parseFloat(sum) + parseFloat(products[i].final));
+                                window.document.getElementById(i).style.display = "block";
                             }
+
+                        } else {
+                            window.document.getElementById("messageAlert").innerText = "Позиции у которых нет ед. изм. не добавились ";
+                            window.document.getElementById("message").style.display = "block";
                         }
+                    }
 
                     if (json.attributes.ticket_id != null){
                         window.document.getElementById("ShowCheck").style.display = "block";
@@ -82,10 +78,9 @@
                         window.document.getElementById("getKKM").style.display = "block";
                     }
 
-                        window.document.getElementById("closeButtonId").style.display = "block";
-                    });
-                xmlHttpRequest.open("GET", final);
-                xmlHttpRequest.send();
+                    window.document.getElementById("closeButtonId").style.display = "block";
+                })
+
             }
         });
 
@@ -157,46 +152,49 @@
                         }
                     }
 
-                    let settings = {
-                        "url": url,
-                        "method": "GET",
-                        "timeout": 0,
-                        "headers": {"Content-Type": "application/json",},
-                        "data": {
-                            "accountId": accountId,
-                            "object_Id": object_Id,
-                            "entity_type": entity_type,
+                    let data =  {
+                        "accountId": accountId,
+                        "object_Id": object_Id,
+                        "entity_type": entity_type,
 
-                            "money_card": money_card,
-                            "money_cash": money_cash,
-                            "money_mobile": money_mobile,
+                        "money_card": money_card,
+                        "money_cash": money_cash,
+                        "money_mobile": money_mobile,
 
-                            "pay_type": pay_type,
-                            "total": total,
+                        "pay_type": pay_type,
+                        "total": total,
 
-                            "position": JSON.stringify(products),
-                        },
-                    };
+                        "position": JSON.stringify(products),
+                    }
+                    console.log(url + ' data ↓ ')
+                    console.log(data)
 
-                    console.log(settings);
+                    $.ajax({
+                        url: url,
+                        method: 'post',
+                        dataType: 'json',
+                        data: data,
+                        success: function(response){
+                            $('#downL').modal('hide')
+                            console.log(url + ' response ↓ ')
+                            console.log(response)
 
-                    $.ajax(settings).done(function (response) {
-                        $('#downL').modal('hide')
-                        let json = response
+                            let json = response
 
-                        if (json.message === 'Ticket created!'){
-                            window.document.getElementById("messageGoodAlert").innerText = "Чек создан";
-                            window.document.getElementById("messageGood").style.display = "block";
-                            window.document.getElementById("ShowCheck").style.display = "block";
-                            window.document.getElementById("closeShift").style.display = "block";
-                            modalShowHide = 'hide';
-                            let response = json.response;
-                            id_ticket = response.id;
-                        } else {
-                            window.document.getElementById('messageAlert').innerText = "Ошибка 400";
-                            window.document.getElementById('message').style.display = "block";
-                            window.document.getElementById(button_hide).style.display = "block";
-                            modalShowHide = 'hide';
+                            if (json.message === 'Ticket created!'){
+                                window.document.getElementById("messageGoodAlert").innerText = "Чек создан";
+                                window.document.getElementById("messageGood").style.display = "block";
+                                window.document.getElementById("ShowCheck").style.display = "block";
+                                window.document.getElementById("closeShift").style.display = "block";
+                                modalShowHide = 'hide';
+                                let response = json.response;
+                                id_ticket = response.id;
+                            } else {
+                                window.document.getElementById('messageAlert').innerText = "Ошибка 400";
+                                window.document.getElementById('message').style.display = "block";
+                                window.document.getElementById(button_hide).style.display = "block";
+                                modalShowHide = 'hide';
+                            }
                         }
                     });
                     modalShowHide = 'hide';
@@ -215,17 +213,20 @@
             let urlrekassa = 'https://app-test.rekassa.kz/'
             //let url = 'http://rekassa/Popup/customerorder/closeShift';
             let url = 'https://dev.smartrekassa.kz/api/ticket';
-            let params = {
+            let data = {
                 accountId: accountId,
                 id_ticket: id_ticket,
             };
-            let final = url + formatParams(params);
-            let xmlHttpRequest = new XMLHttpRequest();
-            xmlHttpRequest.addEventListener("load", function () {
-                window.open(urlrekassa + this.responseText);
-            });
-            xmlHttpRequest.open("GET", final);
-            xmlHttpRequest.send();
+
+            let settings = ajax_settings(url, "GET", data);
+            console.log(url + ' settings ↓ ')
+            console.log(settings)
+
+            $.ajax(settings).done(function (response) {
+                console.log(url + ' response ↓ ')
+                console.log(response)
+                window.open(urlrekassa + response);
+            })
         }
 
         function SelectorSum(Selector){
@@ -506,6 +507,17 @@
 
 @endsection
 <script>
+
+    function ajax_settings(url, method, data){
+        return {
+            "url": url,
+            "method": method,
+            "timeout": 0,
+            "headers": {"Content-Type": "application/json",},
+            "data": data,
+        }
+    }
+
     function newPopup(){
         window.document.getElementById("sum").innerHTML = ''
 
@@ -640,15 +652,15 @@
             accountId: accountId,
             pincode: pinCode,
         };
-        //let url = 'http://rekassa/Popup/customerorder/closeShift';
         let url = 'https://dev.smartrekassa.kz/Popup/customerorder/closeShift';
-        let final = url + formatParams(params);
+        let settings = ajax_settings(url, "GET", params);
+        console.log(url + ' settings ↓ ')
+        console.log(settings)
 
-        console.log("final = " + final);
+        $.ajax(settings).done(function (json) {
+            console.log(url + ' response ↓ ')
+            console.log(json)
 
-        let xmlHttpRequest = new XMLHttpRequest();
-        xmlHttpRequest.addEventListener("load", function () {
-            let json = JSON.parse(this.responseText);
             if (json.statusCode === 200){
                 window.document.getElementById('messageAlert').innerText = json.message;
                 window.document.getElementById('message').style.display = "block";
@@ -657,8 +669,6 @@
                 window.document.getElementById('messageAlert').innerText = "ошибка";
                 window.document.getElementById('message').style.display = "block";
             }
-        });
-        xmlHttpRequest.open("GET", final);
-        xmlHttpRequest.send();
+        })
     }
 </script>
