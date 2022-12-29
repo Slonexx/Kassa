@@ -3,12 +3,10 @@
 namespace App\Http\Controllers\Popup;
 
 use App\Clients\MsClient;
-use App\Http\Controllers\Config\Lib\VendorApiController;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\getData\getSetting;
-use App\Http\Controllers\getData\getWorkerID;
-use App\Http\Controllers\TicketController;
-use GuzzleHttp\Client;
+
+use App\Services\ticket\TicketService;
 use Illuminate\Http\Request;
 
 class demandController extends Controller
@@ -142,13 +140,16 @@ class demandController extends Controller
 
 
         $pay_type = $request->pay_type;
+
         $position = json_decode($request->position);
+
         $positions = [];
         foreach ($position as $item){
             if ($item != null){
                 $positions[] = $item;
             }
         }
+
 
 
 
@@ -167,9 +168,11 @@ class demandController extends Controller
             'positions' => $positions,
         ];
 
+        //dd($data);
+
         try {
 
-            $res = app(TicketController::class)->createTicket($data);
+            $res = app(TicketService::class)->createTicket($data);
             return response()->json($res);
 
         } catch (\Throwable $e){
