@@ -100,34 +100,11 @@
             let SelectorInfo = document.getElementById('valueSelector');
             let option = SelectorInfo.options[SelectorInfo.selectedIndex];
 
-            if (option.value == 0){
-                if (!money_cash) {
-                    window.document.getElementById('messageAlert').innerText = 'Вы не ввели сумму наличных';
-                    window.document.getElementById('message').style.display = "block";
-                    modalShowHide = 'hide'
-                }
+            let error_what = option_value_error_fu(option.value, money_cash, money_cash, money_mobile)
+            if (error_what === true){
+                modalShowHide = 'hide'
             }
-            if (option.value == 1){
-                if (!money_card) {
-                    window.document.getElementById('messageAlert').innerText = 'Вы не ввели сумму карты';
-                    window.document.getElementById('message').style.display = "block";
-                    modalShowHide = 'hide'
-                }
-            }
-            if (option.value == 2){
-                if (!money_mobile){
-                    window.document.getElementById('messageAlert').innerText = 'Вы не ввели сумму мобильных';
-                    window.document.getElementById('message').style.display = "block";
-                    modalShowHide = 'hide'
-                }
-            }
-            if (option.value == 3){
-                if (!money_card && !money_cash && !money_mobile){
-                    window.document.getElementById('messageAlert').innerText = 'Вы не ввели сумму';
-                    window.document.getElementById('message').style.display = "block";
-                    modalShowHide = 'hide'
-                }
-            }
+
 
             if (total-0.01 <= money_card+money_cash+money_mobile) {
                 let url = 'https://dev.smartrekassa.kz/Popup/customerorder/send';
@@ -138,7 +115,7 @@
                 if (modalShowHide === 'show'){
                     $('#downL').modal('toggle');
                     let products = [];
-                    for (let i = 0; i < 20; i++) {
+                    for (let i = 0; i < 99; i++) {
                         if ( window.document.getElementById(i).style.display === 'block' ) {
                             products[i] = {
                                 id:window.document.getElementById('productId_'+i).innerText,
@@ -174,12 +151,10 @@
                         method: 'post',
                         dataType: 'json',
                         data: data,
-                        success: function(response){
+                        success: function(json){
                             $('#downL').modal('hide')
                             console.log(url + ' response ↓ ')
-                            console.log(response)
-
-                            let json = response
+                            console.log(json)
 
                             if (json.message === 'Ticket created!'){
                                 window.document.getElementById("messageGoodAlert").innerText = "Чек создан";
@@ -298,10 +273,6 @@
                     }
                 }
             } else deleteBTNClick( id )
-
-
-
-
 
         }
 
@@ -576,6 +547,51 @@
     }
 
 
+    function option_value_error_fu(index_option, money_card, money_cash, money_mobile){
+        let params = false
+        switch (index_option) {
+            case 0: {
+                if (!money_cash) {
+                    window.document.getElementById('messageAlert').innerText = 'Вы не ввели сумму наличных'
+                    window.document.getElementById('message').style.display = "block"
+                    params = true
+                }
+                break
+            }
+            case 1: {
+                if (!money_card) {
+                    window.document.getElementById('messageAlert').innerText = 'Вы не ввели сумму карты'
+                    window.document.getElementById('message').style.display = "block"
+                    params = true
+                }
+                break
+            }
+            case 2: {
+                if (!money_mobile){
+                    window.document.getElementById('messageAlert').innerText = 'Вы не ввели сумму мобильных'
+                    window.document.getElementById('message').style.display = "block"
+                    params = true
+                }
+                break
+            }
+            case 3: {
+                if (!money_card && !money_cash && !money_mobile){
+                    window.document.getElementById('messageAlert').innerText = 'Вы не ввели сумму'
+                    window.document.getElementById('message').style.display = "block"
+                    params = true
+                }
+                break
+            }
+            default: {
+                window.document.getElementById('messageAlert').innerText = 'Не выбран типа оплаты '
+                window.document.getElementById('message').style.display = "block"
+                params = true
+                break
+            }
+
+        }
+        return params
+    }
 
     function roundToTwo(num) { return +(Math.round(num + "e+2")  + "e-2"); }
 
