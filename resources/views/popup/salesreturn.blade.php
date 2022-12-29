@@ -77,8 +77,6 @@
                         window.document.getElementById("ShowCheck").style.display = "block";
                         window.document.getElementById("refundCheck").style.display = "block";
                     } else { window.document.getElementById("refundCheck").style.display = "block"; }
-
-                    window.document.getElementById("closeButtonId").style.display = "block";
                 });
             }
         });
