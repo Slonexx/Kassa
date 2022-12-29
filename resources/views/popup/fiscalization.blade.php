@@ -157,25 +157,22 @@
                             $('#downL').modal('hide')
                             console.log(url + ' response ↓ ')
                             console.log(response)
-                            let json = response.res
-
-                            if (json.status === 'Ticket created!'){
+                            if (response.code === 200){
                                 window.document.getElementById("messageGoodAlert").innerText = "Чек создан";
                                 window.document.getElementById("messageGood").style.display = "block";
                                 window.document.getElementById("ShowCheck").style.display = "block";
                                 window.document.getElementById("closeShift").style.display = "block";
                                 modalShowHide = 'hide';
-                                let response = json.response;
-                                id_ticket = response.id;
+                                id_ticket = response.res.response.id;
                             } else {
-                                if (json.hasOwnProperty('error')) {
-                                    if (json.error.code == 'CASH_REGISTER_SHIFT_PERIOD_EXPIRED') {
+                                if (response.res.hasOwnProperty('error')) {
+                                    if (response.res.error.code === 'CASH_REGISTER_SHIFT_PERIOD_EXPIRED') {
                                         window.document.getElementById('messageAlert').innerText = "Предыдущая смена не закрыта !";
                                         window.document.getElementById('message').style.display = "block";
                                         window.document.getElementById(button_hide).style.display = "block";
                                         modalShowHide = 'hide';
                                     } else  {
-                                        window.document.getElementById('messageAlert').innerText = json.error.code;
+                                        window.document.getElementById('messageAlert').innerText = response.res.error.code;
                                         window.document.getElementById('message').style.display = "block";
                                         window.document.getElementById(button_hide).style.display = "block";
                                         modalShowHide = 'hide';
