@@ -156,7 +156,7 @@
                         success: function(response){
                             $('#downL').modal('hide')
                             console.log(url + ' response ↓ ')
-                            console.log(json)
+                            console.log(response)
                             let json = response
 
                             if (json.status === 'Ticket created!'){
