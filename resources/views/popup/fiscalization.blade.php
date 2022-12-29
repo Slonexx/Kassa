@@ -153,12 +153,13 @@
                         method: 'post',
                         dataType: 'json',
                         data: data,
-                        success: function(json){
+                        success: function(response){
                             $('#downL').modal('hide')
                             console.log(url + ' response ↓ ')
                             console.log(json)
+                            let json = response
 
-                            if (json.message == 'Ticket created!'){
+                            if (json.status === 'Ticket created!'){
                                 window.document.getElementById("messageGoodAlert").innerText = "Чек создан";
                                 window.document.getElementById("messageGood").style.display = "block";
                                 window.document.getElementById("ShowCheck").style.display = "block";
