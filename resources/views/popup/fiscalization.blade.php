@@ -158,7 +158,7 @@
                             console.log(url + ' response ↓ ')
                             console.log(json)
 
-                            if (json.message === 'Ticket created!'){
+                            if (json.message == 'Ticket created!'){
                                 window.document.getElementById("messageGoodAlert").innerText = "Чек создан";
                                 window.document.getElementById("messageGood").style.display = "block";
                                 window.document.getElementById("ShowCheck").style.display = "block";
@@ -167,11 +167,18 @@
                                 let response = json.response;
                                 id_ticket = response.id;
                             } else {
-                                if (json.error.code =='CASH_REGISTER_SHIFT_PERIOD_EXPIRED') {
-                                    window.document.getElementById('messageAlert').innerText = "Предыдущая смена не закрыта !";
-                                    window.document.getElementById('message').style.display = "block";
-                                    window.document.getElementById(button_hide).style.display = "block";
-                                    modalShowHide = 'hide';
+                                if (json.hasOwnProperty('error')) {
+                                    if (json.error.code == 'CASH_REGISTER_SHIFT_PERIOD_EXPIRED') {
+                                        window.document.getElementById('messageAlert').innerText = "Предыдущая смена не закрыта !";
+                                        window.document.getElementById('message').style.display = "block";
+                                        window.document.getElementById(button_hide).style.display = "block";
+                                        modalShowHide = 'hide';
+                                    } else  {
+                                        window.document.getElementById('messageAlert').innerText = json.error.code;
+                                        window.document.getElementById('message').style.display = "block";
+                                        window.document.getElementById(button_hide).style.display = "block";
+                                        modalShowHide = 'hide';
+                                    }
                                 } else {
                                     window.document.getElementById('messageAlert').innerText = "Ошибка 400";
                                     window.document.getElementById('message').style.display = "block";
