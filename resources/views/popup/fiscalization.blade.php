@@ -71,6 +71,8 @@
                         }
                     }
 
+                    window.document.getElementById('cash').value = window.document.getElementById("sum").innerHTML
+
                     if (json.attributes.ticket_id != null){
                         window.document.getElementById("ShowCheck").style.display = "block";
                         window.document.getElementById("refundCheck").style.display = "block";
@@ -549,6 +551,9 @@
 
     function option_value_error_fu(index_option, money_card, money_cash, money_mobile){
         console.log(index_option)
+        console.log(money_card)
+        console.log(money_cash)
+        console.log(money_mobile)
         let params = false
         switch (index_option) {
             case 0 && "0": {
