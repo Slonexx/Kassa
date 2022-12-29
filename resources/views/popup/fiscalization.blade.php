@@ -558,7 +558,6 @@
         switch (index_option) {
             case 0 && "0": {
                 if (!money_cash) {
-                    console.log(money_card)
                     window.document.getElementById('messageAlert').innerText = 'Вы не ввели сумму наличных'
                     window.document.getElementById('message').style.display = "block"
                     params = true
@@ -566,8 +565,7 @@
                 break
             }
             case 1 && "1": {
-                if (!money_card) {
-                    console.log(money_cash)
+                if (!money_cash) {
                     window.document.getElementById('messageAlert').innerText = 'Вы не ввели сумму карты'
                     window.document.getElementById('message').style.display = "block"
                     params = true
@@ -576,7 +574,6 @@
             }
             case 2 && "2": {
                 if (!money_mobile){
-                    console.log(money_mobile)
                     window.document.getElementById('messageAlert').innerText = 'Вы не ввели сумму мобильных'
                     window.document.getElementById('message').style.display = "block"
                     params = true
