@@ -92,7 +92,7 @@
         });
 
         function sendKKM(pay_type){
-            let url = 'https://smartrekassa.kz/Popup/demand/send';
+            let url = 'https://dev.smartrekassa.kz/Popup/demand/send';
 
             let button_hide = ''
             if (pay_type === 'return') button_hide = 'refundCheck'
