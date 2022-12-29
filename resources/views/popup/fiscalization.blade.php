@@ -550,7 +550,7 @@
     function option_value_error_fu(index_option, money_card, money_cash, money_mobile){
         let params = false
         switch (index_option) {
-            case 0: {
+            case 0 && "0": {
                 if (!money_cash) {
                     window.document.getElementById('messageAlert').innerText = 'Вы не ввели сумму наличных'
                     window.document.getElementById('message').style.display = "block"
@@ -558,7 +558,7 @@
                 }
                 break
             }
-            case 1: {
+            case 1 && "1": {
                 if (!money_card) {
                     window.document.getElementById('messageAlert').innerText = 'Вы не ввели сумму карты'
                     window.document.getElementById('message').style.display = "block"
@@ -566,7 +566,7 @@
                 }
                 break
             }
-            case 2: {
+            case 2 && "2": {
                 if (!money_mobile){
                     window.document.getElementById('messageAlert').innerText = 'Вы не ввели сумму мобильных'
                     window.document.getElementById('message').style.display = "block"
@@ -574,7 +574,7 @@
                 }
                 break
             }
-            case 3: {
+            case 3 && "3": {
                 if (!money_card && !money_cash && !money_mobile){
                     window.document.getElementById('messageAlert').innerText = 'Вы не ввели сумму'
                     window.document.getElementById('message').style.display = "block"
