@@ -88,9 +88,11 @@
 
 
         function sendKKM(pay_type){
-            let button_hide = '';
-            if (pay_type == 'return') button_hide = 'refundCheck';
-            if (pay_type == 'sell') button_hide = 'getKKM';
+            let url = 'https://dev.smartrekassa.kz/Popup/customerorder/send'
+
+            let button_hide = ''
+            if (pay_type === 'return') button_hide = 'refundCheck'
+            if (pay_type === 'sell') button_hide = 'getKKM'
 
             window.document.getElementById(button_hide).style.display = "none";
             let modalShowHide = 'show';
@@ -109,14 +111,10 @@
 
 
             if (total-0.01 <= money_card+money_cash+money_mobile) {
-                let url = 'https://dev.smartrekassa.kz/Popup/customerorder/send';
-                //let url = 'https://rekassa/Popup/customerorder/send';
-
-                console.log('url = ' + url);
-
                 if (modalShowHide === 'show'){
-                    $('#downL').modal('toggle');
-                    let products = [];
+
+                    $('#downL').modal('toggle')
+                    let products = []
                     for (let i = 0; i < 99; i++) {
                         if ( window.document.getElementById(i).style.display === 'block' ) {
                             products[i] = {
