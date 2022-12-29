@@ -77,7 +77,7 @@
                             window.document.getElementById("message").style.display = "block";
                         }
                     }
-
+                    window.document.getElementById('cash').value = window.document.getElementById("sum").innerHTML
                     if (json.attributes.ticket_id != null){
                         window.document.getElementById("ShowCheck").style.display = "block";
                         window.document.getElementById("refundCheck").style.display = "block";
