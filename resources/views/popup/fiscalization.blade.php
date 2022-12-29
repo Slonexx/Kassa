@@ -589,10 +589,7 @@
                 break
             }
             default: {
-                window.document.getElementById('messageAlert').innerText = 'Не выбран типа оплаты '
-                window.document.getElementById('message').style.display = "block"
-                params = true
-                break
+
             }
 
         }
