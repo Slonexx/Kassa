@@ -7,16 +7,13 @@ use App\Http\Controllers\Popup\demandController;
 use App\Http\Controllers\Popup\fiscalizationController;
 use App\Http\Controllers\Popup\salesreturnController;
 use App\Http\Controllers\Web\changeController;
-use App\Http\Controllers\Web\getSetting\BaseController;
 use App\Http\Controllers\Web\getSetting\DeviceController;
 use App\Http\Controllers\Web\getSetting\DocumentController;
 use App\Http\Controllers\Web\getSetting\WorkerController;
 use App\Http\Controllers\Web\indexController;
-use App\Http\Controllers\Web\postSetting\postBaseController;
 use App\Http\Controllers\Web\postSetting\postDeviceController;
 use App\Http\Controllers\Web\postSetting\postDocumentController;
 use App\Http\Controllers\Web\postSetting\postWorkerController;
-use App\Http\Controllers\Web\settingController;
 use App\Http\Controllers\Widget\customerorder\customerorderEditController;
 use App\Http\Controllers\Widget\demandEditController;
 use App\Http\Controllers\Widget\salesreturnEditController;
@@ -42,6 +39,8 @@ Route::get('/Setting/Device/{accountId}', [DeviceController::class, 'getDevice']
 Route::post('/Setting/Device/{accountId}', [postDeviceController::class, 'postDevice']);
 
 
+Route::get('/test/print/{accountId}', [changeController::class, 'getTest']);
+
 Route::get('/kassa/change/{accountId}', [changeController::class, 'getChange']);
 Route::post('/kassa/change/{accountId}', [changeController::class, 'postChange']);
 Route::get('/kassa/get_shift_report/info/{accountId}', [changeController::class, 'getInfoIdShift']);
@@ -58,15 +57,15 @@ Route::get('/widget/salesreturn', [salesreturnEditController::class, 'salesretur
 
 Route::get('/Popup/customerorder', [fiscalizationController::class, 'fiscalizationPopup']);
 Route::get('/Popup/customerorder/show', [fiscalizationController::class, 'ShowFiscalizationPopup']);
-Route::get('/Popup/customerorder/send', [fiscalizationController::class, 'SendFiscalizationPopup']);
+Route::post('/Popup/customerorder/send', [fiscalizationController::class, 'SendFiscalizationPopup']);
 Route::get('/Popup/customerorder/closeShift', [fiscalizationController::class, 'closeShiftPopup']);
 
 Route::get('/Popup/demand', [demandController::class, 'DemandPopup']);
 Route::get('/Popup/demand/show', [demandController::class, 'ShowDemandPopup']);
-Route::get('/Popup/demand/send', [demandController::class, 'SendDemandPopup']);
+Route::post('/Popup/demand/send', [demandController::class, 'SendDemandPopup']);
 
 Route::get('/Popup/salesreturn', [salesreturnController::class, 'salesreturnPopup']);
 Route::get('/Popup/salesreturn/show', [salesreturnController::class, 'ShowSalesreturnPopup']);
-Route::get('/Popup/salesreturn/send', [salesreturnController::class, 'SendSalesreturnPopup']);
+Route::post('/Popup/salesreturn/send', [salesreturnController::class, 'SendSalesreturnPopup']);
 
 
