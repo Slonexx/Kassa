@@ -437,7 +437,7 @@
                 </div>
                 <div class="modal-body text-center" style="background-color: #e5eff1">
                     <div class="row">
-                        <img style="width: 80%" src="https://smartrekassa.kz/Config/download.gif" alt="">
+                        <img style="width: 100%" src="https://smartrekassa.kz/Config/download.gif" alt="">
                     </div>
                 </div>
             </div>
@@ -454,7 +454,7 @@
                 </div>
                 <div class="modal-body text-center" style="background-color: #e5eff1">
                     <div class="row">
-                        <img style="width: 80%" src="https://smartrekassa.kz/Config/download.gif" alt="">
+                        <img style="width: 100%" src="https://smartrekassa.kz/Config/download.gif" alt="">
                     </div>
                 </div>
             </div>
