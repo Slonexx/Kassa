@@ -68,16 +68,15 @@ class postDeviceController extends Controller
     }
 
     private function createBDAccess($accountId){
-        $apiKey = 'f5ac6559-b5cd-4e0e-89e5-7fd32a6d60a5';
         $Setting = new getSettingVendorController($accountId);
         $app = new getSetting($accountId);
         $paymentDocument = $app->paymentDocument;
         try {
             if ($app->tokenMs == null){
-                DataBaseService::createSetting($accountId, $Setting->TokenMoySklad, $apiKey,
+                DataBaseService::createSetting($accountId, $Setting->TokenMoySklad, $Setting->payment_type,
                     $paymentDocument, null,null);
             } else {
-                DataBaseService::updateSetting($accountId, $Setting->TokenMoySklad, $apiKey,
+                DataBaseService::updateSetting($accountId, $Setting->TokenMoySklad, $Setting->payment_type,
                     $paymentDocument,null,null);
             }
         } catch (\Throwable $e){

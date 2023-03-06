@@ -13,11 +13,10 @@ class postDocumentController extends Controller
     public function postDocument(Request $request, $accountId): \Illuminate\Http\RedirectResponse
     {
         $isAdmin = $request->isAdmin;
-        $apiKey = 'f5ac6559-b5cd-4e0e-89e5-7fd32a6d60a5';
-        $app = new getSetting($accountId);
+        $Setting = new getSettingVendorController($accountId);
         try {
-            DataBaseService::updateSetting($accountId, $app->tokenMs, $apiKey,
-                $request->paymentDocument,null,null);
+            DataBaseService::updateSetting($accountId, $Setting->TokenMoySklad, $request->payment_type,
+                $request->createDocument,null,null);
         } catch (\Throwable $e){
 
         }

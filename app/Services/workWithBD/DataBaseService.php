@@ -10,7 +10,7 @@ use SebastianBergmann\CodeCoverage\Driver\Selector;
 class DataBaseService
 {
 
-    public static function createSetting($accountId,$tokenMs,$apiKey,$paymentDocument,$saleChannel,$project){
+    public static function createSetting($accountId, $tokenMs, $payment_type, $paymentDocument, $saleChannel, $project){
         Setting::create([
             'accountId' => $accountId,
             'tokenMs' => $tokenMs,
@@ -40,7 +40,8 @@ class DataBaseService
 
 
 
-    public static function showSetting($accountId){
+    public static function showSetting($accountId): array
+    {
         $find = Setting::query()->where('accountId', $accountId)->first();
         try {
             $result = $find->getAttributes();
@@ -51,13 +52,15 @@ class DataBaseService
                 "apiKey" => null,
                 "saleChannel" => null,
                 "paymentDocument" => null,
+                "payment_type" => null,
                 "project" => null,
             ];
         }
         return $result;
     }
 
-    public static function showDeviceFirst($znm){
+    public static function showDeviceFirst($znm): array
+    {
         $find = Device::query()->where('znm', $znm)->first();
         try {
             $result = $find->getAttributes();
@@ -72,7 +75,8 @@ class DataBaseService
         return $result;
     }
 
-    public static function showDevice($accountId){
+    public static function showDevice($accountId): array
+    {
         $Devices = [];
         $find = Device::query()->where('accountId', $accountId)->orderBy('position')->get();
 
@@ -84,7 +88,8 @@ class DataBaseService
         return $Devices;
     }
 
-    public static function showWorkerFirst($id){
+    public static function showWorkerFirst($id): array
+    {
 
         $find = Worker::query()->where('id', $id)->first();
         try {
@@ -99,7 +104,8 @@ class DataBaseService
         return $result;
     }
 
-    public static function showWorkers($znm){
+    public static function showWorkers($znm): array
+    {
 
         $Workers = [];
         $find = Worker::query()->where('znm', $znm)->get();
@@ -113,12 +119,13 @@ class DataBaseService
 
     }
 
-    public static function updateSetting($accountId,$tokenMs,$apiKey,$paymentDocument,$saleChannel,$project){
+    public static function updateSetting($accountId, $tokenMs, $payment_type, $paymentDocument, $saleChannel, $project){
        $find = Setting::query()->where('accountId', $accountId);
        $find->update([
            'tokenMs' => $tokenMs,
            'saleChannel' => $saleChannel,
            'paymentDocument' => $paymentDocument,
+           'payment_type' => $payment_type,
            'project' => $project,
            'apiKey' => "f5ac6559-b5cd-4e0e-89e5-7fd32a6d60a5",
        ]);
