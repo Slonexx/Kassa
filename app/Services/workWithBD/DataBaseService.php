@@ -10,21 +10,14 @@ use SebastianBergmann\CodeCoverage\Driver\Selector;
 class DataBaseService
 {
 
-    public static function createSetting($accountId, $tokenMs, $payment_type, $paymentDocument, $saleChannel, $project, $OperationCash, $OperationCard, $OperationMobile){
+    public static function createSetting($accountId, $tokenMs, $payment_type, $paymentDocument, $saleChannel, $project){
         Setting::create([
             'accountId' => $accountId,
             'tokenMs' => $tokenMs,
-            'apiKey' => "f5ac6559-b5cd-4e0e-89e5-7fd32a6d60a5",
-
             'saleChannel' => $saleChannel,
-            'project' => $project,
             'paymentDocument' => $paymentDocument,
-            'payment_type' => $payment_type,
-            'OperationCash' => $OperationCash,
-            'OperationCard' => $OperationCard,
-            'OperationMobile' => $OperationMobile,
-
-
+            'project' => $project,
+            'apiKey' => "6784dad7-6679-4950-b257-2711ff63f9bb",
         ]);
     }
 
@@ -57,16 +50,10 @@ class DataBaseService
                 "accountId" => $accountId,
                 "tokenMs" => null,
                 "apiKey" => null,
-
                 "saleChannel" => null,
-                "project" => null,
-
                 "paymentDocument" => null,
                 "payment_type" => null,
-                "OperationCash" => null,
-                "OperationCard" => null,
-                "OperationMobile" => null,
-
+                "project" => null,
             ];
         }
         return $result;
@@ -132,19 +119,15 @@ class DataBaseService
 
     }
 
-    public static function updateSetting($accountId, $tokenMs, $payment_type, $paymentDocument, $saleChannel, $project, $OperationCash, $OperationCard, $OperationMobile){
+    public static function updateSetting($accountId, $tokenMs, $payment_type, $paymentDocument, $saleChannel, $project){
        $find = Setting::query()->where('accountId', $accountId);
        $find->update([
            'tokenMs' => $tokenMs,
-           'apiKey' => "f5ac6559-b5cd-4e0e-89e5-7fd32a6d60a5",
-
            'saleChannel' => $saleChannel,
-           'project' => $project,
            'paymentDocument' => $paymentDocument,
            'payment_type' => $payment_type,
-           'OperationCash' => $OperationCash,
-           'OperationCard' => $OperationCard,
-           'OperationMobile' => $OperationMobile,
+           'project' => $project,
+           'apiKey' => "6784dad7-6679-4950-b257-2711ff63f9bb",
        ]);
     }
 
