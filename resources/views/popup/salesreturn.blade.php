@@ -5,17 +5,17 @@
 
     <script>
 
-        const url = 'https://smartrekassa.kz/Popup/salesreturn/show';
+        const url = 'https://dev.smartrekassa.kz/Popup/salesreturn/show';
         //const url = 'https://rekassa/Popup/salesreturn/show';
         let object_Id = '';
         let accountId = '';
         let entity_type = '';
         let id_ticket = '';
 
-        /*let receivedMessage = {
-            "name":"OpenPopup","messageId":1,"popupName":"fiscalizationPopup","popupParameters":
-                {"object_Id":"25b0c896-755d-11ed-0a80-01170011acd4","entity_type":"salesreturn","accountId":"1dd5bd55-d141-11ec-0a80-055600047495"}
-        };*/
+         /*let receivedMessage = {
+             "name":"OpenPopup","messageId":1,"popupName":"fiscalizationPopup","popupParameters":
+                 {"object_Id":"25b0c896-755d-11ed-0a80-01170011acd4","entity_type":"salesreturn","accountId":"1dd5bd55-d141-11ec-0a80-055600047495"}
+         };*/
 
 
         window.addEventListener("message", function(event) {
@@ -82,7 +82,7 @@
         });
 
         function sendKKM(pay_type){
-            let url = 'https://smartrekassa.kz/Popup/salesreturn/send';
+            let url = 'https://dev.smartrekassa.kz/Popup/salesreturn/send';
 
             let button_hide = '';
             if (pay_type == 'return') button_hide = 'refundCheck';
@@ -190,9 +190,9 @@
         }
 
         function ShowCheck(){
-            let urlrekassa = 'https://app.rekassa.kz/'
+            let urlrekassa = 'https://app-test.rekassa.kz/'
             //let url = 'http://rekassa/Popup/customerorder/closeShift';
-            let url = 'https://smartrekassa.kz/api/ticket';
+            let url = 'https://dev.smartrekassa.kz/api/ticket';
             let data = {
                 accountId: accountId,
                 id_ticket: id_ticket,
@@ -649,7 +649,7 @@
             accountId: accountId,
             pincode: pinCode,
         };
-        let url = 'https://smartrekassa.kz/Popup/customerorder/closeShift';
+        let url = 'https://dev.smartrekassa.kz/Popup/customerorder/closeShift';
         let settings = ajax_settings(url, "GET", params);
         console.log(url + ' settings ↓ ')
         console.log(settings)

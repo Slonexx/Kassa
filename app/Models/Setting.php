@@ -12,6 +12,7 @@ class Setting extends Model
         'tokenMs',
         'saleChannel',
         'paymentDocument',
+        'payment_type',
         'project',
         'apiKey',
     ];

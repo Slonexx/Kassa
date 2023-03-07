@@ -22,7 +22,10 @@
         background-image: radial-gradient( circle farthest-corner at 10% 20%,  rgba(14,174,87,1) 0%, rgba(12,116,117,1) 90% );
     }
 
-    /* Фиксированный боковых навигационных ссылок, полной высоты */
+    .gradient_invert{
+        background-image: linear-gradient(135deg, #c3cfe2 0%, #f5f7fa 100%);
+    }
+
     .sidenav {
         height: 100%;
         width: 15%;
@@ -35,7 +38,6 @@
         padding-top: 20px;
     }
 
-    /* Стиль боковых навигационных ссылок и раскрывающейся кнопки */
     .sidenav a, .dropdown-btn {
         padding: 6px 8px 6px 16px;
         text-decoration: none;
@@ -50,20 +52,19 @@
         outline: none;
     }
 
-    /* При наведении курсора мыши */
     .sidenav a:hover, .dropdown-btn:hover {
         background-image: radial-gradient( circle farthest-corner at 10% 20%,  rgba(14,174,87,1) 0%, rgba(12,116,117,1) 90% );
         border-radius: 10px 10px 0px 0px;
         color: white;
     }
 
-    /* Основное содержание */
+
     .main {
         margin-left: 15%; /* То же, что и ширина боковой навигации */
         font-size: 18px; /* Увеличенный текст для включения прокрутки */
         padding: 0 10px;
     }
-    /* Добавить активный класс для кнопки активного выпадающего списка */
+
     .sidenav .active_sprint  {
         background-image: radial-gradient( circle farthest-corner at 10% 20%,  rgba(14,174,87,1) 0%, rgba(12,116,117,1) 90% );
         margin-right: 50px;
@@ -71,26 +72,14 @@
         color: white;
     }
 
-    /* Выпадающий контейнер (по умолчанию скрыт). Необязательно: добавьте более светлый цвет фона и некоторые левые отступы, чтобы изменить дизайн выпадающего содержимого */
-    .dropdown-container {
+   .dropdown-container {
         display: none;
         background-color: #d5d5d5;
         padding: 5px;
     }
 
-    /* Необязательно: стиль курсора вниз значок */
     .fa-caret-down {
         float: right;
         padding-right: 8px;
-    }
-</style>
-
-<style>
-    /* Новый цвет текста */
-    .text-orange{
-        color: orange;
-    }
-    .transparent{
-        border: none !important;
     }
 </style>

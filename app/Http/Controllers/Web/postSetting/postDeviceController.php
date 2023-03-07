@@ -16,7 +16,9 @@ use Illuminate\Http\Request;
 
 class postDeviceController extends Controller
 {
-    public function postDevice(Request $request, $accountId){ $isAdmin = $request->isAdmin;
+    public function postDevice(Request $request, $accountId): \Illuminate\Contracts\View\View|\Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\Contracts\Foundation\Application
+    {
+        $isAdmin = $request->isAdmin;
         $this->createBDAccess($accountId);
         $Setting = new getSetting($accountId);
 
@@ -66,16 +68,15 @@ class postDeviceController extends Controller
     }
 
     private function createBDAccess($accountId){
-        $apiKey = '6784dad7-6679-4950-b257-2711ff63f9bb';
         $Setting = new getSettingVendorController($accountId);
         $app = new getSetting($accountId);
         $paymentDocument = $app->paymentDocument;
         try {
             if ($app->tokenMs == null){
-                DataBaseService::createSetting($accountId, $Setting->TokenMoySklad, $apiKey,
+                DataBaseService::createSetting($accountId, $Setting->TokenMoySklad, $Setting->payment_type,
                     $paymentDocument, null,null);
             } else {
-                DataBaseService::updateSetting($accountId, $Setting->TokenMoySklad, $apiKey,
+                DataBaseService::updateSetting($accountId, $Setting->TokenMoySklad, $Setting->payment_type,
                     $paymentDocument,null,null);
             }
         } catch (\Throwable $e){

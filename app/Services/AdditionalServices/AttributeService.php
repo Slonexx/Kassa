@@ -95,24 +95,26 @@ class AttributeService
                 "name" => "id-билета (ReKassa)",
                 "type" => "string",
                 "required" => false,
-                "description" => "id-билета (ReKassa)",
+                "show" => false,
+                "description" => "Данное дополнительное поле отвечает за синхронизацию с ReKassa",
             ],
             1 => [
                 "name" => "Фискализация (ReKassa)",
                 "type" => "boolean",
                 "required" => false,
-                "description" => "Фискализация (ReKassa)",
+                "description" => "Данное дополнительное поле отвечает за проведения фискализации, если стоит галочка то фискализация была (ReKassa)",
             ]
         ];
     }
 
-    public function getPayDocAttributes(){
+    public function getPayDocAttributes(): array
+    {
         return [
             0 => [
                 "name" => "Фискализация (ReKassa)",
                 "type" => "boolean",
                 "required" => false,
-                "description" => "Фискализация (ReKassa)",
+                "description" => "Данное дополнительное поле отвечает за проведения фискализации, если стоит галочка то фискализация была (ReKassa)",
             ],
         ];
     }

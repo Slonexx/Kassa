@@ -81,7 +81,7 @@ class changeController extends Controller
 
         $idShift = $clientK->get("crs/".$id."/shifts?includeOpen=true&size=1");
         $idShift = $idShift->_embedded->shifts[0]->shiftNumber;
-        $link = 'https://app.rekassa.kz/shifts/'.$id.'/'.$idShift.'/zxreport';
+        $link = 'https://app-test.rekassa.kz/shifts/'.$id.'/'.$idShift.'/zxreport';
 
         return response()->json([
             'link' => $link
@@ -117,7 +117,7 @@ class changeController extends Controller
                 'cash-register-password' => $cash_register_password,
             ]);
 
-            $link = 'https://app.rekassa.kz/shifts/'.$id.'/'.$idShift.'/zxreport';
+            $link = 'https://app-test.rekassa.kz/shifts/'.$id.'/'.$idShift.'/zxreport';
 
             return response()->json([
                 'status' => true,
@@ -208,6 +208,28 @@ class changeController extends Controller
                 'message' => json_decode($e->getResponse()->getBody()->getContents(), true),
             ]);
         }
+    }
+
+    public function getTest(Request $request, $accountId){
+        $Setting = new getSetting($accountId);
+
+        $Device = new getDevices($accountId);
+        $Device = $Device->devices;
+
+        foreach ($Device as $item){
+            $znm = $item->znm;
+            $password = $item->password;
+        }
+
+        $clientK = new KassClient($znm, $password, $Setting->apiKey);
+        $id = $clientK->getNewJwtToken()->id;
+
+        $id_ticket = '91338';
+
+        $getBody = $clientK->post('/api/crs/'.$id.'/tickets/'.$id_ticket.'/receipts', ['type'=>'PRINTER']);
+        return response()->json($getBody);
+        dd($getBody);
+
     }
 
 }

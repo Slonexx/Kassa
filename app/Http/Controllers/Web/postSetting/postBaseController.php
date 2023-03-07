@@ -14,15 +14,14 @@ class postBaseController extends Controller
     {
 
         $isAdmin = $request->isAdmin;
-        $apiKey = '6784dad7-6679-4950-b257-2711ff63f9bb';
         $Setting = new getSettingVendorController($accountId);
         $app = new getSetting($accountId);
         try {
             if ($app->tokenMs == null){
-                DataBaseService::createSetting($accountId, $Setting->TokenMoySklad, $apiKey,
+                DataBaseService::createSetting($accountId, $Setting->TokenMoySklad, $request->payment_type,
                     $request->paymentDocument, null,null);
             } else {
-                DataBaseService::updateSetting($accountId, $Setting->TokenMoySklad, $apiKey,
+                DataBaseService::updateSetting($accountId, $Setting->TokenMoySklad, $request->payment_type,
                     $request->paymentDocument,null,null);
             }
         } catch (\Throwable $e){
