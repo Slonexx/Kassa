@@ -211,7 +211,7 @@ class TicketService
                     $jsonEntity = $this->writeToAttrib($response->id, $urlEntity, $entity_type, $apiKeyMs, $positions);
 
                     if ($isPayIn){
-                        $this->documentService->initPayDocument($paymentOption,$jsonEntity,$apiKeyMs);
+                        $this->documentService->initPayDocument($paymentOption,$jsonEntity,$apiKeyMs, $body);
                     } else {
                         $isReturn = ($entity_type == "salesreturn");
                         $this->documentService->initPayReturnDocument(

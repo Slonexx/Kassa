@@ -165,14 +165,14 @@ class fiscalizationController extends Controller
 
         //dd($data);
 
-        try {
+        //try {
 
             $res = app(TicketService::class)->createTicket($data);
             return response()->json($res);
 
-        } catch (\Throwable $e){
-            return response()->json($e->getMessage());
-        }
+       // } catch (\Throwable $e){
+       //     return response()->json($e->getMessage());
+      //  }
     }
 
     public function closeShiftPopup(Request $request): array
