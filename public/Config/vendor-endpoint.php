@@ -29,14 +29,14 @@ switch ($method) {
             $app->persist();
 
         }
-        $url = 'https://dev.smartrekassa.kz/setAttributes/' . $accountId . '/' . $accessToken;
+        $url = 'https://smartrekassa.kz/setAttributes/' . $accountId . '/' . $accessToken;
         $install = file_get_contents($url);
         break;
     case 'GET':
         break;
     case 'DELETE':
         //Тут так же
-        $url = 'https://dev.smartrekassa.kz/delete/'.$accountId;
+        $url = 'https://smartrekassa.kz/delete/'.$accountId;
         $install = file_get_contents($url);
 
         $replyStatus = false;

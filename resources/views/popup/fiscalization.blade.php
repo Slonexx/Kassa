@@ -5,7 +5,7 @@
 
     <script>
 
-        const url = 'https://dev.smartrekassa.kz/Popup/customerorder/show'
+        const url = 'https://smartrekassa.kz/Popup/customerorder/show'
         //const url = 'https://rekassa/Popup/customerorder/show'
         let object_Id = ''
         let accountId = ''
@@ -121,7 +121,7 @@
 
 
         function sendKKM(pay_type){
-            let url = 'https://dev.smartrekassa.kz/Popup/customerorder/send'
+            let url = 'https://smartrekassa.kz/Popup/customerorder/send'
             //let url = 'https://rekassa/Popup/customerorder/send'
 
             let button_hide = ''
