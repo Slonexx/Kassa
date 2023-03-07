@@ -4,7 +4,8 @@
 @section('content')
 
     <script>
-        var GlobalURL = 'http://rekassa/delete/Device/'
+        //var GlobalURL = 'http://rekassa/delete/Device/'
+        var GlobalURL = 'https://dev.smartrekassa.kz/delete/Device/'
 
         var Global_num_click = {{ count($devices) }};
         var Global_Max_device = 0;

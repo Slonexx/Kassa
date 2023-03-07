@@ -5,8 +5,8 @@
 
     <script>
 
-        //const url = 'https://dev.smartrekassa.kz/Popup/customerorder/show'
-        const url = 'https://rekassa/Popup/customerorder/show'
+        const url = 'https://dev.smartrekassa.kz/Popup/customerorder/show'
+        //const url = 'https://rekassa/Popup/customerorder/show'
         let object_Id = ''
         let accountId = ''
         let entity_type = ''
@@ -15,7 +15,7 @@
         let payment_type = ''
         let products_length = 0
 
-        let receivedMessage = {
+        /*let receivedMessage = {
             "name":"OpenPopup",
             "messageId":1,
             "popupName":"fiscalizationPopup",
@@ -25,12 +25,12 @@
                     "accountId":"1dd5bd55-d141-11ec-0a80-055600047495",
                     "entity_type":"customerorder",
                 }
-        };
+        };*/
 
         window.addEventListener("message", function() {
             FU_AnimationDownloadGIF('toggle', 'Загрузка')
             newPopup()
-            //let receivedMessage = event.data
+            let receivedMessage = event.data
             if (receivedMessage.name === 'OpenPopup') {
                 object_Id = receivedMessage.popupParameters.object_Id;
                 accountId = receivedMessage.popupParameters.accountId;
@@ -38,7 +38,7 @@
 
                 let data = { object_Id: object_Id, accountId: accountId, };
 
-                receivedMessage = null
+               // receivedMessage = null
 
                 let settings = ajax_settings(url, "GET", data);
                 console.log(url + ' settings ↓ ')
@@ -121,8 +121,8 @@
 
 
         function sendKKM(pay_type){
-            //let url = 'https://dev.smartrekassa.kz/Popup/customerorder/send'
-            let url = 'https://rekassa/Popup/customerorder/send'
+            let url = 'https://dev.smartrekassa.kz/Popup/customerorder/send'
+            //let url = 'https://rekassa/Popup/customerorder/send'
 
             let button_hide = ''
             if (pay_type === 'return') button_hide = 'refundCheck'
