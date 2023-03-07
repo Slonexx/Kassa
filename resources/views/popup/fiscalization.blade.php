@@ -12,6 +12,7 @@
         let entity_type = ''
         let id_ticket = ''
 
+        let payment_type = ''
         let products_length = 0
 
         let receivedMessage = {
@@ -50,8 +51,11 @@
 
                     id_ticket = json.attributes.ticket_id
                     window.document.getElementById("numberOrder").innerHTML = json.name;
+                    payment_type = json.application.payment_type - 1
+                    console.log('payment_type = ' + payment_type)
                     let products = json.products;
                     products_length = json.products.length
+
 
                     for (let i = 0; i < products.length; i++) {
                         if (products[i].propety === true) {
@@ -100,7 +104,8 @@
                         }
                     }
 
-                    window.document.getElementById('cash').value = window.document.getElementById("sum").innerHTML
+                    //window.document.getElementById('cash').value = window.document.getElementById("sum").innerHTML
+                    payment_type_on_set_option(payment_type, window.document.getElementById("sum").innerHTML)
 
                     if (json.attributes.ticket_id != null){
                         window.document.getElementById("ShowCheck").style.display = "block";

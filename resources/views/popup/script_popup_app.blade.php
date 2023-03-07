@@ -26,6 +26,41 @@
         }
     }
 
+    function payment_type_on_set_option(type, price){
+        window.document.getElementById('valueSelector').value = type
+
+        let Cash = window.document.getElementById('Visibility_Cash')
+        let Card = window.document.getElementById('Visibility_Card')
+
+        let input_cash = window.document.getElementById('cash')
+        let input_card = window.document.getElementById('card')
+
+        input_cash.value = ''
+        input_card.value = ''
+        Cash.style.display = 'none'
+        Card.style.display = 'none'
+
+        console.log(type);
+
+        switch (type) {
+            case 0 : {
+                Cash.style.display = 'block'
+                input_cash.value = price
+                break
+            }
+            case 1 : {
+                Card.style.display = 'block'
+                input_card.value = price
+                input_card.disabled = true
+                break
+            }
+            default: {
+                console.log(type)
+            }
+
+        }
+    }
+
     function ShowCheck(){
         let urlrekassa = 'https://app-test.rekassa.kz/'
         //let url = 'http://rekassa/Popup/customerorder/closeShift';
