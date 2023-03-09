@@ -14,9 +14,7 @@ class demandController extends Controller
     public function demandPopup(Request $request): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
 
-        return view( 'popup.demand', [
-
-        ] );
+        return view( 'popup.demand', [] );
     }
 
     public function ShowDemandPopup(Request $request): \Illuminate\Http\JsonResponse
@@ -26,6 +24,11 @@ class demandController extends Controller
         $Setting = new getSetting($accountId);
 
         $json = $this->info_object_Id($object_Id, $Setting);
+
+        $payment_type = $Setting->payment_type;
+        if ($payment_type == null or $payment_type == '') $payment_type = 1;
+
+        $json['application']['payment_type'] = (int) $payment_type ;
 
         return response()->json($json);
     }
