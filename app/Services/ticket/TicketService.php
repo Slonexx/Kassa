@@ -278,9 +278,9 @@ class TicketService
                        $SumBills = intval($sumPrice) * $item->quantity;
                        $SumCoins = intval(round(floatval($sumPrice)-intval($sumPrice),2)*100) * $item->quantity;
                        if ($SumCoins > 100) {
-                           $SumBills = $SumBills + ($SumCoins/100);
+                           $SumBills = $SumBills +( (int) $SumCoins / 100 );
+                           $SumCoins = $SumCoins - (((int) $SumCoins / 100) * 100);
                        }
-
 
                        $position["type"] = "ITEM_TYPE_COMMODITY";
                        $position["commodity"] = [
@@ -292,8 +292,8 @@ class TicketService
                                "coins" => "".intval(round(floatval($positionPrice)-intval($positionPrice),2)*100),
                            ],
                            "sum" => [
-                               "bills" => "".$SumBills,
-                               "coins" => "".$SumCoins,
+                               "bills" => "".intval($sumPrice) * $item->quantity,
+                               "coins" => "".intval(round(floatval($sumPrice)-intval($sumPrice),2)*100) * $item->quantity,
                            ],
                            "measureUnitCode" => null,
                        ];
@@ -329,30 +329,21 @@ class TicketService
                    }
                    else {
                        for ($i = 1; $i <= $row->quantity; $i++){
-                           $SumBills = intval($sumPrice) * $item->quantity;
-                           $SumCoins = intval(round(floatval($sumPrice)-intval($sumPrice),2)*100) * $item->quantity;
-                           if ($SumCoins > 100) {
-                               $SumBills = $SumBills + ($SumCoins/100);
-                           }
-
-
                            $position["type"] = "ITEM_TYPE_COMMODITY";
                            $position["commodity"] = [
                                "name" => $product->name,
                                "sectionCode" => "0",
-                               "quantity" => (integer)($item->quantity * 1000),
+                               "quantity" => 1000,
                                "price" => [
                                    "bills" => "".intval($positionPrice),
                                    "coins" => "".intval(round(floatval($positionPrice)-intval($positionPrice),2)*100),
                                ],
                                "sum" => [
-                                   "bills" => "".$SumBills,
-                                   "coins" => "".$SumCoins,
+                                   "bills" => "".intval($sumPrice),
+                                   "coins" => "".intval(round(floatval($sumPrice)-intval($sumPrice),2)*100),
                                ],
                                "measureUnitCode" => null,
                            ];
-
-
 
                            if (property_exists($product, 'characteristics')){
                                $check_uom = $client->get($product->product->meta->href);
