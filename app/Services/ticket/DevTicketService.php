@@ -208,28 +208,11 @@ class DevTicketService
 
                 //dd($body);
 
-                try {
+               // try {
                     $response = $clientK->post("crs/".$id."/tickets",$body);
                     dd($response, $body);
-                    $jsonEntity = $this->writeToAttrib($response->id, $urlEntity, $entity_type, $apiKeyMs, $positions);
 
-                    if ($isPayIn){
-                        $this->documentService->initPayDocument($paymentOption,$jsonEntity,$apiKeyMs, $body);
-                    } else {
-                        $isReturn = ($entity_type == "salesreturn");
-                        $this->documentService->initPayReturnDocument(
-                            $paymentOption,$isReturn,$jsonEntity,$apiKeyMs
-                        );
-                    }
-                    //dd($response);
-                    return [
-                        "res" => [
-                            "message" => "Ticket created!",
-                            "response" => $response,
-                        ],
-                        "code" => 200,
-                    ];
-                } catch (ClientException $exception){
+               /* } catch (ClientException $exception){
                     return [
                         "res" => [
                             "message" => "Ticket not created!",
@@ -238,7 +221,7 @@ class DevTicketService
                         "code" => 400,
                     ];
                     //dd($exception->getMessage());
-                }
+                }*/
             }
         } else {
             return [
