@@ -117,8 +117,8 @@ class TicketService
                     $payments [] = [
                         "type" => $this->getMoneyType("Наличные"),
                         "sum" => [
-                            "bills" => intval($pay),
-                            "coins" => intval(round(floatval($pay)-intval($pay),2)*100),
+                            "bills" => "".intval($pay),
+                            "coins" => "".intval(round(floatval($pay)-intval($pay),2)*100),
                         ],
                     ];
                 }
@@ -137,8 +137,8 @@ class TicketService
                     $payments[] =  [
                         "type" => $this->getMoneyType("Банковская карта"),
                         "sum" => [
-                            "bills" => intval($pay),
-                            "coins" => intval(round(floatval($pay)-intval($pay),2)*100),
+                            "bills" => "".intval($pay),
+                            "coins" => "".intval(round(floatval($pay)-intval($pay),2)*100),
                         ],
                     ];
                 }
@@ -153,8 +153,8 @@ class TicketService
                     $payments[] =  [
                         "type" => $this->getMoneyType("Мобильные"),
                         "sum" => [
-                            "bills" => intval($pay),
-                            "coins" => intval(round(floatval($pay)-intval($pay),2)*100),
+                            "bills" => "".intval($pay),
+                            "coins" => "".intval(round(floatval($pay)-intval($pay),2)*100),
                         ],
                     ];
 
@@ -165,16 +165,16 @@ class TicketService
 
                 $amounts = [
                     "total" => [
-                        "bills" => intval($totalSum),
-                        "coins" => intval(round(floatval($totalSum)-intval($totalSum),2)*100),
+                        "bills" => "".intval($totalSum),
+                        "coins" => "".intval(round(floatval($totalSum)-intval($totalSum),2)*100),
                         ],
                     "taken" => [
-                            "bills" => intval($taken),
-                            "coins" => intval(round(floatval($taken)-intval($taken),2)*100),
+                            "bills" => "".intval($taken),
+                            "coins" => "".intval(round(floatval($taken)-intval($taken),2)*100),
                     ],
                     "change" => [
-                            "bills" => intval($change),
-                            "coins" => intval(round(floatval($change)-intval($change),2)*100),
+                            "bills" => "".intval($change),
+                            "coins" => "".intval(round(floatval($change)-intval($change),2)*100),
                     ],
                 ];
 
@@ -285,11 +285,11 @@ class TicketService
                            "quantity" => (integer)($item->quantity * 1000),
                            "price" => [
                                "bills" => "".intval($positionPrice),
-                               "coins" => intval(round(floatval($positionPrice)-intval($positionPrice),2)*100),
+                               "coins" => "".intval(round(floatval($positionPrice)-intval($positionPrice),2)*100),
                            ],
                            "sum" => [
                                "bills" => "".intval($sumPrice) * $item->quantity,
-                               "coins" => intval(round(floatval($sumPrice)-intval($sumPrice),2)*100) * $item->quantity,
+                               "coins" => "".intval(round(floatval($sumPrice)-intval($sumPrice),2)*100) * $item->quantity,
                            ],
                            "measureUnitCode" => null,
                        ];
@@ -311,7 +311,7 @@ class TicketService
                                    0 => [
                                        "sum" => [
                                            "bills" => "".intval($sumVat),
-                                           "coins" => intval(round(floatval($sumVat)-intval($sumVat),2)*100),
+                                           "coins" => "".intval(round(floatval($sumVat)-intval($sumVat),2)*100),
                                        ],
                                        "percent" => $row->vat * 1000,
                                        "taxType" => 100,
@@ -332,11 +332,11 @@ class TicketService
                                "quantity" => 1000,
                                "price" => [
                                    "bills" => "".intval($positionPrice),
-                                   "coins" => intval(round(floatval($positionPrice)-intval($positionPrice),2)*100),
+                                   "coins" => "".intval(round(floatval($positionPrice)-intval($positionPrice),2)*100),
                                ],
                                "sum" => [
                                    "bills" => "".intval($sumPrice),
-                                   "coins" => intval(round(floatval($sumPrice)-intval($sumPrice),2)*100),
+                                   "coins" => "".intval(round(floatval($sumPrice)-intval($sumPrice),2)*100),
                                ],
                                "measureUnitCode" => null,
                            ];
@@ -361,7 +361,7 @@ class TicketService
                                        0 => [
                                            "sum" => [
                                                "bills" => "".intval($sumVat),
-                                               "coins" => intval(round(floatval($sumVat)-intval($sumVat),2)*100),
+                                               "coins" => "".intval(round(floatval($sumVat)-intval($sumVat),2)*100),
                                            ],
                                            "percent" => $row->vat * 1000,
                                            "taxType" => 100,
