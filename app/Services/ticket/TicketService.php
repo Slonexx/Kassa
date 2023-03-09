@@ -292,8 +292,8 @@ class TicketService
                                "coins" => "".intval(round(floatval($positionPrice)-intval($positionPrice),2)*100),
                            ],
                            "sum" => [
-                               "bills" => "".intval($sumPrice) * $item->quantity,
-                               "coins" => "".intval(round(floatval($sumPrice)-intval($sumPrice),2)*100) * $item->quantity,
+                               "bills" => "".$SumBills,
+                               "coins" => "".$SumCoins,
                            ],
                            "measureUnitCode" => null,
                        ];
