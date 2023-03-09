@@ -324,7 +324,8 @@ class DevTicketService
                            $SumBills = intval($sumPrice) * $item->quantity;
                            $SumCoins = intval(round(floatval($sumPrice)-intval($sumPrice),2)*100) * $item->quantity;
                            if ($SumCoins > 100) {
-                               $SumBills = $SumBills + ($SumCoins/100);
+                               $SumBills = $SumBills +( (int) $SumCoins / 100 );
+                               $SumCoins = $SumCoins - (((int) $SumCoins / 100) * 100);
                            }
 
 
