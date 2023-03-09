@@ -69,4 +69,4 @@ Route::get('/Popup/salesreturn', [salesreturnController::class, 'salesreturnPopu
 Route::get('/Popup/salesreturn/show', [salesreturnController::class, 'ShowSalesreturnPopup']);
 Route::post('/Popup/salesreturn/send', [salesreturnController::class, 'SendSalesreturnPopup']);
 
-Route::get('/Popup/Request/send', [RequestController::class, 'SendRequestPopup']);
+Route::post('/Popup/Request/send', [RequestController::class, 'SendRequestPopup']);
