@@ -206,7 +206,7 @@ class DevTicketService
 
 
 
-                dd($body);
+                dd($body, json_encode($body));
 
                // try {
                     $response = $clientK->post("crs/".$id."/tickets",$body);
