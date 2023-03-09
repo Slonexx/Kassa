@@ -6,6 +6,7 @@ use App\Clients\MsClient;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\getData\getSetting;
 
+use App\Services\ticket\DevTicketService;
 use App\Services\ticket\TicketService;
 use Illuminate\Http\Request;
 
@@ -60,7 +61,7 @@ class RequestController extends Controller
 
         //dd($data);
 
-        return response()->json(app(TicketService::class)->createTicket($data));
+        return response()->json(app(DevTicketService::class)->createTicket($data));
 
     }
 
