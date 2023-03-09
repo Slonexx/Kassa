@@ -150,6 +150,7 @@
 
     function newPopup(){
         window.document.getElementById("sum").innerHTML = ''
+        window.document.getElementById("main").innerHTML = ''
 
         window.document.getElementById("message").style.display = "none"
         window.document.getElementById("messageGood").style.display = "none"
