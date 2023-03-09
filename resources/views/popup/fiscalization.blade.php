@@ -47,7 +47,6 @@
                 $.ajax(settings).done(function (json) {
                     console.log(url + ' response ↓ ')
                     console.log(json)
-                    FU_AnimationDownloadGIF('hide', 'Загрузка')
 
                     id_ticket = json.attributes.ticket_id
                     window.document.getElementById("numberOrder").innerHTML = json.name;
@@ -105,6 +104,7 @@
                     }
 
                     //window.document.getElementById('cash').value = window.document.getElementById("sum").innerHTML
+                    FU_AnimationDownloadGIF('hide', 'Загрузка')
                     payment_type_on_set_option(payment_type, window.document.getElementById("sum").innerHTML)
 
                     if (json.attributes.ticket_id != null){
