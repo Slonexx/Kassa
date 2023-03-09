@@ -10,11 +10,9 @@ use App\Http\Controllers\getData\getSetting;
 use App\Services\AdditionalServices\DocumentService;
 use App\Services\MetaServices\MetaHook\AttributeHook;
 use Carbon\Carbon;
-use Dflydev\DotAccessData\Data;
 use GuzzleHttp\Exception\ClientException;
-use GuzzleHttp\Exception\GuzzleException;
 use JetBrains\PhpStorm\ArrayShape;
-use function PHPUnit\Framework\isNull;
+
 
 class TicketService
 {
@@ -259,10 +257,8 @@ class TicketService
         $positions = [];
         $client = new MsClient($apiKeyMs);
         $jsonPositions = $client->get($href);
-        //$count = 1;
 
         foreach ($jsonPositions->rows as $row){
-
             foreach ($positionsEntity as $item){
                 if ($row->id == $item->id){
 
@@ -278,6 +274,14 @@ class TicketService
 
 
                    if (!property_exists($row, 'trackingCodes')){
+
+                       $SumBills = intval($sumPrice) * $item->quantity;
+                       $SumCoins = intval(round(floatval($sumPrice)-intval($sumPrice),2)*100) * $item->quantity;
+                       if ($SumCoins > 100) {
+                           $SumBills = $SumBills + ($SumCoins/100);
+                       }
+
+
                        $position["type"] = "ITEM_TYPE_COMMODITY";
                        $position["commodity"] = [
                            "name" => $product->name,
@@ -288,8 +292,8 @@ class TicketService
                                "coins" => "".intval(round(floatval($positionPrice)-intval($positionPrice),2)*100),
                            ],
                            "sum" => [
-                               "bills" => "".intval($sumPrice) * $item->quantity,
-                               "coins" => "".intval(round(floatval($sumPrice)-intval($sumPrice),2)*100) * $item->quantity,
+                               "bills" => "".$SumBills,
+                               "coins" => "".$SumCoins,
                            ],
                            "measureUnitCode" => null,
                        ];
@@ -325,21 +329,30 @@ class TicketService
                    }
                    else {
                        for ($i = 1; $i <= $row->quantity; $i++){
+                           $SumBills = intval($sumPrice) * $item->quantity;
+                           $SumCoins = intval(round(floatval($sumPrice)-intval($sumPrice),2)*100) * $item->quantity;
+                           if ($SumCoins > 100) {
+                               $SumBills = $SumBills + ($SumCoins/100);
+                           }
+
+
                            $position["type"] = "ITEM_TYPE_COMMODITY";
                            $position["commodity"] = [
                                "name" => $product->name,
                                "sectionCode" => "0",
-                               "quantity" => 1000,
+                               "quantity" => (integer)($item->quantity * 1000),
                                "price" => [
                                    "bills" => "".intval($positionPrice),
                                    "coins" => "".intval(round(floatval($positionPrice)-intval($positionPrice),2)*100),
                                ],
                                "sum" => [
-                                   "bills" => "".intval($sumPrice),
-                                   "coins" => "".intval(round(floatval($sumPrice)-intval($sumPrice),2)*100),
+                                   "bills" => "".$SumBills,
+                                   "coins" => "".$SumCoins,
                                ],
                                "measureUnitCode" => null,
                            ];
+
+
 
                            if (property_exists($product, 'characteristics')){
                                $check_uom = $client->get($product->product->meta->href);
