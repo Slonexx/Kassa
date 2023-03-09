@@ -5,6 +5,7 @@ use App\Http\Controllers\Config\DeleteVendorApiController;
 use App\Http\Controllers\deleteData\deleteDevice;
 use App\Http\Controllers\Popup\demandController;
 use App\Http\Controllers\Popup\fiscalizationController;
+use App\Http\Controllers\Popup\RequestController;
 use App\Http\Controllers\Popup\salesreturnController;
 use App\Http\Controllers\Web\changeController;
 use App\Http\Controllers\Web\getSetting\DeviceController;
@@ -68,4 +69,4 @@ Route::get('/Popup/salesreturn', [salesreturnController::class, 'salesreturnPopu
 Route::get('/Popup/salesreturn/show', [salesreturnController::class, 'ShowSalesreturnPopup']);
 Route::post('/Popup/salesreturn/send', [salesreturnController::class, 'SendSalesreturnPopup']);
 
-
+Route::get('/Popup/Request/send', [RequestController::class, 'SendRequestPopup']);
