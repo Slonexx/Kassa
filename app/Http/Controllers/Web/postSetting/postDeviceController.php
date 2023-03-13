@@ -21,6 +21,7 @@ class postDeviceController extends Controller
         $isAdmin = $request->isAdmin;
         $this->createBDAccess($accountId);
         $Setting = new getSetting($accountId);
+        $getSettingVendorController = new getSettingVendorController($accountId);
 
         $ZHM_1 = $request->ZHM_1;
         $PASSWORD_1 = $request->PASSWORD_1;
@@ -29,18 +30,17 @@ class postDeviceController extends Controller
             try {
 
                 //ПРОВЕРКА НА КЛИЕНТА ААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААА
-
                 $Client = new KassClient($ZHM_1, $PASSWORD_1, $Setting->apiKey);
                 $StatusCode = $Client->getStatusCode();
-                $app = new getSetting($accountId);
                 //dd($StatusCode);
+
                 if ($StatusCode == 200 ){
 
-                    if ($app->tokenMs == null){
-                        DataBaseService::createSetting($accountId, $Setting->TokenMoySklad, null,
+                    if ($Setting->tokenMs == null){
+                        DataBaseService::createSetting($accountId, $getSettingVendorController->TokenMoySklad, null,
                             null, null,null);
                     } else {
-                        DataBaseService::updateSetting($accountId, $Setting->TokenMoySklad,null,
+                        DataBaseService::updateSetting($accountId, $getSettingVendorController->TokenMoySklad,null,
                             null,null,null);
                     }
 
