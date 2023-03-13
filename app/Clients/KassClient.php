@@ -21,7 +21,7 @@ class KassClient
      */
     public function __construct($kassaNumber,$password,$apiKey)
     {
-        $this->apiKey = $apiKey;
+        $this->apiKey = "6784dad7-6679-4950-b257-2711ff63f9bb";
         $this->kassaNumber = $kassaNumber;
         $this->password = $password;
 
