@@ -32,7 +32,18 @@ class postDeviceController extends Controller
 
                 $Client = new KassClient($ZHM_1, $PASSWORD_1, $Setting->apiKey);
                 $StatusCode = $Client->getStatusCode();
+                $app = new getSetting($accountId);
+                //dd($StatusCode);
                 if ($StatusCode == 200 ){
+
+                    if ($app->tokenMs == null){
+                        DataBaseService::createSetting($accountId, $Setting->TokenMoySklad, null,
+                            null, null,null);
+                    } else {
+                        DataBaseService::updateSetting($accountId, $Setting->TokenMoySklad,null,
+                            null,null,null);
+                    }
+
                     $Device = new getDeviceFirst($ZHM_1);
                     if ($Device->accountId == null) DataBaseService::createDevice($ZHM_1, $PASSWORD_1, 1, $accountId);
                     else DataBaseService::updateDevice($ZHM_1, $PASSWORD_1, 1, $accountId);
@@ -54,7 +65,7 @@ class postDeviceController extends Controller
 
             } catch (\Throwable $e) {
 
-            }
+           }
         }
 
         $cfg = new cfg();
