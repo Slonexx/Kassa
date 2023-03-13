@@ -21,24 +21,27 @@ class postDeviceController extends Controller
         $isAdmin = $request->isAdmin;
         $this->createBDAccess($accountId);
         $Setting = new getSetting($accountId);
-        $getSettingVendorController = new getSettingVendorController($accountId);
 
         $ZHM_1 = $request->ZHM_1;
         $PASSWORD_1 = $request->PASSWORD_1;
 
         if ($ZHM_1 != null and $PASSWORD_1 != null) {
             try {
+
+                //ПРОВЕРКА НА КЛИЕНТА ААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААА
+
                 $Client = new KassClient($ZHM_1, $PASSWORD_1, $Setting->apiKey);
                 $StatusCode = $Client->getStatusCode();
-
+                $app = new getSetting($accountId);
+                //dd($StatusCode);
                 if ($StatusCode == 200 ){
 
-                    if ($Setting->tokenMs == null){
-                        DataBaseService::createSetting($accountId, $getSettingVendorController->TokenMoySklad, null,
-                            null, null,null, null, null, null);
+                    if ($app->tokenMs == null){
+                        DataBaseService::createSetting($accountId, $Setting->TokenMoySklad, null,
+                            null, null,null);
                     } else {
-                        DataBaseService::updateSetting($accountId, $getSettingVendorController->TokenMoySklad,null,
-                            null,null,null, null, null, null);
+                        DataBaseService::updateSetting($accountId, $Setting->TokenMoySklad,null,
+                            null,null,null);
                     }
 
                     $Device = new getDeviceFirst($ZHM_1);
@@ -62,7 +65,7 @@ class postDeviceController extends Controller
 
             } catch (\Throwable $e) {
 
-            }
+           }
         }
 
         $cfg = new cfg();
@@ -82,10 +85,10 @@ class postDeviceController extends Controller
         try {
             if ($app->tokenMs == null){
                 DataBaseService::createSetting($accountId, $Setting->TokenMoySklad, $Setting->payment_type,
-                    $paymentDocument, null,null, null, null, null);
+                    $paymentDocument, null,null);
             } else {
                 DataBaseService::updateSetting($accountId, $Setting->TokenMoySklad, $Setting->payment_type,
-                    $paymentDocument,null,null, null, null, null);
+                    $paymentDocument,null,null);
             }
         } catch (\Throwable $e){
 
