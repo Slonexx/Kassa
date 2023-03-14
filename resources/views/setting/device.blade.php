@@ -127,12 +127,11 @@
     @endphp
 
     <div class="content p-4 mt-2 bg-white text-Black rounded">
-
         <div class="row gradient rounded p-2 pb-2" style="margin-top: -1rem">
             <div class="col-7" style="margin-top: 1rem"> <span class="text-white" style="font-size: 20px"> Настройки &#8594; Кассовый аппарат </span> </div>
             <div class="col-2 mt-3 text-center"><button onclick="add_device()" type="button" class=" btn transparent btn-outline-warning"> <i class="fa-solid fa-circle-plus"></i> Добавить </button> </div>
             <div class="col-3 text-center">
-                <img src="https://dev.smartrekassa.kz/logoHeadWhite.png" width="100%"  alt="">
+                <img src="https://rekassa/logoHeadWhite.png" width="100%"  alt="">
             </div>
         </div>
 

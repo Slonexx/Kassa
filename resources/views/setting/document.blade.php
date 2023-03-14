@@ -4,9 +4,9 @@
 @section('content')
 
     <div class="content p-4 mt-2 bg-white text-Black rounded">
-
-
         @include('div.TopServicePartner')
+        <script>NAME_HEADER_TOP_SERVICE("Настройки → Документ")</script>
+
         @isset($message)
 
             <div class="mt-2 {{$message['alert']}}"> {{ $message['message'] }}
@@ -14,7 +14,6 @@
             </div>
 
         @endisset
-
 
         <form action="/Setting/Document/{{ $accountId }}?isAdmin={{ $isAdmin }}" method="post" class="mt-3">
         @csrf <!-- {{ csrf_field() }} -->
@@ -34,51 +33,12 @@
                         <label class="mt-1 mx-4"> Выберите какой тип платежного документа создавать: </label>
                     </div>
                     <div class="col-6">
-                        <select id="createDocument_asWay" name="createDocument_asWay" class="form-select text-black" onchange="asWay(this.value)" >
+                        <select id="createDocument" name="createDocument" class="form-select text-black" >
                             <option value="0"> Не создавать </option>
-                            <option value="1"> Приходной ордер </option>
-                            <option value="2"> Входящий платёж </option>
+                            <option value="1">Приходной ордер</option>
+                            <option value="2">Входящий платёж </option>
                             <option value="3"> От выбора типа оплаты </option>
-                            <option value="4"> Собственный выбор </option>
                         </select>
-                    </div>
-                </div>
-                <div id="CustomCreateDocument" class="mt-2 mb-2" style="display: none">
-                    <div class="row">
-                        <div class="col-6">
-                            <label class="mt-1 mx-4"> Оплата наличными </label>
-                        </div>
-                        <div class="col-6">
-                            <select id="OperationCash" name="OperationCash" class="form-select text-black" >
-                                <option value="0"> Не создавать </option>
-                                <option value="1"> Приходной ордер </option>
-                                <option value="2"> Входящий платёж </option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-6">
-                            <label class="mt-1 mx-4"> Оплата картой </label>
-                        </div>
-                        <div class="col-6">
-                            <select id="OperationCard" name="OperationCard" class="form-select text-black" >
-                                <option value="0"> Не создавать </option>
-                                <option value="1"> Приходной ордер </option>
-                                <option value="2"> Входящий платёж </option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-6">
-                            <label class="mt-1 mx-4"> Оплата мобильной </label>
-                        </div>
-                        <div class="col-6">
-                            <select id="OperationMobile" name="OperationMobile" class="form-select text-black" >
-                                <option value="0"> Не создавать </option>
-                                <option value="1"> Приходной ордер </option>
-                                <option value="2"> Входящий платёж </option>
-                            </select>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -107,7 +67,6 @@
                 </div>
             </div>
 
-
             <hr class="href_padding">
 
             <button class="btn btn-outline-dark " data-bs-toggle="modal" data-bs-target="#modal">
@@ -119,35 +78,21 @@
 
         let createDocument = "{{ $paymentDocument }}"
         let payment_type = "{{ $payment_type }}"
-        let OperationCash = "{{ $OperationCash }}"
-        let OperationCard = "{{ $OperationCard }}"
-        let OperationMobile = "{{ $OperationMobile }}"
+        if (createDocument === undefined) createDocument = 0
+        if (payment_type === undefined) payment_type = 1
 
-        loading(createDocument, payment_type, OperationCash, OperationCard, OperationMobile)
-        NAME_HEADER_TOP_SERVICE("Настройки → Документ")
+        console.log(payment_type);
 
-        function asWay(value) {
-            let OperationCash = window.document.getElementById('OperationCash')
-            let OperationCard = window.document.getElementById('OperationCard')
-            let CustomCreateDocument = window.document.getElementById('CustomCreateDocument')
+        loading(createDocument, payment_type)
 
-            if (value === '4'){
-                CustomCreateDocument.style.display = "block"
-            } else {
-                CustomCreateDocument.style.display = "none"
-                OperationCash.value = 0
-                OperationCard.value = 0
-            }
-        }
-
-        function loading(createDocument, payment_type, OperationCash, OperationCard, OperationMobile){
-            window.document.getElementById('createDocument_asWay').value = createDocument
-            if (createDocument == 4) window.document.getElementById('CustomCreateDocument').style.display = "Block"
+        function loading(createDocument, payment_type){
+            window.document.getElementById('createDocument').value = createDocument
             window.document.getElementById('payment_type').value = payment_type
 
-            window.document.getElementById('OperationCash').value = OperationCash
-            window.document.getElementById('OperationCard').value = OperationCard
-            window.document.getElementById('OperationMobile').value = OperationMobile
+        }
+
+        function oldWay(params){
+
         }
 
         function toggleClick(id){

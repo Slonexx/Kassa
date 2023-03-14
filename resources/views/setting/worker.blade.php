@@ -8,9 +8,8 @@
     </script>
 
     <div class="content p-4 mt-2 bg-white text-Black rounded">
-
         @include('div.TopServicePartner')
-        <script> NAME_HEADER_TOP_SERVICE("Настройки → доступа") </script>
+        <script>NAME_HEADER_TOP_SERVICE("Настройки → Сотрудники")</script>
 
 
         @isset($message)
