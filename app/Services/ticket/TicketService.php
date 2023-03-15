@@ -274,12 +274,11 @@ class TicketService
 
 
                    if (!property_exists($row, 'trackingCodes')){
-
                        $SumBills = intval($sumPrice) * $item->quantity;
                        $SumCoins = intval(round(floatval($sumPrice)-intval($sumPrice),2)*100) * $item->quantity;
                        if ($SumCoins > 100) {
-                           $SumBills = $SumBills +( (int) $SumCoins / 100 );
-                           $SumCoins = $SumCoins - (((int) $SumCoins / 100) * 100);
+                           $SumBills = $SumBills + ( intval($SumCoins / 100));
+                           $SumCoins = $SumCoins - (intval($SumCoins / 100) * 100);
                        }
 
                        $position["type"] = "ITEM_TYPE_COMMODITY";
