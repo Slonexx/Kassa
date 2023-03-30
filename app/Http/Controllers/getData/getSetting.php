@@ -8,24 +8,34 @@ use Illuminate\Http\Request;
 
 class getSetting extends Controller
 {
-    var $accountId;
-    var $tokenMs;
-    var $apiKey;
-    var $saleChannel;
-    var $paymentDocument;
-    var $payment_type;
-    var $project;
+    public mixed $accountId;
+    public mixed $tokenMs;
+    public mixed $apiKey;
+
+    public mixed $saleChannel;
+    public mixed $project;
+
+    public mixed $paymentDocument;
+    public mixed $payment_type;
+    public mixed $OperationCash;
+    public mixed $OperationCard;
+
 
     public function __construct($accountId)
     {
         $app = DataBaseService::showSetting($accountId);
         $this->accountId = $app['accountId'];
         $this->tokenMs = $app['tokenMs'];
-        $this->apiKey = $app['apiKey'];
+        $this->apiKey = "f5ac6559-b5cd-4e0e-89e5-7fd32a6d60a5";
+
         $this->saleChannel = $app['saleChannel'];
+        $this->project = $app['project'];
+
         $this->paymentDocument = $app['paymentDocument'];
         $this->payment_type = $app['payment_type'];
-        $this->project = $app['project'];
+        $this->OperationCash = $app['OperationCash'];
+        $this->OperationCard = $app['OperationCard'];
+
     }
 
 

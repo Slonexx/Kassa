@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 class postBaseController extends Controller
 {
     public function postBase(Request $request, $accountId): \Illuminate\Http\RedirectResponse
-    {
+    {/*
 
         $isAdmin = $request->isAdmin;
         $Setting = new getSettingVendorController($accountId);
@@ -31,6 +31,6 @@ class postBaseController extends Controller
         return redirect()->route('getDevices', [
             'accountId' => $accountId,
             'isAdmin' => $isAdmin,
-        ]);
+        ]);*/
     }
 }

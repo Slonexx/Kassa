@@ -21,18 +21,26 @@ class postDeviceController extends Controller
         $isAdmin = $request->isAdmin;
         $this->createBDAccess($accountId);
         $Setting = new getSetting($accountId);
+        $getSettingVendorController = new getSettingVendorController($accountId);
 
         $ZHM_1 = $request->ZHM_1;
         $PASSWORD_1 = $request->PASSWORD_1;
 
         if ($ZHM_1 != null and $PASSWORD_1 != null) {
             try {
-
-                //ПРОВЕРКА НА КЛИЕНТА ААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААА
-
                 $Client = new KassClient($ZHM_1, $PASSWORD_1, $Setting->apiKey);
                 $StatusCode = $Client->getStatusCode();
+
                 if ($StatusCode == 200 ){
+
+                    if ($Setting->tokenMs == null){
+                        DataBaseService::createSetting($accountId, $getSettingVendorController->TokenMoySklad, null,
+                            null, null,null, null, null);
+                    } else {
+                        DataBaseService::updateSetting($accountId, $getSettingVendorController->TokenMoySklad,null,
+                            null,null,null, null, null);
+                    }
+
                     $Device = new getDeviceFirst($ZHM_1);
                     if ($Device->accountId == null) DataBaseService::createDevice($ZHM_1, $PASSWORD_1, 1, $accountId);
                     else DataBaseService::updateDevice($ZHM_1, $PASSWORD_1, 1, $accountId);
@@ -74,10 +82,10 @@ class postDeviceController extends Controller
         try {
             if ($app->tokenMs == null){
                 DataBaseService::createSetting($accountId, $Setting->TokenMoySklad, $Setting->payment_type,
-                    $paymentDocument, null,null);
+                    $paymentDocument, null,null, null, null);
             } else {
                 DataBaseService::updateSetting($accountId, $Setting->TokenMoySklad, $Setting->payment_type,
-                    $paymentDocument,null,null);
+                    $paymentDocument,null,null, null, null);
             }
         } catch (\Throwable $e){
 

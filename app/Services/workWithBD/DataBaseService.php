@@ -10,14 +10,20 @@ use SebastianBergmann\CodeCoverage\Driver\Selector;
 class DataBaseService
 {
 
-    public static function createSetting($accountId, $tokenMs, $payment_type, $paymentDocument, $saleChannel, $project){
+    public static function createSetting($accountId, $tokenMs, $payment_type, $paymentDocument, $saleChannel, $project, $OperationCash, $OperationCard){
         Setting::create([
             'accountId' => $accountId,
             'tokenMs' => $tokenMs,
-            'saleChannel' => $saleChannel,
-            'paymentDocument' => $paymentDocument,
-            'project' => $project,
             'apiKey' => "f5ac6559-b5cd-4e0e-89e5-7fd32a6d60a5",
+
+            'saleChannel' => $saleChannel,
+            'project' => $project,
+            'paymentDocument' => $paymentDocument,
+            'payment_type' => $payment_type,
+            'OperationCash' => $OperationCash,
+            'OperationCard' => $OperationCard,
+
+
         ]);
     }
 
@@ -50,10 +56,15 @@ class DataBaseService
                 "accountId" => $accountId,
                 "tokenMs" => null,
                 "apiKey" => null,
+
                 "saleChannel" => null,
+                "project" => null,
+
                 "paymentDocument" => null,
                 "payment_type" => null,
-                "project" => null,
+                "OperationCash" => null,
+                "OperationCard" => null,
+
             ];
         }
         return $result;
@@ -119,15 +130,18 @@ class DataBaseService
 
     }
 
-    public static function updateSetting($accountId, $tokenMs, $payment_type, $paymentDocument, $saleChannel, $project){
+    public static function updateSetting($accountId, $tokenMs, $payment_type, $paymentDocument, $saleChannel, $project, $OperationCash, $OperationCard){
        $find = Setting::query()->where('accountId', $accountId);
        $find->update([
            'tokenMs' => $tokenMs,
+           'apiKey' => "f5ac6559-b5cd-4e0e-89e5-7fd32a6d60a5",
+
            'saleChannel' => $saleChannel,
+           'project' => $project,
            'paymentDocument' => $paymentDocument,
            'payment_type' => $payment_type,
-           'project' => $project,
-           'apiKey' => "f5ac6559-b5cd-4e0e-89e5-7fd32a6d60a5",
+           'OperationCash' => $OperationCash,
+           'OperationCard' => $OperationCard,
        ]);
     }
 
