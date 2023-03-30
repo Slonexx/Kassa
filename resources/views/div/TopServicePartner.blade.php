@@ -1,5 +1,5 @@
 <div class="row gradient rounded p-2 pb-2" style="margin-top: -1rem">
-    <div class="col-9" style="margin-top: 1.0rem"> <span id="HEAD_TOP_SERVICE" class="text-black" style="font-size: 20px">  </span> </div>
+    <div class="col-9" style="margin-top: 1.0rem"> <span id="HEAD_TOP_SERVICE" class="text-white" style="font-size: 20px">  </span> </div>
     <div class="col-3 text-center">
         <img src="https://dev.smartrekassa.kz/logoHead.png" width="100%"  alt="">
     </div>
