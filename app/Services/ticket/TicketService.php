@@ -764,7 +764,7 @@ class TicketService
                 $url = 'https://online.moysklad.ru/api/remap/1.2/entity/';
                 $url_to_body = null;
                 if ($entity_type != 'salesreturn') {
-                    foreach ($vars as $item){
+                    foreach ($vars['payments'] as $item){
                         if ($item['type'] == "PAYMENT_CASH"){
                             switch ($Setting->OperationCash) {
                                 case 1: {
