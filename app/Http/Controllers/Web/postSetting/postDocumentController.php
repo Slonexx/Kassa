@@ -14,9 +14,10 @@ class postDocumentController extends Controller
     {
         $isAdmin = $request->isAdmin;
         $Setting = new getSettingVendorController($accountId);
+
         try {
             DataBaseService::updateSetting($accountId, $Setting->TokenMoySklad, $request->payment_type,
-                $request->createDocument,null,null, $request->OperationCash, $request->OperationCard);
+                $request->createDocument_asWay,null,null, $request->OperationCash, $request->OperationCard);
         } catch (\Throwable $e){
 
         }

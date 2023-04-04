@@ -423,7 +423,7 @@ class TicketService
         return $client->get($href)->code;
     }
 
-    #[ArrayShape(["date" => "array", "time" => "array"])] private function getNowDateTime(): array
+    private function getNowDateTime(): array
     {
         $now = Carbon::now();
         return [
