@@ -740,7 +740,7 @@ class TicketService
                                 'type' => $OldBody->agent->meta->type,
                                 'mediaType' => $OldBody->agent->meta->mediaType,
                             ] ],
-                            'sum' => (float) $item['sum']['bills']+($item['sum']['coins']/100) * 100,
+                            'sum' => (float) ($item['sum']['bills']+($item['sum']['coins']/100)) * 100,
                             'operations' => [
                                 0 => [
                                     'meta'=> [
@@ -821,7 +821,7 @@ class TicketService
                                 'type' => $OldBody->agent->meta->type,
                                 'mediaType' => $OldBody->agent->meta->mediaType,
                             ] ],
-                            'sum' => (float) $item['sum']['bills']+($item['sum']['coins']/100) * 100,
+                            'sum' => (float) ($item['sum']['bills']+($item['sum']['coins']/100)) * 100,
                             'operations' => [
                                 0 => [
                                     'meta'=> [
