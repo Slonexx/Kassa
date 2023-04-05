@@ -778,8 +778,21 @@ class TicketService
                                 default:
                                     break;
                             }
-                        } else {
+                        } elseif ($item['type'] == "PAYMENT_CARD") {
                             switch ($Setting->OperationCard) {
+                                case 1: {
+                                    $url_to_body = $url . 'cashin';
+                                    break;
+                                }
+                                case 2: {
+                                    $url_to_body = $url . 'paymentin';
+                                    break;
+                                }
+                                default:
+                                    break;
+                            }
+                        } else {
+                            switch ($Setting->OperationMobile) {
                                 case 1: {
                                     $url_to_body = $url . 'cashin';
                                     break;

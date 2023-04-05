@@ -10,7 +10,7 @@ use SebastianBergmann\CodeCoverage\Driver\Selector;
 class DataBaseService
 {
 
-    public static function createSetting($accountId, $tokenMs, $payment_type, $paymentDocument, $saleChannel, $project, $OperationCash, $OperationCard){
+    public static function createSetting($accountId, $tokenMs, $payment_type, $paymentDocument, $saleChannel, $project, $OperationCash, $OperationCard, $OperationMobile){
         Setting::create([
             'accountId' => $accountId,
             'tokenMs' => $tokenMs,
@@ -22,6 +22,7 @@ class DataBaseService
             'payment_type' => $payment_type,
             'OperationCash' => $OperationCash,
             'OperationCard' => $OperationCard,
+            'OperationMobile' => $OperationMobile,
 
 
         ]);
@@ -64,6 +65,7 @@ class DataBaseService
                 "payment_type" => null,
                 "OperationCash" => null,
                 "OperationCard" => null,
+                "OperationMobile" => null,
 
             ];
         }
@@ -130,7 +132,7 @@ class DataBaseService
 
     }
 
-    public static function updateSetting($accountId, $tokenMs, $payment_type, $paymentDocument, $saleChannel, $project, $OperationCash, $OperationCard){
+    public static function updateSetting($accountId, $tokenMs, $payment_type, $paymentDocument, $saleChannel, $project, $OperationCash, $OperationCard, $OperationMobile){
        $find = Setting::query()->where('accountId', $accountId);
        $find->update([
            'tokenMs' => $tokenMs,
@@ -142,6 +144,7 @@ class DataBaseService
            'payment_type' => $payment_type,
            'OperationCash' => $OperationCash,
            'OperationCard' => $OperationCard,
+           'OperationMobile' => $OperationMobile,
        ]);
     }
 

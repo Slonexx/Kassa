@@ -19,6 +19,7 @@ class getSetting extends Controller
     public mixed $payment_type;
     public mixed $OperationCash;
     public mixed $OperationCard;
+    public mixed $OperationMobile;
 
 
     public function __construct($accountId)
@@ -35,6 +36,7 @@ class getSetting extends Controller
         $this->payment_type = $app['payment_type'];
         $this->OperationCash = $app['OperationCash'];
         $this->OperationCard = $app['OperationCard'];
+        $this->OperationMobile = $app['OperationMobile'];
 
     }
 

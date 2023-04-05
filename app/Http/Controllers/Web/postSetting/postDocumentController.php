@@ -17,7 +17,7 @@ class postDocumentController extends Controller
 
         try {
             DataBaseService::updateSetting($accountId, $Setting->TokenMoySklad, $request->payment_type,
-                $request->createDocument_asWay,null,null, $request->OperationCash, $request->OperationCard);
+                $request->createDocument_asWay,null,null, $request->OperationCash, $request->OperationCard, $request->OperationMobile);
         } catch (\Throwable $e){
 
         }

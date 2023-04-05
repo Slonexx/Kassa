@@ -68,6 +68,18 @@
                             </select>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <label class="mt-1 mx-4"> Оплата мобильной </label>
+                        </div>
+                        <div class="col-6">
+                            <select id="OperationMobile" name="OperationMobile" class="form-select text-black" >
+                                <option value="0"> Не создавать </option>
+                                <option value="1"> Приходной ордер </option>
+                                <option value="2"> Входящий платёж </option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -109,8 +121,9 @@
         let payment_type = "{{ $payment_type }}"
         let OperationCash = "{{ $OperationCash }}"
         let OperationCard = "{{ $OperationCard }}"
+        let OperationMobile = "{{ $OperationMobile }}"
 
-        loading(createDocument, payment_type, OperationCash, OperationCard)
+        loading(createDocument, payment_type, OperationCash, OperationCard, OperationMobile)
         NAME_HEADER_TOP_SERVICE("Настройки → Документ")
 
         function asWay(value) {
@@ -127,13 +140,14 @@
             }
         }
 
-        function loading(createDocument, payment_type, OperationCash, OperationCard){
+        function loading(createDocument, payment_type, OperationCash, OperationCard, OperationMobile){
             window.document.getElementById('createDocument_asWay').value = createDocument
             if (createDocument == 4) window.document.getElementById('CustomCreateDocument').style.display = "Block"
             window.document.getElementById('payment_type').value = payment_type
 
             window.document.getElementById('OperationCash').value = OperationCash
             window.document.getElementById('OperationCard').value = OperationCard
+            window.document.getElementById('OperationMobile').value = OperationMobile
         }
 
         function toggleClick(id){

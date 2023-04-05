@@ -16,6 +16,7 @@ class DocumentController extends Controller
         $payment_type = $Setting->payment_type;
         $OperationCash = $Setting->OperationCash;
         $OperationCard = $Setting->OperationCard;
+        $OperationMobile = $Setting->OperationMobile;
 
         if ($tokenMs == null){
             return view('setting.no', [
@@ -35,6 +36,9 @@ class DocumentController extends Controller
         if ($OperationCard == null) {
             $OperationCard = "0";
         }
+        if ($OperationMobile == null) {
+            $OperationMobile = "0";
+        }
 
         if (isset($request->message)) {
             return view('setting.document', [
@@ -46,6 +50,7 @@ class DocumentController extends Controller
                 'payment_type' => $payment_type,
                 'OperationCash' => $OperationCash,
                 'OperationCard' => $OperationCard,
+                'OperationMobile' => $OperationMobile,
             ]);
         }
 
@@ -57,6 +62,7 @@ class DocumentController extends Controller
             'payment_type' => $payment_type,
             'OperationCash' => $OperationCash,
             'OperationCard' => $OperationCard,
+            'OperationMobile' => $OperationMobile,
         ]);
     }
 }

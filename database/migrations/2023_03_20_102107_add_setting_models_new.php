@@ -16,6 +16,7 @@ class AddSettingModelsNew extends Migration
         Schema::table('settings', function (Blueprint $table) {
             $table->string('OperationCash')->after('paymentDocument')->nullable();
             $table->string('OperationCard')->after('paymentDocument')->nullable();
+            $table->string('OperationMobile')->after('paymentDocument')->nullable();
         });
     }
 
@@ -29,6 +30,7 @@ class AddSettingModelsNew extends Migration
         Schema::table('settings', function (Blueprint $table) {
             $table->dropColumn('OperationCash');
             $table->dropColumn('OperationCard');
+            $table->dropColumn('OperationMobile');
         });
     }
 }
