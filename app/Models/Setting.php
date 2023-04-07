@@ -19,6 +19,7 @@ class Setting extends Model
         'payment_type',
         'OperationCash',
         'OperationCard',
+        'OperationMobile',
     ];
 
     use HasFactory;
