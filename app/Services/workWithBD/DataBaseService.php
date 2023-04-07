@@ -10,14 +10,21 @@ use SebastianBergmann\CodeCoverage\Driver\Selector;
 class DataBaseService
 {
 
-    public static function createSetting($accountId, $tokenMs, $payment_type, $paymentDocument, $saleChannel, $project){
+    public static function createSetting($accountId, $tokenMs, $payment_type, $paymentDocument, $saleChannel, $project, $OperationCash, $OperationCard, $OperationMobile){
         Setting::create([
             'accountId' => $accountId,
             'tokenMs' => $tokenMs,
-            'saleChannel' => $saleChannel,
-            'paymentDocument' => $paymentDocument,
-            'project' => $project,
             'apiKey' => "6784dad7-6679-4950-b257-2711ff63f9bb",
+
+            'saleChannel' => $saleChannel,
+            'project' => $project,
+            'paymentDocument' => $paymentDocument,
+            'payment_type' => $payment_type,
+            'OperationCash' => $OperationCash,
+            'OperationCard' => $OperationCard,
+            'OperationMobile' => $OperationMobile,
+
+
         ]);
     }
 
@@ -50,10 +57,16 @@ class DataBaseService
                 "accountId" => $accountId,
                 "tokenMs" => null,
                 "apiKey" => null,
+
                 "saleChannel" => null,
+                "project" => null,
+
                 "paymentDocument" => null,
                 "payment_type" => null,
-                "project" => null,
+                "OperationCash" => null,
+                "OperationCard" => null,
+                "OperationMobile" => null,
+
             ];
         }
         return $result;
@@ -119,16 +132,20 @@ class DataBaseService
 
     }
 
-    public static function updateSetting($accountId, $tokenMs, $payment_type, $paymentDocument, $saleChannel, $project){
-       $find = Setting::query()->where('accountId', $accountId);
-       $find->update([
-           'tokenMs' => $tokenMs,
-           'saleChannel' => $saleChannel,
-           'paymentDocument' => $paymentDocument,
-           'payment_type' => $payment_type,
-           'project' => $project,
-           'apiKey' => "6784dad7-6679-4950-b257-2711ff63f9bb",
-       ]);
+    public static function updateSetting($accountId, $tokenMs, $payment_type, $paymentDocument, $saleChannel, $project, $OperationCash, $OperationCard, $OperationMobile){
+        $find = Setting::query()->where('accountId', $accountId);
+        $find->update([
+            'tokenMs' => $tokenMs,
+            'apiKey' => "6784dad7-6679-4950-b257-2711ff63f9bb",
+
+            'saleChannel' => $saleChannel,
+            'project' => $project,
+            'paymentDocument' => $paymentDocument,
+            'payment_type' => $payment_type,
+            'OperationCash' => $OperationCash,
+            'OperationCard' => $OperationCard,
+            'OperationMobile' => $OperationMobile,
+        ]);
     }
 
     public static function updateDevice($znm,$password,$position,$accountId){
