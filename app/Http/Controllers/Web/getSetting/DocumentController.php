@@ -14,6 +14,10 @@ class DocumentController extends Controller
         $tokenMs = $Setting->tokenMs;
         $paymentDocument = $Setting->paymentDocument;
         $payment_type = $Setting->payment_type;
+        $OperationCash = $Setting->OperationCash;
+        $OperationCard = $Setting->OperationCard;
+        $OperationMobile = $Setting->OperationMobile;
+
         if ($tokenMs == null){
             return view('setting.no', [
                 'accountId' => $accountId,
@@ -26,12 +30,39 @@ class DocumentController extends Controller
         if ($payment_type == null) {
             $payment_type = "1";
         }
+        if ($OperationCash == null) {
+            $OperationCash = "0";
+        }
+        if ($OperationCard == null) {
+            $OperationCard = "0";
+        }
+        if ($OperationMobile == null) {
+            $OperationMobile = "0";
+        }
+
+        if (isset($request->message)) {
+            return view('setting.document', [
+                'accountId' => $accountId,
+                'isAdmin' => $isAdmin,
+
+                'message' => $request->message,
+                'paymentDocument' => $paymentDocument,
+                'payment_type' => $payment_type,
+                'OperationCash' => $OperationCash,
+                'OperationCard' => $OperationCard,
+                'OperationMobile' => $OperationMobile,
+            ]);
+        }
 
         return view('setting.document', [
             'accountId' => $accountId,
             'isAdmin' => $isAdmin,
+
             'paymentDocument' => $paymentDocument,
             'payment_type' => $payment_type,
+            'OperationCash' => $OperationCash,
+            'OperationCard' => $OperationCard,
+            'OperationMobile' => $OperationMobile,
         ]);
     }
 }
