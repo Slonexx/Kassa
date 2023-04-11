@@ -19,10 +19,10 @@ class postBaseController extends Controller
         try {
             if ($app->tokenMs == null){
                 DataBaseService::createSetting($accountId, $Setting->TokenMoySklad, $request->payment_type,
-                    $request->paymentDocument, null,null);
+                    $request->paymentDocument, null,null,null, null, null);
             } else {
                 DataBaseService::updateSetting($accountId, $Setting->TokenMoySklad, $request->payment_type,
-                    $request->paymentDocument,null,null);
+                    $request->paymentDocument,null,null, null, null, null);
             }
         } catch (\Throwable $e){
 
