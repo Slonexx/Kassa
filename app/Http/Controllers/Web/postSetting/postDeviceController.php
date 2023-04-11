@@ -38,10 +38,10 @@ class postDeviceController extends Controller
 
                     if ($Setting->tokenMs == null){
                         DataBaseService::createSetting($accountId, $getSettingVendorController->TokenMoySklad, null,
-                            null, null,null);
+                            null, null,null, null, null, null);
                     } else {
                         DataBaseService::updateSetting($accountId, $getSettingVendorController->TokenMoySklad,null,
-                            null,null,null);
+                            null,null,null, null, null, null);
                     }
 
                     $Device = new getDeviceFirst($ZHM_1);
@@ -85,10 +85,10 @@ class postDeviceController extends Controller
         try {
             if ($app->tokenMs == null){
                 DataBaseService::createSetting($accountId, $Setting->TokenMoySklad, $Setting->payment_type,
-                    $paymentDocument, null,null);
+                    $paymentDocument, null,null,null, null, null);
             } else {
                 DataBaseService::updateSetting($accountId, $Setting->TokenMoySklad, $Setting->payment_type,
-                    $paymentDocument,null,null);
+                    $paymentDocument,null,null, null, null, null);
             }
         } catch (\Throwable $e){
 
