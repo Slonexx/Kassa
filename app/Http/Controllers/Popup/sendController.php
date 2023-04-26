@@ -22,12 +22,17 @@ class sendController extends Controller
         $accountId = $request->accountId;
         $id_entity = $request->id_entity;
         $entity_type = $request->entity_type;
-
         if ($request->money_card === null) $money_card = 0;
         else $money_card = $request->money_card;
+
         if ($request->money_cash === null) $money_cash = 0;
         else $money_cash = $request->money_cash;
-        $pay_type = $request->pay_type;
+
+        if ($request->money_mobile === null) $money_mobile = 0;
+        else $money_mobile = $request->money_mobile;
+
+        if ($request->total === null) $total = 0;
+        else $total = $request->total;
 
         $total = $request->total;
 
