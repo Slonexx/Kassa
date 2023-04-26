@@ -162,11 +162,17 @@ class TestTicketService
 
                 $taken = 0;
                 if ($payType != 'return') $taken = $money_cash;
+                $amountsSumBills = intval($totalSum);
+                $amountsSumCoins = intval(round(floatval($totalSum)-intval($totalSum),2)*100);
+                if ($amountsSumCoins >= 100) {
+                    $amountsSumBills = $amountsSumBills + ( intval($amountsSumBills / 100));
+                    $amountsSumCoins = $amountsSumCoins - (intval($amountsSumCoins / 100) * 100);
+                }
 
                 $amounts = [
                     "total" => [
-                        "bills" => "".intval($totalSum),
-                        "coins" => "".intval(round(floatval($totalSum)-intval($totalSum),2)*100),
+                        "bills" => "".$amountsSumBills,
+                        "coins" => "".$amountsSumCoins,
                     ],
                     "taken" => [
                         "bills" => "".intval($taken),
