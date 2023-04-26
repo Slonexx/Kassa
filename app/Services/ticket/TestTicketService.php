@@ -203,7 +203,7 @@ class TestTicketService
                 }
 
 
-                //dd($body, json_encode($body));
+                dd($body, json_encode($body));
 
                 try {
                     $response = $clientK->post("crs/".$id."/tickets",$body);
