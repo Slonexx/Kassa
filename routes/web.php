@@ -7,6 +7,7 @@ use App\Http\Controllers\Popup\demandController;
 use App\Http\Controllers\Popup\fiscalizationController;
 use App\Http\Controllers\Popup\RequestController;
 use App\Http\Controllers\Popup\salesreturnController;
+use App\Http\Controllers\Popup\sendController;
 use App\Http\Controllers\Web\changeController;
 use App\Http\Controllers\Web\getSetting\DeviceController;
 use App\Http\Controllers\Web\getSetting\DocumentController;
@@ -70,3 +71,6 @@ Route::get('/Popup/salesreturn/show', [salesreturnController::class, 'ShowSalesr
 Route::post('/Popup/salesreturn/send', [salesreturnController::class, 'SendSalesreturnPopup']);
 
 Route::post('/Popup/Request/send', [RequestController::class, 'SendRequestPopup']);
+
+
+Route::post('/Popup/DevRequest/send', [sendController::class, 'DevRequest']);
