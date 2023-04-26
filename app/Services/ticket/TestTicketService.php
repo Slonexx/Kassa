@@ -203,7 +203,7 @@ class TestTicketService
                 }
 
 
-                dd($body, json_encode($body));
+                //dd($body, json_encode($body));
 
                 try {
                     $response = $clientK->post("crs/".$id."/tickets",$body);
@@ -280,7 +280,7 @@ class TestTicketService
                     if (!property_exists($row, 'trackingCodes')){
                         $SumBills = intval($sumPrice) * $item->quantity;
                         $SumCoins = intval(round(floatval($sumPrice)-intval($sumPrice),2)*100) * $item->quantity;
-                        if ($SumCoins > 100) {
+                        if ($SumCoins >= 100) {
                             $SumBills = $SumBills + ( intval($SumCoins / 100));
                             $SumCoins = $SumCoins - (intval($SumCoins / 100) * 100);
                         }
