@@ -46,6 +46,7 @@ class sendController extends Controller
 
             'money_card' => $money_card,
             'money_cash' => $money_cash,
+            'money_mobile' => $money_mobile,
             'pay_type' => $pay_type,
 
             'total' => $total,
