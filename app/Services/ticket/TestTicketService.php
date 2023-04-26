@@ -150,11 +150,18 @@ class TestTicketService
                         $pay = $tempSum;
                     }
 
+                    $paymentsSumBills = intval($pay);
+                    $paymentsSumCoins = intval(round(floatval($pay)-intval($pay),2)*100);
+                    if ($paymentsSumCoins >= 100) {
+                        $paymentsSumBills = $paymentsSumBills + ( intval($paymentsSumCoins / 100));
+                        $paymentsSumCoins = $paymentsSumCoins - (intval($paymentsSumCoins / 100) * 100);
+                    }
+
                     $payments[] =  [
                         "type" => $this->getMoneyType("Мобильные"),
                         "sum" => [
-                            "bills" => "".intval($pay),
-                            "coins" => "".intval(round(floatval($pay)-intval($pay),2)*100),
+                            "bills" => "".$paymentsSumBills,
+                            "coins" => "".$paymentsSumCoins,
                         ],
                     ];
 
@@ -162,10 +169,11 @@ class TestTicketService
 
                 $taken = 0;
                 if ($payType != 'return') $taken = $money_cash;
+
                 $amountsSumBills = intval($totalSum);
                 $amountsSumCoins = intval(round(floatval($totalSum)-intval($totalSum),2)*100);
                 if ($amountsSumCoins >= 100) {
-                    $amountsSumBills = $amountsSumBills + ( intval($amountsSumBills / 100));
+                    $amountsSumBills = $amountsSumBills + ( intval($amountsSumCoins / 100));
                     $amountsSumCoins = $amountsSumCoins - (intval($amountsSumCoins / 100) * 100);
                 }
 
