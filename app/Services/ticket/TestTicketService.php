@@ -114,13 +114,22 @@ class TestTicketService
                         $pay = $tempSum;
                         $tempSum = 0;
                     }
-                    $payments [] = [
+
+                    $paymentsSumBills = intval($pay);
+                    $paymentsSumCoins = intval(round(floatval($pay)-intval($pay),2)*100);
+                    if ($paymentsSumCoins >= 100) {
+                        $paymentsSumBills = $paymentsSumBills + ( intval($paymentsSumCoins / 100));
+                        $paymentsSumCoins = $paymentsSumCoins - (intval($paymentsSumCoins / 100) * 100);
+                    }
+
+                    $payments[] =  [
                         "type" => $this->getMoneyType("Наличные"),
                         "sum" => [
-                            "bills" => "".intval($pay),
-                            "coins" => "".intval(round(floatval($pay)-intval($pay),2)*100),
+                            "bills" => "".$paymentsSumBills,
+                            "coins" => "".$paymentsSumCoins,
                         ],
                     ];
+
                 }
 
                 if (intval($money_card) > 0 && $tempSum > 0){
@@ -132,15 +141,21 @@ class TestTicketService
                         $tempSum = 0;
                     }
 
-                    //$tempSum = 0;
+                    $paymentsSumBills = intval($pay);
+                    $paymentsSumCoins = intval(round(floatval($pay)-intval($pay),2)*100);
+                    if ($paymentsSumCoins >= 100) {
+                        $paymentsSumBills = $paymentsSumBills + ( intval($paymentsSumCoins / 100));
+                        $paymentsSumCoins = $paymentsSumCoins - (intval($paymentsSumCoins / 100) * 100);
+                    }
 
                     $payments[] =  [
                         "type" => $this->getMoneyType("Банковская карта"),
                         "sum" => [
-                            "bills" => "".intval($pay),
-                            "coins" => "".intval(round(floatval($pay)-intval($pay),2)*100),
+                            "bills" => "".$paymentsSumBills,
+                            "coins" => "".$paymentsSumCoins,
                         ],
                     ];
+
                 }
 
                 if (intval($money_mobile) > 0 && $tempSum > 0){
