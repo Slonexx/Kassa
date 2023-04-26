@@ -673,7 +673,7 @@ class TicketService
                                 'mediaType' => $OldBody->meta->mediaType,
                                 'uuidHref' => $OldBody->meta->uuidHref,
                             ],
-                            'linkedSum' => 0
+                            'linkedSum' => $OldBody->sum,
                         ], ]
                 ];
                 $client->post($url, $body);
@@ -724,7 +724,7 @@ class TicketService
                                 'mediaType' => $OldBody->meta->mediaType,
                                 'uuidHref' => $OldBody->meta->uuidHref,
                             ],
-                            'linkedSum' => 0
+                            'linkedSum' => $OldBody->sum,
                         ], ],
                     'rate' => $rate
                 ];
@@ -779,7 +779,7 @@ class TicketService
                                         'mediaType' => $OldBody->meta->mediaType,
                                         'uuidHref' => $OldBody->meta->uuidHref,
                                     ],
-                                    'linkedSum' => 0
+                                    'linkedSum' => (float) ($item['sum']['bills']+($item['sum']['coins']/100)) * 100,
                                 ], ],
                             'rate' => $rate
                         ];
@@ -873,7 +873,7 @@ class TicketService
                                         'mediaType' => $OldBody->meta->mediaType,
                                         'uuidHref' => $OldBody->meta->uuidHref,
                                     ],
-                                    'linkedSum' => 0
+                                    'linkedSum' => (float) ($item['sum']['bills']+($item['sum']['coins']/100)) * 100,
                                 ], ],
                             'rate' => $rate
                         ];
