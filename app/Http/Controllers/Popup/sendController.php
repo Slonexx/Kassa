@@ -35,6 +35,7 @@ class sendController extends Controller
         else $total = $request->total;
 
         $total = $request->total;
+        $pay_type = $request->pay_type;
 
         $position = json_decode(($request->positions));
 
