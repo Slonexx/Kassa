@@ -309,12 +309,18 @@ class TestTicketService
                             }else {
                                 $sumVat = $sumPrice * ($row->vat / 100); //Цена выключает НДС
                             }
-                            if ($row->vat != 0)
+                            if ($row->vat != 0) {
+                                $TaxesSumBills = intval($sumVat);
+                                $TaxesSumCoins= intval(round(floatval($sumVat)-intval($sumVat),2)*100);
+                                if ($TaxesSumCoins >= 100) {
+                                    $TaxesSumBills = $TaxesSumBills + ( intval($TaxesSumCoins / 100));
+                                    $TaxesSumCoins = $TaxesSumCoins - (intval($TaxesSumCoins / 100) * 100);
+                                }
                                 $position["commodity"]["taxes"] = [
                                     0 => [
                                         "sum" => [
-                                            "bills" => "".intval($sumVat),
-                                            "coins" => "".intval(round(floatval($sumVat)-intval($sumVat),2)*100),
+                                            "bills" => "".$TaxesSumBills,
+                                            "coins" => "".$TaxesSumCoins,
                                         ],
                                         "percent" => $row->vat * 1000,
                                         "taxType" => 100,
@@ -322,6 +328,7 @@ class TestTicketService
                                         "taxationType" => 100,
                                     ],
                                 ];
+                            }
                         }
 
                         $positions [] = $position;
@@ -359,12 +366,18 @@ class TestTicketService
                                 }else {
                                     $sumVat = $sumPrice * ($row->vat / 100); //Цена выключает НДС
                                 }
-                                if ($row->vat != 0)
+                                if ($row->vat != 0) {
+                                    $TaxesSumBills = intval($sumVat);
+                                    $TaxesSumCoins= intval(round(floatval($sumVat)-intval($sumVat),2)*100);
+                                    if ($TaxesSumCoins >= 100) {
+                                        $TaxesSumBills = $TaxesSumBills + ( intval($TaxesSumCoins / 100));
+                                        $TaxesSumCoins = $TaxesSumCoins - (intval($TaxesSumCoins / 100) * 100);
+                                    }
                                     $position["commodity"]["taxes"] = [
                                         0 => [
                                             "sum" => [
-                                                "bills" => "".intval($sumVat),
-                                                "coins" => "".intval(round(floatval($sumVat)-intval($sumVat),2)*100),
+                                                "bills" => "".$TaxesSumBills,
+                                                "coins" => "".$TaxesSumCoins,
                                             ],
                                             "percent" => $row->vat * 1000,
                                             "taxType" => 100,
@@ -372,6 +385,7 @@ class TestTicketService
                                             "taxationType" => 100,
                                         ],
                                     ];
+                                }
                             }
 
                             $positions [] = $position;
