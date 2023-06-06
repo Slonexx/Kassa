@@ -234,39 +234,6 @@ class TestTicketService
 
                 dd($body, json_encode($body));
 
-                try {
-                    $response = $clientK->post("crs/".$id."/tickets",$body);
-                    //dd($response);
-                    $jsonEntity = $this->writeToAttrib($response->id, $urlEntity, $entity_type, $apiKeyMs, $positions);
-
-                    if ($isPayIn){
-                        if ($Setting->paymentDocument != null ){
-                            $this->createPaymentDocument($Setting, $client, $entity_type, $jsonEntity, $body);
-                        }
-                    } else {
-                        $isReturn = ($entity_type == "salesreturn");
-                        $this->documentService->initPayReturnDocument(
-                            $paymentOption,$isReturn,$jsonEntity,$apiKeyMs
-                        );
-                    }
-                    //dd($response);
-                    return [
-                        "res" => [
-                            "message" => "Ticket created!",
-                            "response" => $response,
-                        ],
-                        "code" => 200,
-                    ];
-                } catch (ClientException $exception){
-                    return [
-                        "res" => [
-                            "message" => "Ticket not created!",
-                            "error" => json_decode($exception->getResponse()->getBody()),
-                        ],
-                        "code" => 400,
-                    ];
-                    //dd($exception->getMessage());
-                }
             }
         } else {
             return [
@@ -673,7 +640,7 @@ class TestTicketService
                                 'mediaType' => $OldBody->meta->mediaType,
                                 'uuidHref' => $OldBody->meta->uuidHref,
                             ],
-                            'linkedSum' => 0
+                            'linkedSum' => $OldBody->sum,
                         ], ]
                 ];
                 $client->post($url, $body);
@@ -724,7 +691,7 @@ class TestTicketService
                                 'mediaType' => $OldBody->meta->mediaType,
                                 'uuidHref' => $OldBody->meta->uuidHref,
                             ],
-                            'linkedSum' => 0
+                            'linkedSum' => $OldBody->sum,
                         ], ],
                     'rate' => $rate
                 ];
@@ -779,7 +746,7 @@ class TestTicketService
                                         'mediaType' => $OldBody->meta->mediaType,
                                         'uuidHref' => $OldBody->meta->uuidHref,
                                     ],
-                                    'linkedSum' => 0
+                                    'linkedSum' => (float) ($item['sum']['bills']+($item['sum']['coins']/100)) * 100,
                                 ], ],
                             'rate' => $rate
                         ];
@@ -873,7 +840,7 @@ class TestTicketService
                                         'mediaType' => $OldBody->meta->mediaType,
                                         'uuidHref' => $OldBody->meta->uuidHref,
                                     ],
-                                    'linkedSum' => 0
+                                    'linkedSum' => (float) ($item['sum']['bills']+($item['sum']['coins']/100)) * 100,
                                 ], ],
                             'rate' => $rate
                         ];
