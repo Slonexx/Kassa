@@ -228,8 +228,6 @@ class changeController extends Controller
 
         $getBody = $clientK->post('/api/crs/'.$id.'/tickets/'.$id_ticket.'/receipts', ['type'=>'PRINTER']);
         return response()->json($getBody);
-        dd($getBody);
-
     }
 
 }
