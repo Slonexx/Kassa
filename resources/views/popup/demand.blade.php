@@ -167,23 +167,22 @@
                                 modalShowHide = 'hide';
                                 id_ticket = response.res.response.id;
                             } else {
-                                if (response.res.hasOwnProperty('error')) {
-                                    if (response.res.error.code === 'CASH_REGISTER_SHIFT_PERIOD_EXPIRED') {
-                                        window.document.getElementById('messageAlert').innerText = "Предыдущая смена не закрыта !";
-                                        window.document.getElementById('message').style.display = "block";
-                                        window.document.getElementById(button_hide).style.display = "block";
-                                        modalShowHide = 'hide';
-                                    } else  {
-                                        window.document.getElementById('messageAlert').innerText = response.res.error.code;
-                                        window.document.getElementById('message').style.display = "block";
-                                        window.document.getElementById(button_hide).style.display = "block";
-                                        modalShowHide = 'hide';
+                                if (response.hasOwnProperty('res')) {
+                                    if (response.res.hasOwnProperty('error')) {
+                                        if (response.res.error.code === 'CASH_REGISTER_SHIFT_PERIOD_EXPIRED') {
+                                            window.document.getElementById('messageAlert').innerText = "Предыдущая смена не закрыта !"
+                                            window.document.getElementById('message').style.display = "block"
+                                            window.document.getElementById(button_hide).style.display = "block"
+                                        } else  {
+                                            window.document.getElementById('messageAlert').innerText = response.res.error.code
+                                            window.document.getElementById('message').style.display = "block"
+                                            window.document.getElementById(button_hide).style.display = "block"
+                                        }
                                     }
                                 } else {
-                                    window.document.getElementById('messageAlert').innerText = "Ошибка 400";
-                                    window.document.getElementById('message').style.display = "block";
-                                    window.document.getElementById(button_hide).style.display = "block";
-                                    modalShowHide = 'hide';
+                                    window.document.getElementById('messageAlert').innerText = JSON.stringify(response)
+                                    window.document.getElementById('message').style.display = "block"
+                                    window.document.getElementById(button_hide).style.display = "block"
                                 }
                             }
                         }

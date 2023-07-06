@@ -208,7 +208,7 @@
                                         }
                                     }
                                 } else {
-                                    window.document.getElementById('messageAlert').innerText = "Ошибка 400"
+                                    window.document.getElementById('messageAlert').innerText = JSON.stringify(response)
                                     window.document.getElementById('message').style.display = "block"
                                     window.document.getElementById(button_hide).style.display = "block"
                                 }
