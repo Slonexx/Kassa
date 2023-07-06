@@ -27,10 +27,17 @@ class fiscalizationController extends Controller
 
         $json = $this->info_object_Id($object_Id, $Setting);
 
+        $payment_type = $Setting->payment_type;
+        if ($payment_type == null or $payment_type == '') $payment_type = 1;
+
+        $json['application']['payment_type'] = (int) $payment_type ;
+
         return response()->json($json);
     }
 
     public function info_object_Id($object_Id, getSetting $Setting){
+
+
         $url = "https://online.moysklad.ru/api/remap/1.2/entity/customerorder/".$object_Id;
         $Client = new MsClient($Setting->tokenMs);
         $Body = $Client->get($url);
@@ -105,9 +112,11 @@ class fiscalizationController extends Controller
                 'vatSum' => $Body->vatSum / 100 ,
             ];
         };
+
         return [
             'id' => $Body->id,
             'name' => $Body->name,
+            //'payment_type' => (int) $payment_type,
             'sum' => $Body->sum / 100,
             'vat' => $vat,
             'attributes' => $attributes,
@@ -165,14 +174,14 @@ class fiscalizationController extends Controller
 
         //dd($data);
 
-        try {
+        //try {
 
             $res = app(TicketService::class)->createTicket($data);
             return response()->json($res);
 
-        } catch (\Throwable $e){
-            return response()->json($e->getMessage());
-        }
+       // } catch (\Throwable $e){
+       //     return response()->json($e->getMessage());
+      //  }
     }
 
     public function closeShiftPopup(Request $request): array
@@ -203,10 +212,10 @@ class fiscalizationController extends Controller
             ];
         }
 
-        return [
-            'statusCode' => 200,
-            'message' => 'Смена закрыта',
-        ];
+       return [
+           'statusCode' => 200,
+           'message' => 'Смена закрыта',
+       ];
     }
 
 }
