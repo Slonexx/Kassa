@@ -22,10 +22,9 @@ class DocumentService
         $this->expenseItemHook = $expenseItemHook;
     }
 
-    public function initPayDocument($paymentOption, $formattedOrder, $apiKey, $reKassaBody)
+    public function initPayDocument($paymentOption, $formattedOrder, $apiKey, $reKassaBody): void
     {
         if($paymentOption > 0){
-            $uri = null;
             $sum = $formattedOrder->sum;
             $description = '['.( (int) date('H') + 6 ).date(':i:s').' '. date('Y-m-d') .'] ' ;
             if ($paymentOption == 2) {
@@ -38,11 +37,11 @@ class DocumentService
 
                 foreach ($reKassaBody['payments'] as $item){
 
-                   if ($item['type'] == 'PAYMENT_CASH'){
-                       $uri = "https://online.moysklad.ru/api/remap/1.2/entity/cashin";
-                       $sum = ($item['sum']['bills'] + ($item['sum']['coins'] / 100)) * 100;
-                       $this->createPayInDocument($uri, $apiKey,  1, $formattedOrder, $sum, $description.'Автоматическое создание документа на основе настроек приложение. Оплата наличными, на сумму: '.$sum/100);
-                   }
+                    if ($item['type'] == 'PAYMENT_CASH'){
+                        $uri = "https://online.moysklad.ru/api/remap/1.2/entity/cashin";
+                        $sum = ($item['sum']['bills'] + ($item['sum']['coins'] / 100)) * 100;
+                        $this->createPayInDocument($uri, $apiKey,  1, $formattedOrder, $sum, $description.'Автоматическое создание документа на основе настроек приложение. Оплата наличными, на сумму: '.$sum/100);
+                    }
 
                     if ($item['type'] == 'PAYMENT_CARD'){
                         $uri = "https://online.moysklad.ru/api/remap/1.2/entity/paymentin";
@@ -65,7 +64,8 @@ class DocumentService
         }
     }
 
-    public function initPayReturnDocument($paymentOption,$isReturn,$formattedEntity,$apiKey){
+    public function initPayReturnDocument($payments, $paymentOption,$isReturn,$formattedEntity,$apiKey): void
+    {
         $sum = $formattedEntity->sum;
         if ($isReturn){
             $metaReturn = $formattedEntity->meta;
@@ -73,12 +73,16 @@ class DocumentService
             $metaReturn = null;
         }
 
-        if($paymentOption > 0){
-            $this->createPayOutDocument($apiKey,$metaReturn,$paymentOption,$formattedEntity,$sum);
+        foreach ($payments as $item){
+            if($paymentOption > 0){
+                $this->createPayOutDocument($item, $apiKey,$metaReturn,$paymentOption,$formattedEntity,$sum);
+            }
         }
+
+
     }
 
-    private function createPayInDocument($URL, $apiKey, $type,  $formattedOrder, $sum, $description)
+    private function createPayInDocument($URL, $apiKey, $type,  $formattedOrder, $sum, $description): void
     {
         $client = new MsClient($apiKey);
         $docBody = [
@@ -98,17 +102,17 @@ class DocumentService
             if ($type == 1){
                 $meta = $this->attributeHook->getCashInAttribute($attribute->name,$apiKey);
                 if (!is_null($meta))
-                $docBody["attributes"][] = [
-                    "meta" => $meta,
-                    "value" => $attribute->value,
-                ];
+                    $docBody["attributes"][] = [
+                        "meta" => $meta,
+                        "value" => $attribute->value,
+                    ];
             }elseif ($type ==2){
                 $meta = $this->attributeHook->getPaymentInAttribute($attribute->name,$apiKey);
                 if (!is_null($meta))
-                $docBody["attributes"][] = [
-                    "meta" => $meta,
-                    "value" => $attribute->value,
-                ];
+                    $docBody["attributes"][] = [
+                        "meta" => $meta,
+                        "value" => $attribute->value,
+                    ];
             }
         }
 
@@ -119,13 +123,26 @@ class DocumentService
         $client->post($URL, $docBody);
     }
 
-    private function createPayOutDocument($apiKey, $metaReturn, $isPayment, $formattedEntity, $sum)
+    private function createPayOutDocument($payment, $apiKey, $metaReturn, $isPayment, $formattedEntity, $sum): void
     {
         $uri = null;
         if ($isPayment == 2) {
             $uri = "https://online.moysklad.ru/api/remap/1.2/entity/paymentout";
         } elseif($isPayment == 1) {
             $uri = "https://online.moysklad.ru/api/remap/1.2/entity/cashout";
+        }elseif($isPayment == 3) {
+            switch ($payment['type']){
+                case 'PAYMENT_CASH':{
+                    $uri = "https://online.moysklad.ru/api/remap/1.2/entity/cashout";
+                    $sum = ($payment['sum']['bills'] + ($payment['sum']['coins'] / 100) * 1000);
+                    break;
+                }
+                case 'PAYMENT_CARD' or 'PAYMENT_MOBILE':{
+                    $uri = "https://online.moysklad.ru/api/remap/1.2/entity/paymentout";
+                    $sum = ($payment['sum']['bills'] + ($payment['sum']['coins'] / 100) * 1000);
+                    break;
+                }
+            }
         }
 
         $client = new MsClient($apiKey);
@@ -150,17 +167,17 @@ class DocumentService
             if ($isPayment == 1){
                 $meta = $this->attributeHook->getCashOutAttribute($attribute->name,$apiKey);
                 if (!is_null($meta))
-                $docBody["attributes"][] = [
-                    "meta" => $meta,
-                    "value" => $attribute->value,
-                ];
+                    $docBody["attributes"][] = [
+                        "meta" => $meta,
+                        "value" => $attribute->value,
+                    ];
             }elseif ($isPayment ==2){
                 $meta = $this->attributeHook->getPaymentOutAttribute($attribute->name,$apiKey);
                 if (!is_null($meta))
-                $docBody["attributes"][] = [
-                    "meta" => $meta,
-                    "value" => $attribute->value,
-                ];
+                    $docBody["attributes"][] = [
+                        "meta" => $meta,
+                        "value" => $attribute->value,
+                    ];
             }
         }
 
