@@ -163,14 +163,14 @@ class salesreturnController extends Controller
 
         //dd($data);
 
-        try {
+      //  try {
 
             $res = app(TicketService::class)->createTicket($data);
             return response()->json($res);
 
-        } catch (\Throwable $e){
+       /* } catch (\Throwable $e){
             return response()->json($e->getMessage());
-        }
+        }*/
     }
 
 
