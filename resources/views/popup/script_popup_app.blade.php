@@ -62,9 +62,9 @@
     }
 
     function ShowCheck(){
-        let urlrekassa = 'https://app.rekassa.kz/'
+        let urlrekassa = 'https://api-test.rekassa.kz/'
         //let url = 'http://rekassa/Popup/customerorder/closeShift';
-        let url = 'https://smartrekassa.kz/api/ticket';
+        let url = 'https://dev.smartrekassa.kz/api/ticket';
         let data = {
             accountId: accountId,
             id_ticket: id_ticket,
@@ -295,7 +295,7 @@
             accountId: accountId,
             pincode: pinCode,
         };
-        let url = 'https://smartrekassa.kz/Popup/customerorder/closeShift';
+        let url = 'https://dev.smartrekassa.kz/Popup/customerorder/closeShift';
         let settings = ajax_settings(url, "GET", params);
         console.log(url + ' settings ↓ ')
         console.log(settings)

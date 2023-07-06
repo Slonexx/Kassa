@@ -14,7 +14,7 @@ class DataBaseService
         Setting::create([
             'accountId' => $accountId,
             'tokenMs' => $tokenMs,
-            'apiKey' => "6784dad7-6679-4950-b257-2711ff63f9bb",
+            'apiKey' => "f5ac6559-b5cd-4e0e-89e5-7fd32a6d60a5",
 
             'saleChannel' => $saleChannel,
             'project' => $project,
@@ -136,7 +136,7 @@ class DataBaseService
         $find = Setting::query()->where('accountId', $accountId);
         $find->update([
             'tokenMs' => $tokenMs,
-            'apiKey' => "6784dad7-6679-4950-b257-2711ff63f9bb",
+            'apiKey' => "f5ac6559-b5cd-4e0e-89e5-7fd32a6d60a5",
 
             'saleChannel' => $saleChannel,
             'project' => $project,

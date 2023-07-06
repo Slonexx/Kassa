@@ -21,12 +21,12 @@ class KassClient
      */
     public function __construct($kassaNumber,$password,$apiKey)
     {
-        $this->apiKey = "6784dad7-6679-4950-b257-2711ff63f9bb";
+        $this->apiKey = "f5ac6559-b5cd-4e0e-89e5-7fd32a6d60a5";
         $this->kassaNumber = $kassaNumber;
         $this->password = $password;
 
         $this->client = new Client([
-            'base_uri' => 'https://app.rekassa.kz/partner/api/',
+            'base_uri' => 'https://api-test.rekassa.kz/api/',
         ]);
     }
 

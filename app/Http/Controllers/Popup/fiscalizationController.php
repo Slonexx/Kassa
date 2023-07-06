@@ -187,7 +187,7 @@ class fiscalizationController extends Controller
 
         $Client = new Client();
         //$url = 'http://rekassa/api/closeShift';
-        $url = 'https://smartrekassa.kz/api/closeShift';
+        $url = 'https://dev.smartrekassa.kz/api/closeShift';
         try {
             $tmp = $Client->post( $url, [
                 'headers' => [
