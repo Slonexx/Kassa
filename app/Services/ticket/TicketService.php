@@ -4,16 +4,14 @@ namespace App\Services\ticket;
 
 use App\Clients\KassClient;
 use App\Clients\MsClient;
-use App\Http\Controllers\BD\getMainSettingBD;
 use App\Http\Controllers\getData\getDeviceFirst;
 use App\Http\Controllers\getData\getDevices;
 use App\Http\Controllers\getData\getSetting;
 use App\Services\AdditionalServices\DocumentService;
 use App\Services\MetaServices\MetaHook\AttributeHook;
 use Carbon\Carbon;
-use GuzzleHttp\Exception\BadResponseException;
 use GuzzleHttp\Exception\ClientException;
-use JetBrains\PhpStorm\ArrayShape;
+use GuzzleHttp\Exception\GuzzleException;
 
 
 class TicketService
@@ -33,6 +31,10 @@ class TicketService
     }
 
     // Create ticket
+
+    /**
+     * @throws GuzzleException
+     */
     public function createTicket($data): array
     {
         $accountId = $data['accountId'];
@@ -78,17 +80,17 @@ class TicketService
         $password = $Device->password;
 
         //take positions from entity
-        $urlEntity = $this->getUrlEntity($entity_type,$id_entity);
+        $urlEntity = $this->getUrlEntity($entity_type, $id_entity);
         $client = new MsClient($apiKeyMs);
         $jsonEntity = $client->get($urlEntity);
 
         //dd($jsonEntity);
 
-        if (property_exists($jsonEntity,'positions')){
+        if (property_exists($jsonEntity, 'positions')) {
 
             $totalSum = $this->getTotalSum($positions, $urlEntity, $jsonEntity, $apiKeyMs);
 
-            if ($tookSum < $totalSum){
+            if ($tookSum < $totalSum) {
                 return [
                     "res" => [
                         "message" => "Don't have enough money to complete the transaction",
@@ -99,15 +101,15 @@ class TicketService
 
             $change = $tookSum - $totalSum;
 
-            $items = $this->getItemsByHrefPositions($jsonEntity->positions->meta->href,$positions,$jsonEntity,$apiKeyMs);
+            $items = $this->getItemsByHrefPositions($jsonEntity->positions->meta->href, $positions, $jsonEntity, $apiKeyMs);
 
-            if (count($items) > 0 ){
+            if (count($items) > 0) {
 
                 $payments = [];
                 $tempSum = $totalSum;
 
-                if (intval($money_cash) > 0 && $tempSum > 0){
-                    if ($tempSum > $money_cash){
+                if (intval($money_cash) > 0 && $tempSum > 0) {
+                    if ($tempSum > $money_cash) {
                         $pay = $money_cash;
                         $tempSum -= $pay;
                     } else {
@@ -116,24 +118,24 @@ class TicketService
                     }
 
                     $paymentsSumBills = intval($pay);
-                    $paymentsSumCoins = intval(round(floatval($pay)-intval($pay),2)*100);
+                    $paymentsSumCoins = intval(round(floatval($pay) - intval($pay), 2) * 100);
                     if ($paymentsSumCoins >= 100) {
-                        $paymentsSumBills = $paymentsSumBills + ( intval($paymentsSumCoins / 100));
+                        $paymentsSumBills = $paymentsSumBills + (intval($paymentsSumCoins / 100));
                         $paymentsSumCoins = $paymentsSumCoins - (intval($paymentsSumCoins / 100) * 100);
                     }
 
-                    $payments[] =  [
+                    $payments[] = [
                         "type" => $this->getMoneyType("Наличные"),
                         "sum" => [
-                            "bills" => "".$paymentsSumBills,
-                            "coins" => "".$paymentsSumCoins,
+                            "bills" => "" . $paymentsSumBills,
+                            "coins" => "" . $paymentsSumCoins,
                         ],
                     ];
 
                 }
 
-                if (intval($money_card) > 0 && $tempSum > 0){
-                    if ($tempSum > $money_card){
+                if (intval($money_card) > 0 && $tempSum > 0) {
+                    if ($tempSum > $money_card) {
                         $pay = $money_card;
                         $tempSum -= $pay;
                     } else {
@@ -142,41 +144,37 @@ class TicketService
                     }
 
                     $paymentsSumBills = intval($pay);
-                    $paymentsSumCoins = intval(round(floatval($pay)-intval($pay),2)*100);
+                    $paymentsSumCoins = intval(round(floatval($pay) - intval($pay), 2) * 100);
                     if ($paymentsSumCoins >= 100) {
-                        $paymentsSumBills = $paymentsSumBills + ( intval($paymentsSumCoins / 100));
+                        $paymentsSumBills = $paymentsSumBills + (intval($paymentsSumCoins / 100));
                         $paymentsSumCoins = $paymentsSumCoins - (intval($paymentsSumCoins / 100) * 100);
                     }
 
-                    $payments[] =  [
+                    $payments[] = [
                         "type" => $this->getMoneyType("Банковская карта"),
                         "sum" => [
-                            "bills" => "".$paymentsSumBills,
-                            "coins" => "".$paymentsSumCoins,
+                            "bills" => "" . $paymentsSumBills,
+                            "coins" => "" . $paymentsSumCoins,
                         ],
                     ];
 
                 }
 
-                if (intval($money_mobile) > 0 && $tempSum > 0){
-                    if ($tempSum > $money_mobile){
-                        $pay = $money_mobile;
-                    } else {
-                        $pay = $tempSum;
-                    }
+                if (intval($money_mobile) > 0 && $tempSum > 0) {
+                    $pay = min($tempSum, $money_mobile);
 
                     $paymentsSumBills = intval($pay);
-                    $paymentsSumCoins = intval(round(floatval($pay)-intval($pay),2)*100);
+                    $paymentsSumCoins = intval(round(floatval($pay) - intval($pay), 2) * 100);
                     if ($paymentsSumCoins >= 100) {
-                        $paymentsSumBills = $paymentsSumBills + ( intval($paymentsSumCoins / 100));
+                        $paymentsSumBills = $paymentsSumBills + (intval($paymentsSumCoins / 100));
                         $paymentsSumCoins = $paymentsSumCoins - (intval($paymentsSumCoins / 100) * 100);
                     }
 
-                    $payments[] =  [
+                    $payments[] = [
                         "type" => $this->getMoneyType("Мобильные"),
                         "sum" => [
-                            "bills" => "".$paymentsSumBills,
-                            "coins" => "".$paymentsSumCoins,
+                            "bills" => "" . $paymentsSumBills,
+                            "coins" => "" . $paymentsSumCoins,
                         ],
                     ];
 
@@ -186,28 +184,28 @@ class TicketService
                 if ($payType != 'return') $taken = $money_cash;
 
                 $amountsSumBills = intval($totalSum);
-                $amountsSumCoins = intval(round(floatval($totalSum)-intval($totalSum),2)*100);
+                $amountsSumCoins = intval(round(floatval($totalSum) - intval($totalSum), 2) * 100);
                 if ($amountsSumCoins >= 100) {
-                    $amountsSumBills = $amountsSumBills + ( intval($amountsSumCoins / 100));
+                    $amountsSumBills = $amountsSumBills + (intval($amountsSumCoins / 100));
                     $amountsSumCoins = $amountsSumCoins - (intval($amountsSumCoins / 100) * 100);
                 }
 
                 $amounts = [
                     "total" => [
-                        "bills" => "".$amountsSumBills,
-                        "coins" => "".$amountsSumCoins,
+                        "bills" => "" . $amountsSumBills,
+                        "coins" => "" . $amountsSumCoins,
                     ],
                     "taken" => [
-                        "bills" => "".intval($taken),
-                        "coins" => "".intval(round(floatval($taken)-intval($taken),2)*100),
+                        "bills" => "" . intval($taken),
+                        "coins" => "" . intval(round(floatval($taken) - intval($taken), 2) * 100),
                     ],
                     "change" => [
-                        "bills" => "".intval($change),
-                        "coins" => "".intval(round(floatval($change)-intval($change),2)*100),
+                        "bills" => "" . intval($change),
+                        "coins" => "" . intval(round(floatval($change) - intval($change), 2) * 100),
                     ],
                 ];
 
-                $clientK = new KassClient($numKassa,$password,$apiKey);
+                $clientK = new KassClient($numKassa, $password, $apiKey);
                 $id = $clientK->getNewJwtToken()->id;
                 $body = [
                     "dateTime" => $this->getNowDateTime(),
@@ -217,17 +215,16 @@ class TicketService
                 ];
 
                 $isPayIn = null;
-                if ($payType == "sell"){
+                if ($payType == "sell") {
                     $body["operation"] = "OPERATION_SELL";
                     $isPayIn = true;
-                }
-                elseif($payType == "return") {
+                } elseif ($payType == "return") {
                     $body["operation"] = "OPERATION_SELL_RETURN";
                     $isPayIn = false;
                 }
 
                 $ExtensionOptions = $this->getUUH($Setting, $id_entity, $entity_type);
-                if ($ExtensionOptions){
+                if ($ExtensionOptions) {
                     $body = $body + ['extension_options' => $ExtensionOptions];
                 }
 
@@ -235,21 +232,18 @@ class TicketService
                 //dd($body);
 
                 try {
-                    $response = $clientK->post("crs/".$id."/tickets",$body);
+                    $response = $clientK->post("crs/" . $id . "/tickets", $body);
                     //dd($response);
                     $jsonEntity = $this->writeToAttrib($response->id, $urlEntity, $entity_type, $apiKeyMs, $positions);
-
-                    if ($isPayIn){
-                        if ($Setting->paymentDocument != null ){
+                    if ($isPayIn) {
+                        if ($Setting->paymentDocument != null) {
                             $this->createPaymentDocument($Setting, $client, $entity_type, $jsonEntity, $body);
                         }
                     } else {
                         $isReturn = ($entity_type == "salesreturn");
-                        $this->documentService->initPayReturnDocument(
-                            $paymentOption,$isReturn,$jsonEntity,$apiKeyMs
-                        );
+                        $this->documentService->initPayReturnDocument($body['payments'], $paymentOption, $isReturn, $jsonEntity, $apiKeyMs );
                     }
-                    //dd($response);
+
                     return [
                         "res" => [
                             "message" => "Ticket created!",
@@ -257,7 +251,7 @@ class TicketService
                         ],
                         "code" => 200,
                     ];
-                } catch (ClientException $exception){
+                } catch (ClientException $exception) {
                     return [
                         "res" => [
                             "message" => "Ticket not created!",
@@ -284,33 +278,33 @@ class TicketService
         ];
     }
 
-    private function getItemsByHrefPositions($href,$positionsEntity,$jsonEntity,$apiKeyMs): array
+    private function getItemsByHrefPositions($href, $positionsEntity, $jsonEntity, $apiKeyMs): array
     {
         //dd($href,$positionsEntity,$jsonEntity,$apiKeyMs);
         $positions = [];
         $client = new MsClient($apiKeyMs);
         $jsonPositions = $client->get($href);
 
-        foreach ($jsonPositions->rows as $row){
-            foreach ($positionsEntity as $item){
-                if ($row->id == $item->id){
+        foreach ($jsonPositions->rows as $row) {
+            foreach ($positionsEntity as $item) {
+                if ($row->id == $item->id) {
 
                     $discount = $row->discount;
                     $positionPrice = $row->price / 100;
-                    $sumPrice = $positionPrice - ( $positionPrice * ($discount/100) ) ;
-                    $product = $this->getProductByAssortMeta($row->assortment->meta->href,$apiKeyMs);
+                    $sumPrice = $positionPrice - ($positionPrice * ($discount / 100));
+                    $product = $this->getProductByAssortMeta($row->assortment->meta->href, $apiKeyMs);
 
-                    if (property_exists($product, 'characteristics')){
+                    if (property_exists($product, 'characteristics')) {
                         $check_uom = $client->get($product->product->meta->href);
-                        $ProductByUOM = $this->getProductByUOM($check_uom->uom->meta->href,$apiKeyMs);
-                    } else  $ProductByUOM = $this->getProductByUOM($product->uom->meta->href,$apiKeyMs);
+                        $this->getProductByUOM($check_uom->uom->meta->href, $apiKeyMs);
+                    } else $this->getProductByUOM($product->uom->meta->href, $apiKeyMs);
 
 
-                    if (!property_exists($row, 'trackingCodes')){
+                    if (!property_exists($row, 'trackingCodes')) {
                         $SumBills = intval($sumPrice) * $item->quantity;
-                        $SumCoins = intval(round(floatval($sumPrice)-intval($sumPrice),2)*100) * $item->quantity;
+                        $SumCoins = intval(round(floatval($sumPrice) - intval($sumPrice), 2) * 100) * $item->quantity;
                         if ($SumCoins >= 100) {
-                            $SumBills = $SumBills + ( intval($SumCoins / 100));
+                            $SumBills = $SumBills + (intval($SumCoins / 100));
                             $SumCoins = $SumCoins - (intval($SumCoins / 100) * 100);
                         }
 
@@ -320,40 +314,39 @@ class TicketService
                             "sectionCode" => "0",
                             "quantity" => (integer)($item->quantity * 1000),
                             "price" => [
-                                "bills" => "".intval($positionPrice),
-                                "coins" => "".intval(round(floatval($positionPrice)-intval($positionPrice),2)*100),
+                                "bills" => "" . intval($positionPrice),
+                                "coins" => "" . intval(round(floatval($positionPrice) - intval($positionPrice), 2) * 100),
                             ],
                             "sum" => [
-                                "bills" => "".$SumBills,
-                                "coins" => "".$SumCoins,
+                                "bills" => "" . $SumBills,
+                                "coins" => "" . $SumCoins,
                             ],
-                            "measureUnitCode" => null,
                         ];
 
-                        if (property_exists($product, 'characteristics')){
+                        if (property_exists($product, 'characteristics')) {
                             $check_uom = $client->get($product->product->meta->href);
-                            $position["commodity"]['measureUnitCode'] = $this->getUomCode($check_uom->uom->meta->href,$apiKeyMs);
-                        } else  $position["commodity"]['measureUnitCode'] = $this->getUomCode($product->uom->meta->href,$apiKeyMs);
+                            $position["commodity"]['measureUnitCode'] = $this->getUomCode($check_uom->uom->meta->href, $apiKeyMs);
+                        } else  $position["commodity"]['measureUnitCode'] = $this->getUomCode($product->uom->meta->href, $apiKeyMs);
 
-                        if (property_exists($row,'vat') && property_exists($jsonEntity,'vatIncluded')){
+                        if (property_exists($row, 'vat') && property_exists($jsonEntity, 'vatIncluded')) {
 
-                            if ($jsonEntity->vatIncluded){
-                                $sumVat = $sumPrice * ( $row->vat / (100+$row->vat) ); //Цена включает НДС
-                            }else {
+                            if ($jsonEntity->vatIncluded) {
+                                $sumVat = $sumPrice * ($row->vat / (100 + $row->vat)); //Цена включает НДС
+                            } else {
                                 $sumVat = $sumPrice * ($row->vat / 100); //Цена выключает НДС
                             }
                             if ($row->vat != 0) {
                                 $TaxesSumBills = intval($sumVat);
-                                $TaxesSumCoins= intval(round(floatval($sumVat)-intval($sumVat),2)*100);
+                                $TaxesSumCoins = intval(round(floatval($sumVat) - intval($sumVat), 2) * 100);
                                 if ($TaxesSumCoins >= 100) {
-                                    $TaxesSumBills = $TaxesSumBills + ( intval($TaxesSumCoins / 100));
+                                    $TaxesSumBills = $TaxesSumBills + (intval($TaxesSumCoins / 100));
                                     $TaxesSumCoins = $TaxesSumCoins - (intval($TaxesSumCoins / 100) * 100);
                                 }
                                 $position["commodity"]["taxes"] = [
                                     0 => [
                                         "sum" => [
-                                            "bills" => "".$TaxesSumBills,
-                                            "coins" => "".$TaxesSumCoins,
+                                            "bills" => "" . $TaxesSumBills,
+                                            "coins" => "" . $TaxesSumCoins,
                                         ],
                                         "percent" => $row->vat * 1000,
                                         "taxType" => 100,
@@ -365,52 +358,50 @@ class TicketService
                         }
 
                         $positions [] = $position;
-                    }
-                    else {
-                        for ($i = 1; $i <= $row->quantity; $i++){
+                    } else {
+                        for ($i = 1; $i <= $row->quantity; $i++) {
                             $position["type"] = "ITEM_TYPE_COMMODITY";
                             $position["commodity"] = [
                                 "name" => $product->name,
                                 "sectionCode" => "0",
                                 "quantity" => 1000,
                                 "price" => [
-                                    "bills" => "".intval($positionPrice),
-                                    "coins" => "".intval(round(floatval($positionPrice)-intval($positionPrice),2)*100),
+                                    "bills" => "" . intval($positionPrice),
+                                    "coins" => "" . intval(round(floatval($positionPrice) - intval($positionPrice), 2) * 100),
                                 ],
                                 "sum" => [
-                                    "bills" => "".intval($sumPrice),
-                                    "coins" => "".intval(round(floatval($sumPrice)-intval($sumPrice),2)*100),
+                                    "bills" => "" . intval($sumPrice),
+                                    "coins" => "" . intval(round(floatval($sumPrice) - intval($sumPrice), 2) * 100),
                                 ],
-                                "measureUnitCode" => null,
                             ];
 
-                            if (property_exists($product, 'characteristics')){
+                            if (property_exists($product, 'characteristics')) {
                                 $check_uom = $client->get($product->product->meta->href);
-                                $position["commodity"]['measureUnitCode'] = $this->getUomCode($check_uom->uom->meta->href,$apiKeyMs);
-                            } else  $position["commodity"]['measureUnitCode'] = $this->getUomCode($product->uom->meta->href,$apiKeyMs);
+                                $position["commodity"]['measureUnitCode'] = $this->getUomCode($check_uom->uom->meta->href, $apiKeyMs);
+                            } else  $position["commodity"]['measureUnitCode'] = $this->getUomCode($product->uom->meta->href, $apiKeyMs);
 
-                            if (property_exists($row,'trackingCodes')){
-                                $position["commodity"]["excise_stamp"] = $row->trackingCodes[$i-1]->cis;
+                            if (property_exists($row, 'trackingCodes')) {
+                                $position["commodity"]["excise_stamp"] = $row->trackingCodes[$i - 1]->cis;
                             }
 
-                            if (property_exists($row,'vat') && property_exists($jsonEntity,'vatIncluded')){
-                                if ($jsonEntity->vatIncluded){
-                                    $sumVat = $sumPrice * ( $row->vat / (100+$row->vat) ); //Цена включает НДС
-                                }else {
+                            if (property_exists($row, 'vat') && property_exists($jsonEntity, 'vatIncluded')) {
+                                if ($jsonEntity->vatIncluded) {
+                                    $sumVat = $sumPrice * ($row->vat / (100 + $row->vat)); //Цена включает НДС
+                                } else {
                                     $sumVat = $sumPrice * ($row->vat / 100); //Цена выключает НДС
                                 }
                                 if ($row->vat != 0) {
                                     $TaxesSumBills = intval($sumVat);
-                                    $TaxesSumCoins= intval(round(floatval($sumVat)-intval($sumVat),2)*100);
+                                    $TaxesSumCoins = intval(round(floatval($sumVat) - intval($sumVat), 2) * 100);
                                     if ($TaxesSumCoins >= 100) {
-                                        $TaxesSumBills = $TaxesSumBills + ( intval($TaxesSumCoins / 100));
+                                        $TaxesSumBills = $TaxesSumBills + (intval($TaxesSumCoins / 100));
                                         $TaxesSumCoins = $TaxesSumCoins - (intval($TaxesSumCoins / 100) * 100);
                                     }
                                     $position["commodity"]["taxes"] = [
                                         0 => [
                                             "sum" => [
-                                                "bills" => "".$TaxesSumBills,
-                                                "coins" => "".$TaxesSumCoins,
+                                                "bills" => "" . $TaxesSumBills,
+                                                "coins" => "" . $TaxesSumCoins,
                                             ],
                                             "percent" => $row->vat * 1000,
                                             "taxType" => 100,
@@ -426,8 +417,7 @@ class TicketService
                     }
 
 
-                }
-                else continue;
+                } else continue;
             }
 
         }
@@ -435,33 +425,37 @@ class TicketService
         return $positions;
     }
 
-    private function getUrlEntity($enType,$enId){
+    private function getUrlEntity($enType, $enId): ?string
+    {
         $url = null;
-        switch ($enType){
+        switch ($enType) {
             case "customerorder":
-                $url = "https://online.moysklad.ru/api/remap/1.2/entity/customerorder/".$enId;
+                $url = "https://online.moysklad.ru/api/remap/1.2/entity/customerorder/" . $enId;
                 break;
             case "demand":
-                $url = "https://online.moysklad.ru/api/remap/1.2/entity/demand/".$enId;
+                $url = "https://online.moysklad.ru/api/remap/1.2/entity/demand/" . $enId;
                 break;
             case "salesreturn":
-                $url = "https://online.moysklad.ru/api/remap/1.2/entity/salesreturn/".$enId;
+                $url = "https://online.moysklad.ru/api/remap/1.2/entity/salesreturn/" . $enId;
                 break;
         }
         return $url;
     }
 
-    private function getProductByAssortMeta($href,$apiKeyMs){
+    private function getProductByAssortMeta($href, $apiKeyMs)
+    {
         $client = new MsClient($apiKeyMs);
         return $client->get($href);
     }
 
-    private function getProductByUOM($href,$apiKeyMs){
+    private function getProductByUOM($href, $apiKeyMs)
+    {
         $client = new MsClient($apiKeyMs);
         return $client->get($href);
     }
 
-    private function getUomCode($href,$apiKeyMs){
+    private function getUomCode($href, $apiKeyMs)
+    {
         $client = new MsClient($apiKeyMs);
         return $client->get($href)->code;
     }
@@ -487,18 +481,21 @@ class TicketService
     {
         $client = new MsClient($apiKeyMs);
 
-        if (is_null($id_ticket)){ $flag = false;
-        } else { $flag = true; }
+        if (is_null($id_ticket)) {
+            $flag = false;
+        } else {
+            $flag = true;
+        }
 
-        $metaPositions = $this->getmetaPostionos($urlEntity, $entityType, $apiKeyMs, $positions);
+        $metaPositions = $this->getMetaPositions($urlEntity, $apiKeyMs, $positions);
 
-        $metaIdTicket = $this->getMeta("id-билета (ReKassa)",$entityType,$apiKeyMs);
-        $metaTicketFlag = $this->getMeta("Фискализация (ReKassa)",$entityType,$apiKeyMs);
+        $metaIdTicket = $this->getMeta("id-билета (ReKassa)", $entityType, $apiKeyMs);
+        $metaTicketFlag = $this->getMeta("Фискализация (ReKassa)", $entityType, $apiKeyMs);
         $body = [
             "attributes" => [
                 0 => [
                     "meta" => $metaIdTicket,
-                    "value" => "".$id_ticket,
+                    "value" => "" . $id_ticket,
                 ],
                 1 => [
                     "meta" => $metaTicketFlag,
@@ -508,11 +505,11 @@ class TicketService
             'positions' => $metaPositions,
         ];
 
-        $putBody = $client->put($urlEntity,$body);
-        return $putBody;
+        return  $client->put($urlEntity, $body);
     }
 
-    private function getMeta($attribName,$entityType,$apiKeyMs){
+    private function getMeta($attribName, $entityType, $apiKeyMs)
+    {
         return match ($entityType) {
             "customerorder" => $this->attributeHook->getOrderAttribute($attribName, $apiKeyMs),
             "demand" => $this->attributeHook->getDemandAttribute($attribName, $apiKeyMs),
@@ -531,43 +528,42 @@ class TicketService
         };
     }
 
-    private function getTotalSum($positions, $urlEntity, $jsonEntity,$apiKeyMs): float|int
+    private function getTotalSum($positions, $urlEntity, $jsonEntity, $apiKeyMs): float|int
     {
         $total = 0;
-        $urlEntityWithPositions = $urlEntity.'/positions';
+        $urlEntityWithPositions = $urlEntity . '/positions';
         $client = new MsClient($apiKeyMs);
         $jsonPositions = $client->get($urlEntityWithPositions);
 
-        foreach ($jsonPositions->rows as $position){
+        foreach ($jsonPositions->rows as $position) {
 
-            foreach ($positions as $item){
-                if ($position->id == $item->id){
+            foreach ($positions as $item) {
+                if ($position->id == $item->id) {
                     $href = $position->assortment->meta->href;
                     $product = $client->get($href);
 
 
-                    if (property_exists($product, 'characteristics')){
+                    if (property_exists($product, 'characteristics')) {
                         $check_uom = $client->get($product->product->meta->href);
-                        $checkUOM = $this->getProductByUOM($check_uom->uom->meta->href,$apiKeyMs);
-                    }
-                    else  $checkUOM = $this->getProductByUOM($product->uom->meta->href,$apiKeyMs);
+                        $checkUOM = $this->getProductByUOM($check_uom->uom->meta->href, $apiKeyMs);
+                    } else  $checkUOM = $this->getProductByUOM($product->uom->meta->href, $apiKeyMs);
 
 
-                    if ($checkUOM->name == "шт"){
+                    if ($checkUOM->name == "шт") {
                         $discount = $position->discount;
                         $positionPrice = $item->quantity * $position->price / 100;
-                        $sumPrice = $positionPrice - ( $positionPrice * ($discount/100) ) ;
+                        $sumPrice = $positionPrice - ($positionPrice * ($discount / 100));
                     } else {
                         $discount = $position->discount;
-                        $positionPrice = $item->quantity *  $position->price / 100;
-                        $sumPrice = $positionPrice - ( $positionPrice * ($discount/100) ) ;
+                        $positionPrice = $item->quantity * $position->price / 100;
+                        $sumPrice = $positionPrice - ($positionPrice * ($discount / 100));
                     }
 
 
-                    if (property_exists($jsonEntity,'vatIncluded')){
-                        if ($jsonEntity->vatIncluded){
-                            $sumVat = $sumPrice * ( $position->vat / (100+$position->vat) ); //Цена включает НДС
-                        }else {
+                    if (property_exists($jsonEntity, 'vatIncluded')) {
+                        if ($jsonEntity->vatIncluded) {
+                            $sumVat = $sumPrice * ($position->vat / (100 + $position->vat)); //Цена включает НДС
+                        } else {
                             $sumVat = $sumPrice * ($position->vat / 100); //Цена выключает НДС
                             $sumPrice += $sumVat;
                         }
@@ -597,31 +593,29 @@ class TicketService
         $numKassa = $Device->znm;
         $password = $Device->password;
 
-        $client = new KassClient($numKassa,$password,$apiKey);
+        $client = new KassClient($numKassa, $password, $apiKey);
 
         $idKassa = $client->getNewJwtToken()->id;
 
-        return "print/".$idKassa."/".$idTicket;
+        return "print/" . $idKassa . "/" . $idTicket;
     }
 
 
-
-    private function getmetaPostionos($urlEntity, $entityType, $apiKeyMs, $positions)
+    private function getMetaPositions($urlEntity, $apiKeyMs, $positions): array
     {
         $client = new MsClient($apiKeyMs);
-
-        $body = $client->get($urlEntity.'/positions')->rows;
+        $data = null;
+        $body = $client->get($urlEntity . '/positions')->rows;
         $index = 0;
-        foreach ($body as $item){
-            foreach ($positions as $pos){
-                if ($item->id == $pos->id){
+        foreach ($body as $item) {
+            foreach ($positions as $pos) {
+                if ($item->id == $pos->id) {
 
-                    $data[$index] =  [
+                    $data[$index] = [
                         'id' => $item->id,
-                        'quantity' =>(int) $pos->quantity,
+                        'quantity' => (int)$pos->quantity,
                         'price' => $item->price,
                         'discount' => $item->discount,
-                        'vat' => null,
                         'assortment' => [
                             'meta' => [
                                 'href' => $item->assortment->meta->href,
@@ -644,21 +638,28 @@ class TicketService
     private function getUUH(getSetting $Setting, mixed $id_entity, mixed $entity_type): array
     {
         $Client = new MsClient($Setting->tokenMs);
-        $body = $Client->get('https://online.moysklad.ru/api/remap/1.2/entity/'.$entity_type.'/'.$id_entity);
+        $body = $Client->get('https://online.moysklad.ru/api/remap/1.2/entity/' . $entity_type . '/' . $id_entity);
         $agent = $Client->get($body->agent->meta->href);
         $result = [];
 
-        if (property_exists($agent, 'email')) { $result['customer_email'] = $agent->email; }
-        if (property_exists($agent, 'phone')) { $result['customer_phone'] = $agent->phone; }
-        if (property_exists($agent, 'inn')) { $result['customer_iin_or_bin'] = $agent->inn; }
+        if (property_exists($agent, 'email')) {
+            $result['customer_email'] = $agent->email;
+        }
+        if (property_exists($agent, 'phone')) {
+            $result['customer_phone'] = $agent->phone;
+        }
+        if (property_exists($agent, 'inn')) {
+            $result['customer_iin_or_bin'] = $agent->inn;
+        }
 
         return $result;
     }
 
-    private function createPaymentDocument( getSetting $Setting, MsClient $client, string $entity_type, mixed $OldBody, mixed $vars)
+    private function createPaymentDocument(getSetting $Setting, MsClient $client, string $entity_type, mixed $OldBody, mixed $vars): void
     {
-        switch ($Setting->paymentDocument){
-            case "1": {
+        switch ($Setting->paymentDocument) {
+            case "1":
+            {
                 $url = 'https://online.moysklad.ru/api/remap/1.2/entity/';
                 if ($entity_type != 'salesreturn') {
                     $url = $url . 'cashin';
@@ -667,20 +668,20 @@ class TicketService
                     break;
                 }
                 $body = [
-                    'organization' => [  'meta' => [
+                    'organization' => ['meta' => [
                         'href' => $OldBody->organization->meta->href,
                         'type' => $OldBody->organization->meta->type,
                         'mediaType' => $OldBody->organization->meta->mediaType,
-                    ] ],
-                    'agent' => [ 'meta'=> [
+                    ]],
+                    'agent' => ['meta' => [
                         'href' => $OldBody->agent->meta->href,
                         'type' => $OldBody->agent->meta->type,
                         'mediaType' => $OldBody->agent->meta->mediaType,
-                    ] ],
+                    ]],
                     'sum' => $OldBody->sum,
                     'operations' => [
                         0 => [
-                            'meta'=> [
+                            'meta' => [
                                 'href' => $OldBody->meta->href,
                                 'metadataHref' => $OldBody->meta->metadataHref,
                                 'type' => $OldBody->meta->type,
@@ -688,12 +689,13 @@ class TicketService
                                 'uuidHref' => $OldBody->meta->uuidHref,
                             ],
                             'linkedSum' => $OldBody->sum,
-                        ], ]
+                        ],]
                 ];
                 $client->post($url, $body);
                 break;
             }
-            case "2": {
+            case "2":
+            {
                 $url = 'https://online.moysklad.ru/api/remap/1.2/entity/';
                 if ($entity_type != 'salesreturn') {
                     $url = $url . 'paymentin';
@@ -704,10 +706,10 @@ class TicketService
 
                 $rate_body = $client->get("https://online.moysklad.ru/api/remap/1.2/entity/currency/")->rows;
                 $rate = null;
-                foreach ($rate_body as $item){
-                    if ($item->name == "тенге" or $item->fullName == "Казахстанский тенге"){
+                foreach ($rate_body as $item) {
+                    if ($item->name == "тенге" or $item->fullName == "Казахстанский тенге") {
                         $rate =
-                            ['meta'=> [
+                            ['meta' => [
                                 'href' => $item->meta->href,
                                 'metadataHref' => $item->meta->metadataHref,
                                 'type' => $item->meta->type,
@@ -718,20 +720,20 @@ class TicketService
                 }
 
                 $body = [
-                    'organization' => [  'meta' => [
+                    'organization' => ['meta' => [
                         'href' => $OldBody->organization->meta->href,
                         'type' => $OldBody->organization->meta->type,
                         'mediaType' => $OldBody->organization->meta->mediaType,
-                    ] ],
-                    'agent' => [ 'meta'=> [
+                    ]],
+                    'agent' => ['meta' => [
                         'href' => $OldBody->agent->meta->href,
                         'type' => $OldBody->agent->meta->type,
                         'mediaType' => $OldBody->agent->meta->mediaType,
-                    ] ],
+                    ]],
                     'sum' => $OldBody->sum,
                     'operations' => [
                         0 => [
-                            'meta'=> [
+                            'meta' => [
                                 'href' => $OldBody->meta->href,
                                 'metadataHref' => $OldBody->meta->metadataHref,
                                 'type' => $OldBody->meta->type,
@@ -739,19 +741,19 @@ class TicketService
                                 'uuidHref' => $OldBody->meta->uuidHref,
                             ],
                             'linkedSum' => $OldBody->sum,
-                        ], ],
+                        ],],
                     'rate' => $rate
                 ];
                 if ($body['rate'] == null) unlink($body['rate']);
                 $client->post($url, $body);
                 break;
             }
-            case "3": {
+            case "3":
+            {
                 $url = 'https://online.moysklad.ru/api/remap/1.2/entity/';
-                $url_to_body = null;
                 if ($entity_type != 'salesreturn') {
-                    foreach ($vars['payments'] as $item){
-                        if ($item['type'] == "PAYMENT_CASH"){
+                    foreach ($vars['payments'] as $item) {
+                        if ($item['type'] == "PAYMENT_CASH") {
                             $url_to_body = $url . 'cashin';
                         } else {
                             $url_to_body = $url . 'paymentin';
@@ -759,10 +761,10 @@ class TicketService
 
                         $rate_body = $client->get("https://online.moysklad.ru/api/remap/1.2/entity/currency/")->rows;
                         $rate = null;
-                        foreach ($rate_body as $item_rate){
-                            if ($item_rate->name == "тенге" or $item_rate->fullName == "Казахстанский тенге"){
+                        foreach ($rate_body as $item_rate) {
+                            if ($item_rate->name == "тенге" or $item_rate->fullName == "Казахстанский тенге") {
                                 $rate =
-                                    ['meta'=> [
+                                    ['meta' => [
                                         'href' => $item_rate->meta->href,
                                         'metadataHref' => $item_rate->meta->metadataHref,
                                         'type' => $item_rate->meta->type,
@@ -773,28 +775,28 @@ class TicketService
                         }
 
                         $body = [
-                            'organization' => [  'meta' => [
+                            'organization' => ['meta' => [
                                 'href' => $OldBody->organization->meta->href,
                                 'type' => $OldBody->organization->meta->type,
                                 'mediaType' => $OldBody->organization->meta->mediaType,
-                            ] ],
-                            'agent' => [ 'meta'=> [
+                            ]],
+                            'agent' => ['meta' => [
                                 'href' => $OldBody->agent->meta->href,
                                 'type' => $OldBody->agent->meta->type,
                                 'mediaType' => $OldBody->agent->meta->mediaType,
-                            ] ],
-                            'sum' => (float) ($item['sum']['bills']+($item['sum']['coins']/100)) * 100,
+                            ]],
+                            'sum' => (float)($item['sum']['bills'] + ($item['sum']['coins'] / 100)) * 100,
                             'operations' => [
                                 0 => [
-                                    'meta'=> [
+                                    'meta' => [
                                         'href' => $OldBody->meta->href,
                                         'metadataHref' => $OldBody->meta->metadataHref,
                                         'type' => $OldBody->meta->type,
                                         'mediaType' => $OldBody->meta->mediaType,
                                         'uuidHref' => $OldBody->meta->uuidHref,
                                     ],
-                                    'linkedSum' => (float) ($item['sum']['bills']+($item['sum']['coins']/100)) * 100,
-                                ], ],
+                                    'linkedSum' => (float)($item['sum']['bills'] + ($item['sum']['coins'] / 100)) * 100,
+                                ],],
                             'rate' => $rate
                         ];
                         if ($body['rate'] == null) unlink($body['rate']);
@@ -803,18 +805,21 @@ class TicketService
                 }
                 break;
             }
-            case "4":{
+            case "4":
+            {
                 $url = 'https://online.moysklad.ru/api/remap/1.2/entity/';
                 $url_to_body = null;
                 if ($entity_type != 'salesreturn') {
-                    foreach ($vars['payments'] as $item){
-                        if ($item['type'] == "PAYMENT_CASH"){
+                    foreach ($vars['payments'] as $item) {
+                        if ($item['type'] == "PAYMENT_CASH") {
                             switch ($Setting->OperationCash) {
-                                case 1: {
+                                case 1:
+                                {
                                     $url_to_body = $url . 'cashin';
                                     break;
                                 }
-                                case 2: {
+                                case 2:
+                                {
                                     $url_to_body = $url . 'paymentin';
                                     break;
                                 }
@@ -823,11 +828,13 @@ class TicketService
                             }
                         } elseif ($item['type'] == "PAYMENT_CARD") {
                             switch ($Setting->OperationCard) {
-                                case 1: {
+                                case 1:
+                                {
                                     $url_to_body = $url . 'cashin';
                                     break;
                                 }
-                                case 2: {
+                                case 2:
+                                {
                                     $url_to_body = $url . 'paymentin';
                                     break;
                                 }
@@ -836,11 +843,13 @@ class TicketService
                             }
                         } else {
                             switch ($Setting->OperationMobile) {
-                                case 1: {
+                                case 1:
+                                {
                                     $url_to_body = $url . 'cashin';
                                     break;
                                 }
-                                case 2: {
+                                case 2:
+                                {
                                     $url_to_body = $url . 'paymentin';
                                     break;
                                 }
@@ -853,9 +862,9 @@ class TicketService
 
                         $rate_body = $client->get("https://online.moysklad.ru/api/remap/1.2/entity/currency/")->rows;
                         $rate = null;
-                        foreach ($rate_body as $item_rate){
-                            if ($item_rate->name == "тенге" or $item_rate->fullName == "Казахстанский тенге"){
-                                $rate = ['meta'=>
+                        foreach ($rate_body as $item_rate) {
+                            if ($item_rate->name == "тенге" or $item_rate->fullName == "Казахстанский тенге") {
+                                $rate = ['meta' =>
                                     [
                                         'href' => $item_rate->meta->href,
                                         'metadataHref' => $item_rate->meta->metadataHref,
@@ -867,28 +876,28 @@ class TicketService
                         }
 
                         $body = [
-                            'organization' => [  'meta' => [
+                            'organization' => ['meta' => [
                                 'href' => $OldBody->organization->meta->href,
                                 'type' => $OldBody->organization->meta->type,
                                 'mediaType' => $OldBody->organization->meta->mediaType,
-                            ] ],
-                            'agent' => [ 'meta'=> [
+                            ]],
+                            'agent' => ['meta' => [
                                 'href' => $OldBody->agent->meta->href,
                                 'type' => $OldBody->agent->meta->type,
                                 'mediaType' => $OldBody->agent->meta->mediaType,
-                            ] ],
-                            'sum' => (float) ($item['sum']['bills']+($item['sum']['coins']/100)) * 100,
+                            ]],
+                            'sum' => (float)($item['sum']['bills'] + ($item['sum']['coins'] / 100)) * 100,
                             'operations' => [
                                 0 => [
-                                    'meta'=> [
+                                    'meta' => [
                                         'href' => $OldBody->meta->href,
                                         'metadataHref' => $OldBody->meta->metadataHref,
                                         'type' => $OldBody->meta->type,
                                         'mediaType' => $OldBody->meta->mediaType,
                                         'uuidHref' => $OldBody->meta->uuidHref,
                                     ],
-                                    'linkedSum' => (float) ($item['sum']['bills']+($item['sum']['coins']/100)) * 100,
-                                ], ],
+                                    'linkedSum' => (float)($item['sum']['bills'] + ($item['sum']['coins'] / 100)) * 100,
+                                ],],
                             'rate' => $rate
                         ];
                         if ($body['rate'] == null) unset($body['rate']);
@@ -900,13 +909,13 @@ class TicketService
                 break;
             }
 
-            default:{
+            default:
+            {
                 break;
             }
         }
 
     }
-
 
 
 }
