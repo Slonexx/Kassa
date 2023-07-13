@@ -62,7 +62,7 @@
     }
 
     function ShowCheck(){
-        let urlrekassa = 'https://api-test.rekassa.kz/'
+        let urlrekassa = 'https://app-test.rekassa.kz/'
         //let url = 'http://rekassa/Popup/customerorder/closeShift';
         let url = 'https://dev.smartrekassa.kz/api/ticket';
         let data = {

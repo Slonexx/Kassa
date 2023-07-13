@@ -81,7 +81,7 @@ class changeController extends Controller
 
         $idShift = $clientK->get("crs/".$id."/shifts?includeOpen=true&size=1");
         $idShift = $idShift->_embedded->shifts[0]->shiftNumber;
-        $link = 'https://api-test.rekassa.kz/shifts/'.$id.'/'.$idShift.'/zxreport';
+        $link = 'https://app-test.rekassa.kz/shifts/'.$id.'/'.$idShift.'/zxreport';
 
         return response()->json([
             'link' => $link
@@ -117,7 +117,7 @@ class changeController extends Controller
                 'cash-register-password' => $cash_register_password,
             ]);
 
-            $link = 'https://api-test.rekassa.kz/shifts/'.$id.'/'.$idShift.'/zxreport';
+            $link = 'https://app-test.rekassa.kz/shifts/'.$id.'/'.$idShift.'/zxreport';
 
             return response()->json([
                 'status' => true,
