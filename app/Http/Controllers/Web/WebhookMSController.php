@@ -92,7 +92,6 @@ class WebhookMSController extends Controller
             } else {
                 $start['project'] = true;
             }
-
             if ($item['saleschannel'] != "0") {
                 if (property_exists($objectBody, 'salesChannel') && $msClient->get($objectBody->salesChannel->meta->href)->name == $item['saleschannel']) {
                     $start['saleschannel'] = true;
@@ -100,6 +99,8 @@ class WebhookMSController extends Controller
             } else {
                 $start['saleschannel'] = true;
             }
+
+            dd($start);
 
             if ($this->allValuesTrue($start)) {
                 return response()->json([
