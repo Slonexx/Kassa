@@ -110,7 +110,10 @@ class WebhookMSController extends Controller
             }
         }
 
-        return response()->json(['code' => 200, 'message' => "successful"]);
+        return response()->json([
+            'code' => 203,
+            'message' => $this->returnMessage($auditContext['moment'], "Конец скрипта, прошел по foreach"),
+        ]);
     }
 
     private function returnMessage($moment, string $message): array|string
