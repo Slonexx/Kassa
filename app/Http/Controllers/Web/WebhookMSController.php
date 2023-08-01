@@ -86,7 +86,7 @@ class WebhookMSController extends Controller
                 $start['state'] = true;
             }
             if ($item['project'] != "0") {
-                if (property_exists($objectBody, 'project') && $msClient->get($objectBody->project->meta->href)->name == $item['projectAutomation']) {
+                if (property_exists($objectBody, 'project') && $msClient->get($objectBody->project->meta->href)->name == $item['project']) {
                     $start['project'] = true;
                 }
             } else {
@@ -94,7 +94,7 @@ class WebhookMSController extends Controller
             }
 
             if ($item['saleschannel'] != "0") {
-                if (property_exists($objectBody, 'salesChannel') && $msClient->get($objectBody->salesChannel->meta->href)->name == $item['saleschannelAutomation']) {
+                if (property_exists($objectBody, 'salesChannel') && $msClient->get($objectBody->salesChannel->meta->href)->name == $item['saleschannel']) {
                     $start['saleschannel'] = true;
                 }
             } else {
