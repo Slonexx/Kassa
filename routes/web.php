@@ -9,10 +9,12 @@ use App\Http\Controllers\Popup\RequestController;
 use App\Http\Controllers\Popup\salesreturnController;
 use App\Http\Controllers\Popup\sendController;
 use App\Http\Controllers\Web\changeController;
+use App\Http\Controllers\Web\getSetting\AutomationController;
 use App\Http\Controllers\Web\getSetting\DeviceController;
 use App\Http\Controllers\Web\getSetting\DocumentController;
 use App\Http\Controllers\Web\getSetting\WorkerController;
 use App\Http\Controllers\Web\indexController;
+use App\Http\Controllers\Web\postSetting\postAutomationController;
 use App\Http\Controllers\Web\postSetting\postDeviceController;
 use App\Http\Controllers\Web\postSetting\postDocumentController;
 use App\Http\Controllers\Web\postSetting\postWorkerController;
@@ -39,6 +41,9 @@ Route::post('/Setting/Worker/{accountId}', [postWorkerController::class, 'postWo
 
 Route::get('/Setting/Device/{accountId}', [DeviceController::class, 'getDevice'])->name('getDevices');
 Route::post('/Setting/Device/{accountId}', [postDeviceController::class, 'postDevice']);
+
+Route::get('/Setting/Automation/{accountId}', [AutomationController::class, 'getAutomation'])->name('getAutomation');
+Route::post('/Setting/Automation/{accountId}', [postAutomationController::class, 'postAutomation']);
 
 
 Route::get('/test/print/{accountId}', [changeController::class, 'getTest']);

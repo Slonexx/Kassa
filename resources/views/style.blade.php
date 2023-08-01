@@ -2,7 +2,7 @@
 <style>
 
     .head-full {
-        height: 720px;
+        height: 1080px;
     }
 
     body {

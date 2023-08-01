@@ -44,25 +44,12 @@ class MsClient{
          return json_decode($res->getBody());
     }
 
-/*    public function multiPost($url,$bodyArr)
-    {
-        try {
-
-            //$responses =
-                Http::pool(function (Pool $pool) use ($url, $bodyArr){
-                foreach ($bodyArr as $body){
-                    $pool->contentType('application/json')
-                        ->withToken($this->apiKey)
-                        ->post($url,$body);
-                }
-            });
-
-            //dd($responses);
-
-        } catch (RequestException $e){
-            dd($e);
-        }
-
-    }*/
+    public function delete($url, $body){
+        $res = $this->client->delete($url,[
+            'Accept' => 'application/json',
+            'body' => json_encode($body),
+        ]);
+        return json_decode($res->getBody());
+    }
 
 }

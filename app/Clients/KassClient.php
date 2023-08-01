@@ -34,7 +34,8 @@ class KassClient
     /**
      * @throws GuzzleException
      */
-    public function getNewJwtToken() {
+    public function getNewJwtToken(): mixed
+    {
         //$uuid_v4 = Str::uuid();
         $res =  $this->client->post('auth/login',[
             'headers' => [
