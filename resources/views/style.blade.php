@@ -2,7 +2,7 @@
 <style>
 
     .head-full {
-        height: 720px;
+        height: 1080px;
     }
 
     body {
@@ -72,7 +72,7 @@
         color: white;
     }
 
-   .dropdown-container {
+    .dropdown-container {
         display: none;
         background-color: #d5d5d5;
         padding: 5px;

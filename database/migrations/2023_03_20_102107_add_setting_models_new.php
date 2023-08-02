@@ -6,12 +6,8 @@ use Illuminate\Support\Facades\Schema;
 
 class AddSettingModelsNew extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
-    public function up()
+
+    public function up(): void
     {
         Schema::table('settings', function (Blueprint $table) {
             $table->string('OperationCash')->after('paymentDocument')->nullable();
@@ -20,12 +16,8 @@ class AddSettingModelsNew extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
+
+    public function down(): void
     {
         Schema::table('settings', function (Blueprint $table) {
             $table->dropColumn('OperationCash');

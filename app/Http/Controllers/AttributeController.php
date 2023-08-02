@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Clients\MsClient;
 use App\Services\AdditionalServices\AttributeService;
 use Illuminate\Http\Request;
 
