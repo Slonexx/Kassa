@@ -6,7 +6,7 @@
             <div class="content p-4 mt-2 bg-white text-Black rounded">
                 @include('div.TopServicePartner')
                 <script> NAME_HEADER_TOP_SERVICE("Настройки → Автоматизация") </script>
-                @if($message == true) <div class="{{$class}}"> {{$message}}</div> @endif
+                @if($message) <div class="{{$class}}"> {{$message}}</div> @endif
 
                 <div class="mt-3 alert alert-warning alert-dismissible fade show in text-center" style="font-size: 16px">
                     Данный раздел предлагает автоматизировать фискализацию путем создания собственного сценария для смены статуса в документах.

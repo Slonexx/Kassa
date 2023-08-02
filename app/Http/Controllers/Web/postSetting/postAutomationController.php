@@ -103,7 +103,7 @@ class postAutomationController extends Controller
         }
 
 
-        return redirect()->route('getAutomation', ['accountId' => $accountId, 'isAdmin' => $request->isAdmin]);
+        return redirect()->route('getAutomation', ['accountId' => $accountId, 'isAdmin' => $request->isAdmin, 'message' => $message]);
     }
 
 
