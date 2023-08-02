@@ -63,9 +63,9 @@ class AutomationController extends Controller
             'salesreturn' => $body_project,
         ];
         $body_meta_saleschannel = [
-            'customerorder' => $body_project,
-            'demand' => $body_project,
-            'salesreturn' => $body_project,
+            'customerorder' => $body_saleschannel,
+            'demand' => $body_saleschannel,
+            'salesreturn' => $body_saleschannel,
         ];
 
 

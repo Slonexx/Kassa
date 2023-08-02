@@ -57,7 +57,7 @@ class WebhookMSController extends Controller
 
         try {
             $objectBody = $msClient->get($events[0]['meta']['href']);
-            $state = $msClient->get($objectBody->state->meta->href)->name;
+            $state = $msClient->get($objectBody->state->meta->href);
         } catch (BadResponseException $e) {
             Log::error($e); // Борируем ошибку, чтобы отслеживать возможные проблемы
             return response()->json([
@@ -77,30 +77,30 @@ class WebhookMSController extends Controller
            }
        }
 
+       //dd($msClient->get($objectBody->salesChannel->meta->href));
+
         foreach ($multiDimensionalArray as $item) {
             $start = ['entity' => false,'state' => false, 'saleschannel' => false, 'project' => false];
             if ($item['entity'] == "0") {
                 $start['entity'] = true;
             }
-            if ($state == $item['status'] || $item['status'] == "0") {
+            if ($state->id == $item['status'] || $item['status'] == "0") {
                 $start['state'] = true;
             }
             if ($item['project'] != "0") {
-                if (property_exists($objectBody, 'project') && $msClient->get($objectBody->project->meta->href)->name == $item['project']) {
+                if (property_exists($objectBody, 'project') && $msClient->get($objectBody->project->meta->href)->id == $item['project']) {
                     $start['project'] = true;
                 }
             } else {
                 $start['project'] = true;
             }
             if ($item['saleschannel'] != "0") {
-                if (property_exists($objectBody, 'salesChannel') && $msClient->get($objectBody->salesChannel->meta->href)->name == $item['saleschannel']) {
+                if (property_exists($objectBody, 'salesChannel') && $msClient->get($objectBody->salesChannel->meta->href)->id == $item['saleschannel']) {
                     $start['saleschannel'] = true;
                 }
             } else {
                 $start['saleschannel'] = true;
             }
-
-            dd($start);
 
             if ($this->allValuesTrue($start)) {
                 return response()->json([
@@ -113,7 +113,7 @@ class WebhookMSController extends Controller
 
         return response()->json([
             'code' => 203,
-            'message' => $this->returnMessage($auditContext['moment'], "Конец скрипта, прошел по foreach"),
+            'message' => $this->returnMessage($auditContext['moment'], "Конец скрипта, прошел по foreach, не нашел нужный скрипт"),
         ]);
     }
 
