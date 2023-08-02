@@ -3,6 +3,7 @@
 use App\Http\Controllers\AttributeController;
 use App\Http\Controllers\ShiftController;
 use App\Http\Controllers\TicketController;
+use App\Http\Controllers\Web\WebhookMSController;
 use App\Http\Controllers\WebHookController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
@@ -22,5 +23,7 @@ Route::post('closeShift',[ShiftController::class,'closeShift']);
 Route::post('webhook/{accountId}/customerorder',[WebHookController::class,'newOrder']);
 Route::post('webhook/{accountId}/demand',[WebHookController::class,'newDemand']);
 
-
+Route::post('/webhook/customerorder/',[WebhookMSController::class, 'customerorder']);
+Route::post('/webhook/demand/',[WebhookMSController::class, 'customerorder']);
+Route::post('/webhook/salesreturn/',[WebhookMSController::class, 'customerorder']);
 
