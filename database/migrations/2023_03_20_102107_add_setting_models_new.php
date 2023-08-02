@@ -20,9 +20,7 @@ class AddSettingModelsNew extends Migration
     public function down(): void
     {
         Schema::table('settings', function (Blueprint $table) {
-            $table->dropColumn('OperationCash');
-            $table->dropColumn('OperationCard');
-            $table->dropColumn('OperationMobile');
+
         });
     }
 }
