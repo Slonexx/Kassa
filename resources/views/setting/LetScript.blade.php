@@ -3,6 +3,8 @@
     let status_arr_meta = @json($arr_meta);
     let project_arr_meta = @json($arr_project);
     let saleschannel_arr_meta = @json($arr_saleschannel);
+    let ConstSaleschannel_arr_meta = @json($arr_saleschannel);
+    let ConstProject_arr_meta = @json($arr_project);
 
 
     let Saved = @json($SavedCreateToArray);

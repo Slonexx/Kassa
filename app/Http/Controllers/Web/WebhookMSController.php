@@ -87,17 +87,25 @@ class WebhookMSController extends Controller
             if ($state->id == $item['status'] || $item['status'] == "0") {
                 $start['state'] = true;
             }
-            if ($item['project'] != "0") {
-                if (property_exists($objectBody, 'project') && $msClient->get($objectBody->project->meta->href)->id == $item['project']) {
-                    $start['project'] = true;
+            if ($item['project'] != "0" and property_exists($objectBody, 'project')) {
+
+                foreach (array_filter(explode('/', $item['project'])) as $_item) {
+                    if ($msClient->get($objectBody->project->meta->href)->id == $_item) {
+                        $start['project'] = true;
+                    }
                 }
+
             } else {
                 $start['project'] = true;
             }
-            if ($item['saleschannel'] != "0") {
-                if (property_exists($objectBody, 'salesChannel') && $msClient->get($objectBody->salesChannel->meta->href)->id == $item['saleschannel']) {
-                    $start['saleschannel'] = true;
+            if ($item['saleschannel'] != "0" and property_exists($objectBody, 'salesChannel')) {
+
+                foreach (array_filter(explode('/', $item['saleschannel'])) as $_item){
+                    if ($msClient->get($objectBody->salesChannel->meta->href)->id == $_item) {
+                        $start['saleschannel'] = true;
+                    }
                 }
+
             } else {
                 $start['saleschannel'] = true;
             }

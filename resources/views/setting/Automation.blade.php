@@ -1,6 +1,7 @@
 @extends('layout')
 @section('item', 'link_5')
 @section('content')
+
     <div class="main-container">
         <div class="content-container">
             <div class="content p-4 mt-2 bg-white text-Black rounded">
@@ -9,8 +10,7 @@
                 @if($message) <div class="{{$class}}"> {{$message}}</div> @endif
 
                 <div class="mt-3 alert alert-warning alert-dismissible fade show in text-center" style="font-size: 16px">
-                    Данный раздел предлагает автоматизировать фискализацию путем создания собственного сценария для смены статуса в документах.
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    Данный раздел позволяет автоматизировать фискализацию путём создания собственных сценариев.
                 </div>
 
                 <form action="/Setting/Automation/{{ $accountId }}?isAdmin={{ $isAdmin }}" method="post">
@@ -35,13 +35,16 @@
                         <div class="col-2 text-center">
                             Тип оплаты
                         </div>
-                        <div class="col-2 text-center">
-                            Канал продаж
+                        <div class="row col-5">
+                            <div class="col-6 text-center">
+                                Канал продаж
+                            </div>
+                            <div class="col-6 text-center">
+                                Проект
+                            </div>
                         </div>
-                        <div class="col-2 text-center">
-                            Проект
-                        </div>
-                        <div class="col-2 text-center">
+
+                        <div class="col-1 text-center">
                             Удалить
                         </div>
                     </div>
@@ -49,6 +52,9 @@
 
                     </div>
 
+                    <div id="hiddenAllComponent" style="display: none">
+
+                    </div>
                     <button class="mt-2 btn btn-outline-dark gradient_focus"> Сохранить</button>
                 </form>
             </div>

@@ -36,7 +36,7 @@ class AutomationController extends Controller
         $body_project = $Client->get('https://online.moysklad.ru/api/remap/1.2/entity/project');
         $body_saleschannel = $Client->get('https://online.moysklad.ru/api/remap/1.2/entity/saleschannel');
 
-        $dontChoose = json_decode(json_encode(['id'=>0, 'name'=>'Не выбирать']));
+        $dontChoose = json_decode(json_encode(['id'=>'0', 'name'=>'Не выбирать']));
 
         if (!property_exists($customerorder,'states')) { $customerorder = $dontChoose;
         } else { $customerorder = $customerorder->states; array_unshift($customerorder, $dontChoose); }
