@@ -89,7 +89,7 @@ class AutomationController extends Controller
             ];
         })->toArray();
 
-        return view('setting.Automation.Automation', [
+        return view('setting.Automation', [
             'arr_meta' => $body_meta_status,
             'arr_project' => $body_meta_project,
             'arr_saleschannel' => $body_meta_saleschannel,
