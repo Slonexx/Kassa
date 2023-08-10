@@ -62,19 +62,19 @@ class AutomationController extends Controller
 
 
         $body_meta_status = [
-            'customerorder' => $customerorder,
-            'demand' => $demand,
-            'salesreturn' => $salesreturn,
+            'customerorder' => (array) $customerorder,
+            'demand' => (array) $demand,
+            'salesreturn' => (array) $salesreturn,
         ];
         $body_meta_project = [
-            'customerorder' => $body_project,
-            'demand' => $body_project,
-            'salesreturn' => $body_project,
+            'customerorder' => (array) $body_project,
+            'demand' => (array) $body_project,
+            'salesreturn' => (array) $body_project,
         ];
         $body_meta_saleschannel = [
-            'customerorder' => $body_saleschannel,
-            'demand' => $body_saleschannel,
-            'salesreturn' => $body_saleschannel,
+            'customerorder' => (array) $body_saleschannel,
+            'demand' => (array) $body_saleschannel,
+            'salesreturn' => (array) $body_saleschannel,
         ];
 
 
