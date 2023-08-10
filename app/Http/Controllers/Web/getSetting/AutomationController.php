@@ -7,6 +7,7 @@ use App\Http\Controllers\Config\getSettingVendorController;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\getData\getDevices;
 use App\Models\AutomationModel;
+use GuzzleHttp\Exception\BadResponseException;
 use Illuminate\Http\Request;
 
 class AutomationController extends Controller
@@ -29,9 +30,17 @@ class AutomationController extends Controller
         $Setting = new getSettingVendorController($accountId);
         $Client = new MsClient($Setting->TokenMoySklad);
 
-        $customerorder = $Client->get('https://online.moysklad.ru/api/remap/1.2/entity/customerorder/metadata');
-        $demand = $Client->get('https://online.moysklad.ru/api/remap/1.2/entity/demand/metadata');
-        $salesreturn = $Client->get('https://online.moysklad.ru/api/remap/1.2/entity/salesreturn/metadata');
+        try {
+            $customerorder = $Client->get('https://online.moysklad.ru/api/remap/1.2/entity/customerorder/metadata');
+            $demand = $Client->get('https://online.moysklad.ru/api/remap/1.2/entity/demand/metadata');
+            $salesreturn = $Client->get('https://online.moysklad.ru/api/remap/1.2/entity/salesreturn/metadata');
+        } catch (BadResponseException $e){
+            return view('setting.error', [
+                'accountId' => $accountId,
+                'isAdmin' => $request->isAdmin,
+                'message' => $e->getResponse()->getBody()->getContents()
+            ]);
+        }
 
         $body_project = $Client->get('https://online.moysklad.ru/api/remap/1.2/entity/project');
         $body_saleschannel = $Client->get('https://online.moysklad.ru/api/remap/1.2/entity/saleschannel');
@@ -80,7 +89,7 @@ class AutomationController extends Controller
             ];
         })->toArray();
 
-        return view('setting.Automation', [
+        return view('setting.Automation.Automation', [
             'arr_meta' => $body_meta_status,
             'arr_project' => $body_meta_project,
             'arr_saleschannel' => $body_meta_saleschannel,
