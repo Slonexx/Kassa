@@ -6,6 +6,8 @@ use App\Clients\MsClient;
 use App\Http\Controllers\Config\Lib\VendorApiController;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\getData\getSetting;
+use App\Services\Settings\SettingsService;
+use GuzzleHttp\Exception\BadResponseException;
 use Illuminate\Http\Request;
 
 class indexController extends Controller
@@ -66,6 +68,28 @@ class indexController extends Controller
             "salesreturn" => "https://online.moysklad.ru/api/remap/1.2/entity/salesreturn/" . $enId,
             default => null,
         };
+    }
+
+
+
+    public function searchEmployeeByID($login){
+        $allSettings = app(SettingsService::class)->getSettings();
+
+        foreach ($allSettings as $setting){
+
+            try {
+                $ClientCheckMC = new MsClient($setting->TokenMoySklad);
+                $body = $ClientCheckMC->get('https://online.moysklad.ru/api/remap/1.2/entity/employee?filter=uid~'.$login)->rows;
+
+                if ($body!=[]){
+                    dd($body);
+                }
+
+            } catch (BadResponseException $e) {
+                continue;
+            }
+
+        }
     }
 
 }
