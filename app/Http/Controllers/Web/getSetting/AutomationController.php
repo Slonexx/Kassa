@@ -47,17 +47,18 @@ class AutomationController extends Controller
 
         $dontChoose = json_decode(json_encode(['id'=>'0', 'name'=>'Не выбирать']));
 
-        if (!property_exists($customerorder,'states')) { $customerorder = $dontChoose;
+        if (!property_exists($customerorder,'states')) { $customerorder = [$dontChoose];
         } else { $customerorder = $customerorder->states; array_unshift($customerorder, $dontChoose); }
-        if (!property_exists($demand,'states')) { $demand = $dontChoose;
+        if (!property_exists($demand,'states')) { $demand = [$dontChoose];
         } else { $demand = $demand->states; array_unshift($demand, $dontChoose); }
-        if (!property_exists($salesreturn,'states')) { $salesreturn = $dontChoose;
+        if (!property_exists($salesreturn,'states')) { $salesreturn = [$dontChoose];
         } else { $salesreturn = $salesreturn->states; array_unshift($salesreturn, $dontChoose); }
 
-        if (!$body_project->meta->size > 0) { $body_project = $dontChoose;
+
+        if (!$body_project->meta->size > 0) { $body_project = [$dontChoose];
         } else { $body_project = $body_project->rows; array_unshift($body_project, $dontChoose); }
 
-        if (!$body_saleschannel->meta->size > 0) { $body_saleschannel = $dontChoose;
+        if (!$body_saleschannel->meta->size > 0) { $body_saleschannel = [$dontChoose];
         } else { $body_saleschannel = $body_saleschannel->rows; array_unshift($body_saleschannel, $dontChoose); }
 
 
