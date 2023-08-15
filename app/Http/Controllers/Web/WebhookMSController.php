@@ -42,6 +42,14 @@ class WebhookMSController extends Controller
             ]);
         }
 
+        if (empty($events[0]['updatedFields']['state'])) {
+            return response()->json([
+                'code' => 203,
+                'message' => $this->returnMessage($auditContext['moment'], "Отсутствует state, (изменений не было), скрипт прекращён!"),
+            ]);
+        }
+
+
         // Заменим обращение к базе данных с использованием Eloquent ORM, чтобы сократить количество запросов
         $multiDimensionalArray = AutomationModel::where('accountId', $accountId)
             ->select('accountId', 'entity', 'status', 'payment', 'saleschannel', 'project')
