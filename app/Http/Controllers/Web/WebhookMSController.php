@@ -35,6 +35,13 @@ class WebhookMSController extends Controller
         $setting = app(getSettingVendorController::class, ['accountId' => $accountId]);
         $msClient = new MsClient($setting->TokenMoySklad);
 
+        if (empty($request->auditContext)) {
+            return response()->json([
+                'code' => 203,
+                'message' => $this->returnMessage("2023-00-00 00:00:00", "Отсутствует auditContext, (изменений не было), скрипт прекращён!"),
+            ]);
+        }
+
         if (empty($events[0]['updatedFields'])) {
             return response()->json([
                 'code' => 203,
