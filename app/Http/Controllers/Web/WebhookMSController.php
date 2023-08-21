@@ -92,7 +92,7 @@ class WebhookMSController extends Controller
             if ($item['entity'] == "0") {
                 $start['entity'] = true;
             }
-            if ($state->id == $item['status'] and empty($events[0]['updatedFields']['state'])) {
+            if ($state->id == $item['status'] and in_array("state", $events[0]['updatedFields'])) {
                 $start['state'] = true;
             }
 
