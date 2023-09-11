@@ -673,10 +673,10 @@ class AutomatingServices
         foreach($json->rows as $row){
             if($row->name == $attribName){
                 return [
-                    'href' => $row->meta->href,
-                    'type' => $row->meta->type,
-                    'mediaType' => $row->meta->mediaType,
-                ];
+                        'href' => $row->meta->href,
+                        'type' => $row->meta->type,
+                        'mediaType' => $row->meta->mediaType,
+                        ];
             }
         }
         return [];

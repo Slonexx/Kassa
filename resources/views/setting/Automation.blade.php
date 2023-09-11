@@ -27,7 +27,7 @@
 
                     <div class="mt-2 row gradient p-1 rounded text-white">
                         <div class="col-2">
-                            Тип документа
+                           Тип документа
                         </div>
                         <div class="col-2 text-center">
                             Статус
@@ -63,5 +63,5 @@
 
     @include('setting.LetScript')
     @include('setting.function')
-    {{-- @include('setting.script')--}}
+   {{-- @include('setting.script')--}}
 @endsection

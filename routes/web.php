@@ -30,6 +30,7 @@ Route::get('/delete/Device/{znm}', [deleteDevice::class, 'delete']);
 
 Route::get('/', [indexController::class, 'index']);
 Route::get('/{accountId}/', [indexController::class, 'indexShow'])->name('main');
+Route::get('/search/employee/byName/{login}', [indexController::class, 'searchEmployeeByID']);
 
 
 Route::get('/Setting/Document/{accountId}', [DocumentController::class, 'getDocument'])->name('getDocument');

@@ -37,11 +37,11 @@ class DocumentService
 
                 foreach ($reKassaBody['payments'] as $item){
 
-                   if ($item['type'] == 'PAYMENT_CASH'){
-                       $uri = "https://online.moysklad.ru/api/remap/1.2/entity/cashin";
-                       $sum = ($item['sum']['bills'] + ($item['sum']['coins'] / 100)) * 100;
-                       $this->createPayInDocument($uri, $apiKey,  1, $formattedOrder, $sum, $description.'Автоматическое создание документа на основе настроек приложение. Оплата наличными, на сумму: '.$sum/100);
-                   }
+                    if ($item['type'] == 'PAYMENT_CASH'){
+                        $uri = "https://online.moysklad.ru/api/remap/1.2/entity/cashin";
+                        $sum = ($item['sum']['bills'] + ($item['sum']['coins'] / 100)) * 100;
+                        $this->createPayInDocument($uri, $apiKey,  1, $formattedOrder, $sum, $description.'Автоматическое создание документа на основе настроек приложение. Оплата наличными, на сумму: '.$sum/100);
+                    }
 
                     if ($item['type'] == 'PAYMENT_CARD'){
                         $uri = "https://online.moysklad.ru/api/remap/1.2/entity/paymentin";
@@ -102,17 +102,17 @@ class DocumentService
             if ($type == 1){
                 $meta = $this->attributeHook->getCashInAttribute($attribute->name,$apiKey);
                 if (!is_null($meta))
-                $docBody["attributes"][] = [
-                    "meta" => $meta,
-                    "value" => $attribute->value,
-                ];
+                    $docBody["attributes"][] = [
+                        "meta" => $meta,
+                        "value" => $attribute->value,
+                    ];
             }elseif ($type ==2){
                 $meta = $this->attributeHook->getPaymentInAttribute($attribute->name,$apiKey);
                 if (!is_null($meta))
-                $docBody["attributes"][] = [
-                    "meta" => $meta,
-                    "value" => $attribute->value,
-                ];
+                    $docBody["attributes"][] = [
+                        "meta" => $meta,
+                        "value" => $attribute->value,
+                    ];
             }
         }
 
@@ -167,17 +167,17 @@ class DocumentService
             if ($isPayment == 1){
                 $meta = $this->attributeHook->getCashOutAttribute($attribute->name,$apiKey);
                 if (!is_null($meta))
-                $docBody["attributes"][] = [
-                    "meta" => $meta,
-                    "value" => $attribute->value,
-                ];
+                    $docBody["attributes"][] = [
+                        "meta" => $meta,
+                        "value" => $attribute->value,
+                    ];
             }elseif ($isPayment ==2){
                 $meta = $this->attributeHook->getPaymentOutAttribute($attribute->name,$apiKey);
                 if (!is_null($meta))
-                $docBody["attributes"][] = [
-                    "meta" => $meta,
-                    "value" => $attribute->value,
-                ];
+                    $docBody["attributes"][] = [
+                        "meta" => $meta,
+                        "value" => $attribute->value,
+                    ];
             }
         }
 

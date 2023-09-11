@@ -25,4 +25,5 @@ Route::post('webhook/{accountId}/demand',[WebHookController::class,'newDemand'])
 
 Route::post('/webhook/customerorder/',[WebhookMSController::class, 'customerorder']);
 Route::post('/webhook/demand/',[WebhookMSController::class, 'customerorder']);
+Route::post('/webhook/salesreturn/',[WebhookMSController::class, 'customerorder']);
 

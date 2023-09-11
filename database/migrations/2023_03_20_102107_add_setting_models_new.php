@@ -10,9 +10,9 @@ class AddSettingModelsNew extends Migration
     public function up(): void
     {
         Schema::table('settings', function (Blueprint $table) {
-            $table->string('OperationCash')->after('paymentDocument')->nullable();
+          /*  $table->string('OperationCash')->after('paymentDocument')->nullable();
             $table->string('OperationCard')->after('paymentDocument')->nullable();
-            $table->string('OperationMobile')->after('paymentDocument')->nullable();
+            $table->string('OperationMobile')->after('paymentDocument')->nullable();*/
         });
     }
 

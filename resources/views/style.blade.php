@@ -26,6 +26,10 @@
         background-image: linear-gradient(135deg, #c3cfe2 0%, #f5f7fa 100%);
     }
 
+    .gradient_normal{
+        background-image: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    }
+
     .sidenav {
         height: 100%;
         width: 15%;
@@ -72,7 +76,7 @@
         color: white;
     }
 
-   .dropdown-container {
+    .dropdown-container {
         display: none;
         background-color: #d5d5d5;
         padding: 5px;

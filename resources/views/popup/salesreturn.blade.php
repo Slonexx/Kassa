@@ -12,10 +12,10 @@
         let entity_type = '';
         let id_ticket = '';
 
-        /*let receivedMessage = {
-            "name":"OpenPopup","messageId":1,"popupName":"fiscalizationPopup","popupParameters":
-                {"object_Id":"25b0c896-755d-11ed-0a80-01170011acd4","entity_type":"salesreturn","accountId":"1dd5bd55-d141-11ec-0a80-055600047495"}
-        };*/
+         /*let receivedMessage = {
+             "name":"OpenPopup","messageId":1,"popupName":"fiscalizationPopup","popupParameters":
+                 {"object_Id":"25b0c896-755d-11ed-0a80-01170011acd4","entity_type":"salesreturn","accountId":"1dd5bd55-d141-11ec-0a80-055600047495"}
+         };*/
 
 
         window.addEventListener("message", function(event) {

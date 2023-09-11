@@ -7,6 +7,15 @@
     let ConstProject_arr_meta = @json($arr_project);
 
 
+    console.log('status ')
+    console.log(status_arr_meta)
+
+    console.log('project ')
+    console.log(project_arr_meta)
+
+    console.log('saleschannel ')
+    console.log(saleschannel_arr_meta)
+
     let Saved = @json($SavedCreateToArray);
 
 
