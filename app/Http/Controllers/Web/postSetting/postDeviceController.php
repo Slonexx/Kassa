@@ -65,7 +65,7 @@ class postDeviceController extends Controller
 
             } catch (\Throwable $e) {
 
-           }
+            }
         }
 
         $cfg = new cfg();
