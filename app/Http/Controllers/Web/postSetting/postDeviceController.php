@@ -64,9 +64,11 @@ class postDeviceController extends Controller
 
 
             } catch (\Throwable $e) {
-
+                dd($e->getMessage());
             }
         }
+
+
 
         $cfg = new cfg();
         $app = AppInstanceContoller::loadApp($cfg->appId, $accountId);
@@ -74,6 +76,8 @@ class postDeviceController extends Controller
         $vendorAPI = new VendorApiController();
         $vendorAPI->updateAppStatus($cfg->appId, $accountId, $app->getStatusName());
         $app->persist();
+
+        dd($ZHM_1, $PASSWORD_1, $StatusCode, $app);
 
         return redirect()->route('getDocument', ['accountId' => $accountId, 'isAdmin' => $isAdmin]);
     }
