@@ -12,6 +12,8 @@ use App\Http\Controllers\getData\getDeviceFirst;
 use App\Http\Controllers\getData\getDevices;
 use App\Http\Controllers\getData\getSetting;
 use App\Services\workWithBD\DataBaseService;
+use GuzzleHttp\Exception\BadResponseException;
+use http\Exception\BadConversionException;
 use Illuminate\Http\Request;
 
 class postDeviceController extends Controller
@@ -63,8 +65,8 @@ class postDeviceController extends Controller
                 }
 
 
-            } catch (\Throwable $e) {
-
+            } catch (BadResponseException $e) {
+                dd($e->getResponse()->getBody()->getContents());
             }
         }
 
