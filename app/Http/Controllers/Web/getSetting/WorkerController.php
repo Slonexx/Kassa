@@ -34,8 +34,10 @@ class WorkerController extends Controller
         }
 
         if ( array_key_exists(0, $Workers->workers) ){
-            $Workers = null;
+            $Workers = '';
         } else $Workers = $Workers->workers;
+
+
 
         $Setting = new getSetting($accountId);
         $tokenMs = $Setting->tokenMs;
