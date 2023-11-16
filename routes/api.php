@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AttributeController;
+use App\Http\Controllers\integration\connectController;
 use App\Http\Controllers\ShiftController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\Web\WebhookMSController;
@@ -26,4 +27,9 @@ Route::post('webhook/{accountId}/demand',[WebHookController::class,'newDemand'])
 Route::post('/webhook/customerorder/',[WebhookMSController::class, 'customerorder']);
 Route::post('/webhook/demand/',[WebhookMSController::class, 'customerorder']);
 Route::post('/webhook/salesreturn/',[WebhookMSController::class, 'customerorder']);
+
+
+Route::group(["prefix" => "integration"], function () {
+    Route::get('client/connect/{accountId}', [connectController::class, 'connectClient']);
+});
 
