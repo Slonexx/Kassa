@@ -11,24 +11,29 @@ use Illuminate\Http\Request;
 
 class connectController extends Controller
 {
-    public function connectClient(Request $request): \Illuminate\Http\JsonResponse
+    public function connectClient(Request $request, $accountId): \Illuminate\Http\JsonResponse
     {
 
         $data = (object) [
             'serial_number' => $request->serial_number ?? '',
             'password' => $request->serial_number ?? '',
         ];
-        try {
 
+        if ($accountId == '1dd5bd55-d141-11ec-0a80-055600047495') {
+
+        } else {
             $Client = new KassClient($data->serial_number, $data->password, "6784dad7-6679-4950-b257-2711ff63f9bb");
             $StatusCode = $Client->getStatusCode();
+        }
+
+        try {
             if ($StatusCode == 200) {
                 return response()->json([
                     'status' => true,
                 ]);
             } else {
                 return response()->json([
-                    'status' => true,
+                    'status' => false,
                     'message' => "Не верный знм или пароль",
                 ]);
             }
