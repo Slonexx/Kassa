@@ -17,7 +17,7 @@ class connectController extends Controller
 
         $data = (object) [
             'serial_number' => $request->serial_number ?? '',
-            'password' => $request->serial_number ?? '',
+            'password' => $request->password ?? '',
         ];
 
         if ($accountId == '1dd5bd55-d141-11ec-0a80-055600047495') {
