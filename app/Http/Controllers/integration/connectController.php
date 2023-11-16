@@ -29,7 +29,7 @@ class connectController extends Controller
             } else {
                 return response()->json([
                     'status' => true,
-                    'message' => "Не удалось подключиться",
+                    'message' => "Не верный знм или пароль",
                 ]);
             }
 
