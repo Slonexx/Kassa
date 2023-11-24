@@ -31,6 +31,6 @@ Route::post('/webhook/salesreturn/',[WebhookMSController::class, 'customerorder'
 Route::group(["prefix" => "integration"], function () {
     Route::get('client/connect/{accountId}', [connectController::class, 'connectClient']);
     Route::get('client/get/ticket/', [TicketController::class, 'getUrlTicket']);
-    Route::get('client/send/ticket/', [actionClientController::class, 'sendTicket']);
+    Route::post('client/send/ticket/', [actionClientController::class, 'sendTicket']);
 });
 
