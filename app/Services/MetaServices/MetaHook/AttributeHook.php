@@ -35,6 +35,18 @@ class AttributeHook
         }
         return $foundedMeta;
     }
+    public function getOrderAttributeParams($nameAttribute, MsClient $client)
+    {
+        $json = $client->get("https://api.moysklad.ru/api/remap/1.2/entity/customerorder/metadata/attributes");
+        $foundedMeta = null;
+        foreach($json->rows as $row){
+            if($row->name == $nameAttribute){
+                $foundedMeta = $row->meta;
+                break;
+            }
+        }
+        return $foundedMeta;
+    }
 
     public function getDemandAttribute($nameAttribute, $apiKey)
     {
@@ -50,12 +62,36 @@ class AttributeHook
         }
         return $foundedMeta;
     }
+    public function getDemandAttributeParams($nameAttribute, MsClient $client)
+    {
+        $json = $client->get("https://api.moysklad.ru/api/remap/1.2/entity/demand/metadata/attributes");
+        $foundedMeta = null;
+        foreach($json->rows as $row){
+            if($row->name == $nameAttribute){
+                $foundedMeta = $row->meta;
+                break;
+            }
+        }
+        return $foundedMeta;
+    }
 
     public function getSalesReturnAttribute($nameAttribute, $apiKey)
     {
         $uri = "https://api.moysklad.ru/api/remap/1.2/entity/salesreturn/metadata/attributes";
         $client = new MsClient($apiKey);
         $json = $client->get($uri);
+        $foundedMeta = null;
+        foreach($json->rows as $row){
+            if($row->name == $nameAttribute){
+                $foundedMeta = $row->meta;
+                break;
+            }
+        }
+        return $foundedMeta;
+    }
+    public function getSalesReturnAttributeParams($nameAttribute,  MsClient $client)
+    {
+        $json = $client->get("https://api.moysklad.ru/api/remap/1.2/entity/salesreturn/metadata/attributes");
         $foundedMeta = null;
         foreach($json->rows as $row){
             if($row->name == $nameAttribute){
