@@ -13,7 +13,7 @@ use Illuminate\Http\Request;
 class actionClientController extends Controller
 {
     public function sendTicket(Request $request) {
-        dd($request->all());
+        return response()->json($request->all());
     }
 
 }
