@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AttributeController;
+use App\Http\Controllers\integration\actionClientController;
 use App\Http\Controllers\integration\connectController;
 use App\Http\Controllers\ShiftController;
 use App\Http\Controllers\TicketController;
@@ -30,5 +31,6 @@ Route::post('/webhook/salesreturn/',[WebhookMSController::class, 'customerorder'
 Route::group(["prefix" => "integration"], function () {
     Route::get('client/connect/{accountId}', [connectController::class, 'connectClient']);
     Route::get('client/get/ticket/', [TicketController::class, 'getUrlTicket']);
+    Route::get('client/send/ticket/', [actionClientController::class, 'sendTicket']);
 });
 
