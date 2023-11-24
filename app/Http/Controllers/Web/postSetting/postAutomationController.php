@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 class postAutomationController extends Controller
 {
 
-    public function postAutomation(Request $request, $accountId)
+    public function postAutomation(Request $request, $accountId): \Illuminate\Http\RedirectResponse
     {
         $Setting = new getSettingVendorController($accountId);
 
