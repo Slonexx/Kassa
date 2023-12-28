@@ -134,12 +134,12 @@ class DocumentService
             switch ($payment['type']){
                 case 'PAYMENT_CASH':{
                     $uri = "https://api.moysklad.ru/api/remap/1.2/entity/cashout";
-                    $sum = ($payment['sum']['bills'] + ($payment['sum']['coins'] / 100) * 1000);
+                    $sum = ($payment['sum']['bills'] + ($payment['sum']['coins'] ) * 1000);
                     break;
                 }
                 case 'PAYMENT_CARD' or 'PAYMENT_MOBILE':{
                     $uri = "https://api.moysklad.ru/api/remap/1.2/entity/paymentout";
-                    $sum = ($payment['sum']['bills'] + ($payment['sum']['coins'] / 100) * 1000);
+                    $sum = ($payment['sum']['bills'] + ($payment['sum']['coins'] ) * 1000);
                     break;
                 }
             }
