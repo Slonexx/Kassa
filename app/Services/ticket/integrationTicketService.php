@@ -554,7 +554,7 @@ class integrationTicketService
         return $data;
     }
 
-    private function getUUH(mixed $id_entity, mixed $entity_type): array
+    private function getUUH(mixed $id_entity, mixed $entity_type)
     {
         $body = $this->msClient->get('https://api.moysklad.ru/api/remap/1.2/entity/' . $entity_type . '/' . $id_entity);
         $agent = $this->msClient->get($body->agent->meta->href);
