@@ -206,7 +206,7 @@ class TicketService
                     ],
                 ];
 
-                if ($accountId->accountId = '1dd5bd55-d141-11ec-0a80-055600047495') $clientK = new testKassClient($numKassa, $password, $apiKey);
+                if ($accountId == '1dd5bd55-d141-11ec-0a80-055600047495') $clientK = new testKassClient($numKassa, $password, $apiKey);
                 else $clientK = new KassClient($numKassa, $password, $apiKey);
                 $id = $clientK->getNewJwtToken()->id;
                 $body = [
@@ -595,7 +595,7 @@ class TicketService
         $numKassa = $Device->znm;
         $password = $Device->password;
 
-        if ($accountId->accountId = '1dd5bd55-d141-11ec-0a80-055600047495') $client = new testKassClient($numKassa, $password, $apiKey);
+        if ($accountId == '1dd5bd55-d141-11ec-0a80-055600047495') $client = new testKassClient($numKassa, $password, $apiKey);
         else $client = new KassClient($numKassa, $password, $apiKey);
 
         $idKassa = $client->getNewJwtToken()->id;
