@@ -4,6 +4,7 @@ namespace App\Services\ticket;
 
 use App\Clients\KassClient;
 use App\Clients\MsClient;
+use App\Clients\testKassClient;
 use App\Http\Controllers\getData\getDeviceFirst;
 use App\Http\Controllers\getData\getDevices;
 use App\Http\Controllers\getData\getSetting;
@@ -205,7 +206,8 @@ class TicketService
                     ],
                 ];
 
-                $clientK = new KassClient($numKassa, $password, $apiKey);
+                if ($accountId->accountId = '1dd5bd55-d141-11ec-0a80-055600047495') $clientK = new testKassClient($numKassa, $password, $apiKey);
+                else $clientK = new KassClient($numKassa, $password, $apiKey);
                 $id = $clientK->getNewJwtToken()->id;
                 $body = [
                     "dateTime" => $this->getNowDateTime(),
@@ -593,7 +595,8 @@ class TicketService
         $numKassa = $Device->znm;
         $password = $Device->password;
 
-        $client = new KassClient($numKassa, $password, $apiKey);
+        if ($accountId->accountId = '1dd5bd55-d141-11ec-0a80-055600047495') $client = new testKassClient($numKassa, $password, $apiKey);
+        else $client = new KassClient($numKassa, $password, $apiKey);
 
         $idKassa = $client->getNewJwtToken()->id;
 
