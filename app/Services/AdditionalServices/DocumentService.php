@@ -152,7 +152,7 @@ class DocumentService
             "expenseItem" => [
                 "meta" => $this->expenseItemHook->getExpenseItem('Возврат',$apiKey),
             ],
-            "sum" => $sum,
+            "sum" => $sum * 100,
         ];
 
         if ($metaReturn != null){
