@@ -28,29 +28,29 @@ class DocumentService
             $sum = $formattedOrder->sum;
             $description = '['.( (int) date('H') + 6 ).date(':i:s').' '. date('Y-m-d') .'] ' ;
             if ($paymentOption == 2) {
-                $uri = "https://online.moysklad.ru/api/remap/1.2/entity/paymentin";
+                $uri = "https://api.moysklad.ru/api/remap/1.2/entity/paymentin";
                 $this->createPayInDocument($uri, $apiKey,  2, $formattedOrder, $sum, $description.'Автоматическое создание документа на основе настроек приложение');
             } elseif($paymentOption == 1) {
-                $uri = "https://online.moysklad.ru/api/remap/1.2/entity/cashin";
+                $uri = "https://api.moysklad.ru/api/remap/1.2/entity/cashin";
                 $this->createPayInDocument($uri, $apiKey, 1, $formattedOrder, $sum, $description.'Автоматическое создание документа на основе настроек приложение');
             } elseif ($paymentOption == 3) {
 
                 foreach ($reKassaBody['payments'] as $item){
 
                     if ($item['type'] == 'PAYMENT_CASH'){
-                        $uri = "https://online.moysklad.ru/api/remap/1.2/entity/cashin";
+                        $uri = "https://api.moysklad.ru/api/remap/1.2/entity/cashin";
                         $sum = ($item['sum']['bills'] + ($item['sum']['coins'] / 100)) * 100;
                         $this->createPayInDocument($uri, $apiKey,  1, $formattedOrder, $sum, $description.'Автоматическое создание документа на основе настроек приложение. Оплата наличными, на сумму: '.$sum/100);
                     }
 
                     if ($item['type'] == 'PAYMENT_CARD'){
-                        $uri = "https://online.moysklad.ru/api/remap/1.2/entity/paymentin";
+                        $uri = "https://api.moysklad.ru/api/remap/1.2/entity/paymentin";
                         $sum = ($item['sum']['bills'] + ($item['sum']['coins'] / 100)) * 100;
                         $this->createPayInDocument($uri, $apiKey,  2, $formattedOrder, $sum, $description.'Автоматическое создание документа на основе настроек приложение. Оплата картой, на сумму: '.$sum/100);
                     }
 
                     if ($item['type'] == 'PAYMENT_MOBILE'){
-                        $uri = "https://online.moysklad.ru/api/remap/1.2/entity/paymentin";
+                        $uri = "https://api.moysklad.ru/api/remap/1.2/entity/paymentin";
                         $sum = ($item['sum']['bills'] + ($item['sum']['coins'] / 100)) * 100;
                         $this->createPayInDocument($uri, $apiKey,  2, $formattedOrder, $sum, $description.'Автоматическое создание документа на основе настроек приложение. Оплата мобильная, на сумму: '.$sum/100);
                     }
@@ -127,19 +127,19 @@ class DocumentService
     {
         $uri = null;
         if ($isPayment == 2) {
-            $uri = "https://online.moysklad.ru/api/remap/1.2/entity/paymentout";
+            $uri = "https://api.moysklad.ru/api/remap/1.2/entity/paymentout";
         } elseif($isPayment == 1) {
-            $uri = "https://online.moysklad.ru/api/remap/1.2/entity/cashout";
+            $uri = "https://api.moysklad.ru/api/remap/1.2/entity/cashout";
         }elseif($isPayment == 3) {
             switch ($payment['type']){
                 case 'PAYMENT_CASH':{
-                    $uri = "https://online.moysklad.ru/api/remap/1.2/entity/cashout";
-                    $sum = ($payment['sum']['bills'] + ($payment['sum']['coins'] / 100) * 1000);
+                    $uri = "https://api.moysklad.ru/api/remap/1.2/entity/cashout";
+                    $sum = ($payment['sum']['bills'] + ($payment['sum']['coins'] ) * 1000);
                     break;
                 }
                 case 'PAYMENT_CARD' or 'PAYMENT_MOBILE':{
-                    $uri = "https://online.moysklad.ru/api/remap/1.2/entity/paymentout";
-                    $sum = ($payment['sum']['bills'] + ($payment['sum']['coins'] / 100) * 1000);
+                    $uri = "https://api.moysklad.ru/api/remap/1.2/entity/paymentout";
+                    $sum = ($payment['sum']['bills'] + ($payment['sum']['coins'] ) * 1000);
                     break;
                 }
             }
@@ -152,7 +152,7 @@ class DocumentService
             "expenseItem" => [
                 "meta" => $this->expenseItemHook->getExpenseItem('Возврат',$apiKey),
             ],
-            "sum" => $sum,
+            "sum" => $sum * 100,
         ];
 
         if ($metaReturn != null){

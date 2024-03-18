@@ -17,14 +17,12 @@ class cfg extends Controller
 
     public function __construct()
     {
-        $cfg = new AppConfigController( require(public_path().'/Config'.'/config.php') );
-
-        $this->appId = $cfg->appId;
-        $this->appUid = $cfg->appUid;
-        $this->secretKey = $cfg->secretKey;
-        $this->appBaseUrl = $cfg->appBaseUrl;
-        $this->moyskladVendorApiEndpointUrl = $cfg->moyskladVendorApiEndpointUrl;
-        $this->moyskladJsonApiEndpointUrl = $cfg->moyskladJsonApiEndpointUrl;
+        $this->appId = "ae75a400-6677-4b47-a9d7-a92a216ee489";
+        $this->appUid = 'rekassa.smartinnovations';
+        $this->secretKey = "9j3XnrRgYOByB3Ugp5nwC0y44eYFJLnQvgh4xEEMssUPEuGJ0dUfHRfXx7WeBHT29q9WhvWOBwWqteEuMxBrqWImrIz16TBB3ML8EVLxG45IFgAdakKQeeqGi3C3tQFA";
+        $this->appBaseUrl ='https://smartrekassa.kz/';
+        $this->moyskladVendorApiEndpointUrl = 'https://apps-api.moysklad.ru/api/vendor/1.0';
+        $this->moyskladJsonApiEndpointUrl = 'https://api.moysklad.ru/api/remap/1.2';
     }
 
 

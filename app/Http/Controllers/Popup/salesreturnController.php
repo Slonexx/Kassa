@@ -35,14 +35,13 @@ class salesreturnController extends Controller
     }
 
     public function info_object_Id($object_Id, $Setting){
-        $url = "https://online.moysklad.ru/api/remap/1.2/entity/salesreturn/".$object_Id;
+        $url = "https://api.moysklad.ru/api/remap/1.2/entity/salesreturn/".$object_Id;
         $Client = new MsClient($Setting->tokenMs);
         $Body = $Client->get($url);
-        $attributes = null;
+        $attributes = [
+            'ticket_id' => null,
+        ];
         if (property_exists($Body, 'attributes')){
-            $attributes = [
-                'ticket_id' => null,
-            ];
             foreach ($Body->attributes as $item){
                 if ($item->name == 'id-билета (ReKassa)'){
                     $attributes['ticket_id'] = $item->value;

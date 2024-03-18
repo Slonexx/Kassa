@@ -27,7 +27,7 @@ class updateDocument extends Command
         foreach ($allSettings as $settings) {
             try {
                 $ClientCheckMC = new MsClient($settings->TokenMoySklad);
-                $ClientCheckMC->get('https://online.moysklad.ru/api/remap/1.2/entity/employee');
+                $ClientCheckMC->get('https://api.moysklad.ru/api/remap/1.2/entity/employee');
             } catch (BadResponseException $e) {continue;}
 
             $data = [

@@ -9,283 +9,224 @@ use App\Http\Controllers\getData\getDeviceFirst;
 use App\Http\Controllers\getData\getDevices;
 use App\Http\Controllers\getData\getSetting;
 use App\Services\AdditionalServices\DocumentService;
-use App\Services\MetaServices\MetaHook\AttributeHook;
 use Carbon\Carbon;
 use GuzzleHttp\Exception\ClientException;
-use GuzzleHttp\Exception\GuzzleException;
+use Illuminate\Http\JsonResponse;
 
 
-class TicketService
+class integrationTicketService
 {
-
-    private AttributeHook $attributeHook;
+    private mixed $data;
+    private MsClient $msClient;
     private DocumentService $documentService;
 
-    /**
-     * @param AttributeHook $attributeHook
-     * @param DocumentService $documentService
-     */
-    public function __construct(AttributeHook $attributeHook, DocumentService $documentService)
+    public function __construct()
     {
-        $this->attributeHook = $attributeHook;
-        $this->documentService = $documentService;
+        $this->documentService = app(DocumentService::class);
     }
 
-    // Create ticket
-
-    /**
-     * @throws GuzzleException
-     */
-    public function createTicket($data): array
+    public function createTicket($data): JsonResponse
     {
-        $accountId = $data['accountId'];
-        $id_entity = $data['id_entity'];
-        $entity_type = $data['entity_type'];
+        $this->data = $data;
+        $this->msClient = new MsClient($data->connection->ms_token);
 
+        $accountId = $data->accountId;
+        $id_entity = $data->object_Id;
+        $entity_type = $data->entity_type;
 
-        $money_card = $data['money_card'];
-        $money_cash = $data['money_cash'];
-        $money_mobile = $data['money_mobile'];
+        $money_card = $data->data->money_card;
+        $money_cash = $data->data->money_cash;
+        $money_mobile = $data->data->money_mobile;
 
-        $total = $data['total'];
-        $payType = $data['pay_type'];
+        $total = $data->data->total;
+        $payType = $data->data->pay_type;
 
-        $positions = $data['positions'];
+        $positions = $data->data->position;
 
         $tookSum = $total;
 
-        if (is_null($money_card)) $money_card = 0;
-        if (is_null($money_cash)) $money_cash = 0;
-        if (is_null($money_mobile)) $money_mobile = 0;
 
-        if ($money_card <= 0 && $money_cash <= 0 && $money_mobile <= 0) return [
-            "res" => [
-                "message" => "Please enter money!",
-            ],
-            "code" => 400
-        ];
-
-
-        $Setting = new getSetting($accountId);
-
-        $apiKeyMs = $Setting->tokenMs;
-        $paymentOption = $Setting->paymentDocument;
-
-        $apiKey = $Setting->apiKey;
-
-        $Device = new getDevices($accountId);
-        $znm = $Device->devices[0]->znm;
-        $Device = new getDeviceFirst($znm);
-
-        $numKassa = $Device->znm;
-        $password = $Device->password;
+        if ($data->data->money_card <= 0 && $data->data->money_cash <= 0 && $data->data->money_mobile <= 0) return response()->json([
+            'status' => false,
+            'message' => 'Отсутствуют информации о суммах, перезагрузите бразуер (F5)',
+        ]);
 
         //take positions from entity
         $urlEntity = $this->getUrlEntity($entity_type, $id_entity);
-        $client = new MsClient($apiKeyMs);
-        $jsonEntity = $client->get($urlEntity);
 
-        //dd($jsonEntity);
+        $jsonEntity = $this->msClient->get($urlEntity);
 
-        if (property_exists($jsonEntity, 'positions')) {
+        $totalSum = $this->getTotalSum($positions, $urlEntity, $jsonEntity);
 
-            $totalSum = $this->getTotalSum($positions, $urlEntity, $jsonEntity, $apiKeyMs);
+        if ($tookSum < $totalSum)
+            return response()->json([
+                'status' => false,
+                'message' => "Недостаточно денег для завершения транзакции",
+            ]);
 
-            if ($tookSum < $totalSum) {
-                return [
-                    "res" => [
-                        "message" => "Don't have enough money to complete the transaction",
+
+        $change = $tookSum - $totalSum;
+
+        $items = $this->getItemsByHrefPositions($jsonEntity->positions->meta->href, $positions, $jsonEntity);
+
+        if (count($items) > 0) {
+
+            $payments = [];
+            $tempSum = $totalSum;
+
+            if (intval($money_cash) > 0 && $tempSum > 0) {
+                if ($tempSum > $money_cash) {
+                    $pay = $money_cash;
+                    $tempSum -= $pay;
+                } else {
+                    $pay = $tempSum;
+                    $tempSum = 0;
+                }
+
+                $paymentsSumBills = intval($pay);
+                $paymentsSumCoins = intval(round(floatval($pay) - intval($pay), 2) * 100);
+                if ($paymentsSumCoins >= 100) {
+                    $paymentsSumBills = $paymentsSumBills + (intval($paymentsSumCoins / 100));
+                    $paymentsSumCoins = $paymentsSumCoins - (intval($paymentsSumCoins / 100) * 100);
+                }
+
+                $payments[] = [
+                    "type" => $this->getMoneyType("Наличные"),
+                    "sum" => [
+                        "bills" => "" . $paymentsSumBills,
+                        "coins" => "" . $paymentsSumCoins,
                     ],
-                    "code" => 400
                 ];
+
+            }
+            if (intval($money_card) > 0 && $tempSum > 0) {
+                if ($tempSum > $money_card) {
+                    $pay = $money_card;
+                    $tempSum -= $pay;
+                } else {
+                    $pay = $tempSum;
+                    $tempSum = 0;
+                }
+
+                $paymentsSumBills = intval($pay);
+                $paymentsSumCoins = intval(round(floatval($pay) - intval($pay), 2) * 100);
+                if ($paymentsSumCoins >= 100) {
+                    $paymentsSumBills = $paymentsSumBills + (intval($paymentsSumCoins / 100));
+                    $paymentsSumCoins = $paymentsSumCoins - (intval($paymentsSumCoins / 100) * 100);
+                }
+
+                $payments[] = [
+                    "type" => $this->getMoneyType("Банковская карта"),
+                    "sum" => [
+                        "bills" => "" . $paymentsSumBills,
+                        "coins" => "" . $paymentsSumCoins,
+                    ],
+                ];
+
+            }
+            if (intval($money_mobile) > 0 && $tempSum > 0) {
+                $pay = min($tempSum, $money_mobile);
+
+                $paymentsSumBills = intval($pay);
+                $paymentsSumCoins = intval(round(floatval($pay) - intval($pay), 2) * 100);
+                if ($paymentsSumCoins >= 100) {
+                    $paymentsSumBills = $paymentsSumBills + (intval($paymentsSumCoins / 100));
+                    $paymentsSumCoins = $paymentsSumCoins - (intval($paymentsSumCoins / 100) * 100);
+                }
+
+                $payments[] = [
+                    "type" => $this->getMoneyType("Мобильные"),
+                    "sum" => [
+                        "bills" => "" . $paymentsSumBills,
+                        "coins" => "" . $paymentsSumCoins,
+                    ],
+                ];
+
             }
 
-            $change = $tookSum - $totalSum;
+            $taken = 0;
+            if ($payType != 'return') $taken = $money_cash;
 
-            $items = $this->getItemsByHrefPositions($jsonEntity->positions->meta->href, $positions, $jsonEntity, $apiKeyMs);
-
-            if (count($items) > 0) {
-
-                $payments = [];
-                $tempSum = $totalSum;
-
-                if (intval($money_cash) > 0 && $tempSum > 0) {
-                    if ($tempSum > $money_cash) {
-                        $pay = $money_cash;
-                        $tempSum -= $pay;
-                    } else {
-                        $pay = $tempSum;
-                        $tempSum = 0;
-                    }
-
-                    $paymentsSumBills = intval($pay);
-                    $paymentsSumCoins = intval(round(floatval($pay) - intval($pay), 2) * 100);
-                    if ($paymentsSumCoins >= 100) {
-                        $paymentsSumBills = $paymentsSumBills + (intval($paymentsSumCoins / 100));
-                        $paymentsSumCoins = $paymentsSumCoins - (intval($paymentsSumCoins / 100) * 100);
-                    }
-
-                    $payments[] = [
-                        "type" => $this->getMoneyType("Наличные"),
-                        "sum" => [
-                            "bills" => "" . $paymentsSumBills,
-                            "coins" => "" . $paymentsSumCoins,
-                        ],
-                    ];
-
-                }
-
-                if (intval($money_card) > 0 && $tempSum > 0) {
-                    if ($tempSum > $money_card) {
-                        $pay = $money_card;
-                        $tempSum -= $pay;
-                    } else {
-                        $pay = $tempSum;
-                        $tempSum = 0;
-                    }
-
-                    $paymentsSumBills = intval($pay);
-                    $paymentsSumCoins = intval(round(floatval($pay) - intval($pay), 2) * 100);
-                    if ($paymentsSumCoins >= 100) {
-                        $paymentsSumBills = $paymentsSumBills + (intval($paymentsSumCoins / 100));
-                        $paymentsSumCoins = $paymentsSumCoins - (intval($paymentsSumCoins / 100) * 100);
-                    }
-
-                    $payments[] = [
-                        "type" => $this->getMoneyType("Банковская карта"),
-                        "sum" => [
-                            "bills" => "" . $paymentsSumBills,
-                            "coins" => "" . $paymentsSumCoins,
-                        ],
-                    ];
-
-                }
-
-                if (intval($money_mobile) > 0 && $tempSum > 0) {
-                    $pay = min($tempSum, $money_mobile);
-
-                    $paymentsSumBills = intval($pay);
-                    $paymentsSumCoins = intval(round(floatval($pay) - intval($pay), 2) * 100);
-                    if ($paymentsSumCoins >= 100) {
-                        $paymentsSumBills = $paymentsSumBills + (intval($paymentsSumCoins / 100));
-                        $paymentsSumCoins = $paymentsSumCoins - (intval($paymentsSumCoins / 100) * 100);
-                    }
-
-                    $payments[] = [
-                        "type" => $this->getMoneyType("Мобильные"),
-                        "sum" => [
-                            "bills" => "" . $paymentsSumBills,
-                            "coins" => "" . $paymentsSumCoins,
-                        ],
-                    ];
-
-                }
-
-                $taken = 0;
-                if ($payType != 'return') $taken = $money_cash;
-
-                $amountsSumBills = intval($totalSum);
-                $amountsSumCoins = intval(round(floatval($totalSum) - intval($totalSum), 2) * 100);
-                if ($amountsSumCoins >= 100) {
-                    $amountsSumBills = $amountsSumBills + (intval($amountsSumCoins / 100));
-                    $amountsSumCoins = $amountsSumCoins - (intval($amountsSumCoins / 100) * 100);
-                }
-
-                $amounts = [
-                    "total" => [
-                        "bills" => "" . $amountsSumBills,
-                        "coins" => "" . $amountsSumCoins,
-                    ],
-                    "taken" => [
-                        "bills" => "" . intval($taken),
-                        "coins" => "" . intval(round(floatval($taken) - intval($taken), 2) * 100),
-                    ],
-                    "change" => [
-                        "bills" => "" . intval($change),
-                        "coins" => "" . intval(round(floatval($change) - intval($change), 2) * 100),
-                    ],
-                ];
-
-                if ($accountId == '1dd5bd55-d141-11ec-0a80-055600047495') $clientK = new testKassClient($numKassa, $password, $apiKey);
-                else $clientK = new KassClient($numKassa, $password, $apiKey);
-                $id = $clientK->getNewJwtToken()->id;
-                $body = [
-                    "dateTime" => $this->getNowDateTime(),
-                    "items" => $items,
-                    "payments" => $payments,
-                    "amounts" => $amounts,
-                ];
-
-                $isPayIn = null;
-                if ($payType == "sell") {
-                    $body["operation"] = "OPERATION_SELL";
-                    $isPayIn = true;
-                } elseif ($payType == "return") {
-                    $body["operation"] = "OPERATION_SELL_RETURN";
-                    $isPayIn = false;
-                }
-
-                $ExtensionOptions = $this->getUUH($Setting, $id_entity, $entity_type);
-                if ($ExtensionOptions) {
-                    $body = $body + ['extension_options' => $ExtensionOptions];
-                }
-
-
-                //dd($body);
-
-                try {
-                    $response = $clientK->post("crs/" . $id . "/tickets", $body);
-                    //dd($response);
-                    $jsonEntity = $this->writeToAttrib($response->id, $urlEntity, $entity_type, $apiKeyMs, $positions);
-                    if ($isPayIn) {
-                        if ($Setting->paymentDocument != null) {
-                            $this->createPaymentDocument($Setting, $client, $entity_type, $jsonEntity, $body);
-                        }
-                    } else {
-                        $isReturn = ($entity_type == "salesreturn");
-                        $this->documentService->initPayReturnDocument($body['payments'], $paymentOption, $isReturn, $jsonEntity, $apiKeyMs );
-                    }
-
-                    return [
-                        "res" => [
-                            "message" => "Ticket created!",
-                            "response" => $response,
-                        ],
-                        "code" => 200,
-                    ];
-                } catch (ClientException $exception) {
-                    return [
-                        "res" => [
-                            "message" => "Ticket not created!",
-                            "error" => json_decode($exception->getResponse()->getBody()),
-                        ],
-                        "code" => 400,
-                    ];
-                    //dd($exception->getMessage());
-                }
+            $amountsSumBills = intval($totalSum);
+            $amountsSumCoins = intval(round(floatval($totalSum) - intval($totalSum), 2) * 100);
+            if ($amountsSumCoins >= 100) {
+                $amountsSumBills = $amountsSumBills + (intval($amountsSumCoins / 100));
+                $amountsSumCoins = $amountsSumCoins - (intval($amountsSumCoins / 100) * 100);
             }
-        } else {
-            return [
-                "res" => [
-                    "message" => "Entity haven't got positions!",
+
+            $amounts = [
+                "total" => [
+                    "bills" => "" . $amountsSumBills,
+                    "coins" => "" . $amountsSumCoins,
                 ],
-                "code" => 400,
+                "taken" => [
+                    "bills" => "" . intval($taken),
+                    "coins" => "" . intval(round(floatval($taken) - intval($taken), 2) * 100),
+                ],
+                "change" => [
+                    "bills" => "" . intval($change),
+                    "coins" => "" . intval(round(floatval($change) - intval($change), 2) * 100),
+                ],
             ];
+            if ($accountId == '1dd5bd55-d141-11ec-0a80-055600047495') $clientK = new testKassClient($this->data->setting_main->serial_number, $this->data->setting_main->password);
+            else $clientK = new KassClient($this->data->setting_main->serial_number, $this->data->setting_main->password, '');
+
+            $id = $clientK->getNewJwtToken()->id;
+            $body = [
+                "dateTime" => $this->getNowDateTime(),
+                "items" => $items,
+                "payments" => $payments,
+                "amounts" => $amounts,
+            ];
+
+            $isPayIn = null;
+            if ($payType == "sell") {
+                $body["operation"] = "OPERATION_SELL";
+                $isPayIn = true;
+            } elseif ($payType == "return") {
+                $body["operation"] = "OPERATION_SELL_RETURN";
+                $isPayIn = false;
+            }
+
+            $ExtensionOptions = $this->getUUH($id_entity, $entity_type);
+            if ($ExtensionOptions) $body = $body + ['extension_options' => $ExtensionOptions];
+
+
+            //dd($body);
+
+            try {
+                $response = $clientK->post("crs/" . $id . "/tickets", $body);
+                $jsonEntity = $this->writeToAttrib($response, $urlEntity, $entity_type, $positions);
+
+                if ($isPayIn) {
+                    if ($this->data->setting_document->paymentDocument != null) $this->createPaymentDocument($entity_type, $jsonEntity, $body);
+                } else {
+                    $isReturn = ($entity_type == "salesreturn");
+                    $this->documentService->initPayReturnDocument($body['payments'], $this->data->setting_document->paymentDocument, $isReturn, $jsonEntity, $this->data->connection->ms_token);
+                }
+
+                return response()->json([
+                    'status' => true,
+                    'response' => $response,
+                ]);
+            } catch (ClientException $exception) {
+                return response()->json([
+                    'status' => false,
+                    'message' => json_decode($exception->getResponse()->getBody()),
+                ]);
+            }
         }
-        return [
-            "res" => [
-                "message" => "Some error",
-            ],
-            "code" => 400,
-        ];
+        return response()->json([
+            'status' => false,
+            'message' => "Отсутствует количество товаров",
+        ]);
     }
 
-    private function getItemsByHrefPositions($href, $positionsEntity, $jsonEntity, $apiKeyMs): array
+    private function getItemsByHrefPositions($href, $positionsEntity, $jsonEntity): array
     {
         //dd($href,$positionsEntity,$jsonEntity,$apiKeyMs);
         $positions = [];
-        $client = new MsClient($apiKeyMs);
-        $jsonPositions = $client->get($href);
+        $jsonPositions = $this->msClient->get($href);
 
         foreach ($jsonPositions->rows as $row) {
             foreach ($positionsEntity as $item) {
@@ -294,12 +235,12 @@ class TicketService
                     $discount = $row->discount;
                     $positionPrice = $row->price / 100;
                     $sumPrice = $positionPrice - ($positionPrice * ($discount / 100));
-                    $product = $this->getProductByAssortMeta($row->assortment->meta->href, $apiKeyMs);
+                    $product = $this->msClient->get($row->assortment->meta->href);
 
                     if (property_exists($product, 'characteristics')) {
-                        $check_uom = $client->get($product->product->meta->href);
-                        $this->getProductByUOM($check_uom->uom->meta->href, $apiKeyMs);
-                    } else $this->getProductByUOM($product->uom->meta->href, $apiKeyMs);
+                        $check_uom = $this->msClient->get($product->product->meta->href);
+                        $this->getProductByUOM($check_uom->uom->meta->href);
+                    } else $this->getProductByUOM($product->uom->meta->href);
 
 
                     if (!property_exists($row, 'trackingCodes')) {
@@ -326,9 +267,9 @@ class TicketService
                         ];
 
                         if (property_exists($product, 'characteristics')) {
-                            $check_uom = $client->get($product->product->meta->href);
-                            $position["commodity"]['measureUnitCode'] = $this->getUomCode($check_uom->uom->meta->href, $apiKeyMs);
-                        } else  $position["commodity"]['measureUnitCode'] = $this->getUomCode($product->uom->meta->href, $apiKeyMs);
+                            $check_uom = $this->msClient->get($product->product->meta->href);
+                            $position["commodity"]['measureUnitCode'] = $this->getUomCode($check_uom->uom->meta->href);
+                        } else  $position["commodity"]['measureUnitCode'] = $this->getUomCode($product->uom->meta->href);
 
                         if (property_exists($row, 'vat') && property_exists($jsonEntity, 'vatIncluded')) {
 
@@ -378,9 +319,9 @@ class TicketService
                             ];
 
                             if (property_exists($product, 'characteristics')) {
-                                $check_uom = $client->get($product->product->meta->href);
-                                $position["commodity"]['measureUnitCode'] = $this->getUomCode($check_uom->uom->meta->href, $apiKeyMs);
-                            } else  $position["commodity"]['measureUnitCode'] = $this->getUomCode($product->uom->meta->href, $apiKeyMs);
+                                $check_uom = $this->msClient->get($product->product->meta->href);
+                                $position["commodity"]['measureUnitCode'] = $this->getUomCode($check_uom->uom->meta->href);
+                            } else  $position["commodity"]['measureUnitCode'] = $this->getUomCode($product->uom->meta->href);
 
                             if (property_exists($row, 'trackingCodes')) {
                                 $position["commodity"]["excise_stamp"] = $row->trackingCodes[$i - 1]->cis;
@@ -444,22 +385,14 @@ class TicketService
         return $url;
     }
 
-    private function getProductByAssortMeta($href, $apiKeyMs)
+    private function getProductByUOM($href)
     {
-        $client = new MsClient($apiKeyMs);
-        return $client->get($href);
+        return $this->msClient->get($href);
     }
 
-    private function getProductByUOM($href, $apiKeyMs)
+    private function getUomCode($href)
     {
-        $client = new MsClient($apiKeyMs);
-        return $client->get($href);
-    }
-
-    private function getUomCode($href, $apiKeyMs)
-    {
-        $client = new MsClient($apiKeyMs);
-        return $client->get($href)->code;
+        return $this->msClient->get($href)->code;
     }
 
     private function getNowDateTime(): array
@@ -479,45 +412,55 @@ class TicketService
         ];
     }
 
-    public function writeToAttrib($id_ticket, $urlEntity, $entityType, $apiKeyMs, $positions)
+    public function writeToAttrib($responseClient, $urlEntity, $entityType, $positions)
     {
-        $client = new MsClient($apiKeyMs);
+        $body = null;
+        $metaPositions = $this->getMetaPositions($urlEntity, $positions);
 
-        if (is_null($id_ticket)) {
-            $flag = false;
-        } else {
-            $flag = true;
-        }
+        $meta = $this->getMeta($entityType);
 
-        $metaPositions = $this->getMetaPositions($urlEntity, $apiKeyMs, $positions);
+        if ($meta['fiscal_number'] != null) $body["attributes"][] = ["meta" => $meta['fiscal_number'], "value" => "" . $responseClient->id];
+        if ($meta['link_to_check'] != null) $body["attributes"][] = ["meta" => $meta['link_to_check'], "value" => $responseClient->qrCode];
+        if ($meta['fiscalization'] != null) $body["attributes"][] = ["meta" => $meta['fiscalization'], "value" => true];
+        if ($meta['kkm_ID'] != null) $body["attributes"][] = ["meta" => $meta['kkm_ID'], "value" => "" . $responseClient->id];
 
-        $metaIdTicket = $this->getMeta("id-билета (ReKassa)", $entityType, $apiKeyMs);
-        $metaTicketFlag = $this->getMeta("Фискализация (ReKassa)", $entityType, $apiKeyMs);
         $body = [
-            "attributes" => [
-                0 => [
-                    "meta" => $metaIdTicket,
-                    "value" => "" . $id_ticket,
-                ],
-                1 => [
-                    "meta" => $metaTicketFlag,
-                    "value" => $flag,
-                ],
-            ],
+            "attributes" => $body["attributes"],
             'positions' => $metaPositions,
         ];
 
-        return  $client->put($urlEntity, $body);
+        return $this->msClient->put($urlEntity, $body);
     }
 
-    private function getMeta($attribName, $entityType, $apiKeyMs)
+    private function getMeta($entityType): array
     {
-        return match ($entityType) {
-            "customerorder" => $this->attributeHook->getOrderAttribute($attribName, $apiKeyMs),
-            "demand" => $this->attributeHook->getDemandAttribute($attribName, $apiKeyMs),
-            "salesreturn" => $this->attributeHook->getSalesReturnAttribute($attribName, $apiKeyMs),
-            default => null,
+
+        $url = match ($entityType) {
+            "demand" => "https://api.moysklad.ru/api/remap/1.2/entity/demand/metadata/attributes",
+            "salesreturn" => "https://api.moysklad.ru/api/remap/1.2/entity/salesreturn/metadata/attributes",
+            default => "https://api.moysklad.ru/api/remap/1.2/entity/customerorder/metadata/attributes",
         };
+
+        $json = $this->msClient->get($url);
+        $meta = null;
+        foreach ($json->rows as $row) {
+            if ($row->name == "фискальный номер") {
+                $meta['fiscal_number'] = $row->meta;
+            } elseif ($row->name == "Ссылка на чек") {
+                $meta['link_to_check'] = $row->meta;
+            } elseif ($row->name == "Фискализация") {
+                $meta['fiscalization'] = $row->meta;
+            } elseif ($row->name == "kkm_ID") {
+                $meta['kkm_ID'] = $row->meta;
+            }
+        }
+
+        return [
+            'fiscal_number' => $meta['fiscal_number'] ?? '',
+            'link_to_check' => $meta['link_to_check'] ?? '',
+            'fiscalization' => $meta['fiscalization'] ?? '',
+            'kkm_ID' => $meta['kkm_ID'] ?? '',
+        ];
     }
 
     private function getMoneyType($moneyType): string
@@ -530,25 +473,24 @@ class TicketService
         };
     }
 
-    private function getTotalSum($positions, $urlEntity, $jsonEntity, $apiKeyMs): float|int
+    private function getTotalSum($positions, $urlEntity, $jsonEntity): float|int
     {
         $total = 0;
         $urlEntityWithPositions = $urlEntity . '/positions';
-        $client = new MsClient($apiKeyMs);
-        $jsonPositions = $client->get($urlEntityWithPositions);
+        $jsonPositions = $this->msClient->get($urlEntityWithPositions);
 
         foreach ($jsonPositions->rows as $position) {
 
             foreach ($positions as $item) {
                 if ($position->id == $item->id) {
                     $href = $position->assortment->meta->href;
-                    $product = $client->get($href);
+                    $product = $this->msClient->get($href);
 
 
                     if (property_exists($product, 'characteristics')) {
-                        $check_uom = $client->get($product->product->meta->href);
-                        $checkUOM = $this->getProductByUOM($check_uom->uom->meta->href, $apiKeyMs);
-                    } else  $checkUOM = $this->getProductByUOM($product->uom->meta->href, $apiKeyMs);
+                        $check_uom = $this->msClient->get($product->product->meta->href);
+                        $checkUOM = $this->getProductByUOM($check_uom->uom->meta->href);
+                    } else  $checkUOM = $this->getProductByUOM($product->uom->meta->href);
 
 
                     if ($checkUOM->name == "шт") {
@@ -578,37 +520,11 @@ class TicketService
         return $total;
     }
 
-    public function showTicket($data): string
+
+    private function getMetaPositions($urlEntity, $positions): array
     {
-        $accountId = $data['accountId'];
-        $idTicket = $data['id_ticket'];
-
-
-        $Setting = new getSetting($accountId);
-        $apiKey = $Setting->apiKey;
-
-        $Device = new getDevices($accountId);
-
-        $znm = $Device->devices[0]->znm;
-        $Device = new getDeviceFirst($znm);
-
-        $numKassa = $Device->znm;
-        $password = $Device->password;
-
-        if ($accountId == '1dd5bd55-d141-11ec-0a80-055600047495') $client = new testKassClient($numKassa, $password, $apiKey);
-        else $client = new KassClient($numKassa, $password, $apiKey);
-
-        $idKassa = $client->getNewJwtToken()->id;
-
-        return "print/" . $idKassa . "/" . $idTicket;
-    }
-
-
-    private function getMetaPositions($urlEntity, $apiKeyMs, $positions): array
-    {
-        $client = new MsClient($apiKeyMs);
         $data = null;
-        $body = $client->get($urlEntity . '/positions')->rows;
+        $body = $this->msClient->get($urlEntity . '/positions')->rows;
         $index = 0;
         foreach ($body as $item) {
             foreach ($positions as $pos) {
@@ -638,12 +554,11 @@ class TicketService
         return $data;
     }
 
-    private function getUUH(getSetting $Setting, mixed $id_entity, mixed $entity_type): array
+    private function getUUH(mixed $id_entity, mixed $entity_type)
     {
-        $Client = new MsClient($Setting->tokenMs);
-        $body = $Client->get('https://api.moysklad.ru/api/remap/1.2/entity/' . $entity_type . '/' . $id_entity);
-        $agent = $Client->get($body->agent->meta->href);
-        $result = [];
+        $body = $this->msClient->get('https://api.moysklad.ru/api/remap/1.2/entity/' . $entity_type . '/' . $id_entity);
+        $agent = $this->msClient->get($body->agent->meta->href);
+        $result = false;
 
         if (property_exists($agent, 'email')) {
             $result['customer_email'] = $agent->email;
@@ -658,9 +573,9 @@ class TicketService
         return $result;
     }
 
-    private function createPaymentDocument(getSetting $Setting, MsClient $client, string $entity_type, mixed $OldBody, mixed $vars): void
+    private function createPaymentDocument(string $entity_type, mixed $OldBody, mixed $vars): void
     {
-        switch ($Setting->paymentDocument) {
+        switch ($this->data->setting_document->paymentDocument) {
             case "1":
             {
                 $url = 'https://api.moysklad.ru/api/remap/1.2/entity/';
@@ -694,7 +609,7 @@ class TicketService
                             'linkedSum' => $OldBody->sum,
                         ],]
                 ];
-                $client->post($url, $body);
+                $this->msClient->post($url, $body);
                 break;
             }
             case "2":
@@ -707,7 +622,7 @@ class TicketService
                     break;
                 }
 
-                $rate_body = $client->get("https://api.moysklad.ru/api/remap/1.2/entity/currency/")->rows;
+                $rate_body = $this->msClient->get("https://api.moysklad.ru/api/remap/1.2/entity/currency/")->rows;
                 $rate = null;
                 foreach ($rate_body as $item) {
                     if ($item->name == "тенге" or $item->fullName == "Казахстанский тенге") {
@@ -748,7 +663,7 @@ class TicketService
                     'rate' => $rate
                 ];
                 if ($body['rate'] == null) unlink($body['rate']);
-                $client->post($url, $body);
+                $this->msClient->post($url, $body);
                 break;
             }
             case "3":
@@ -762,7 +677,7 @@ class TicketService
                             $url_to_body = $url . 'paymentin';
                         }
 
-                        $rate_body = $client->get("https://api.moysklad.ru/api/remap/1.2/entity/currency/")->rows;
+                        $rate_body = $this->msClient->get("https://api.moysklad.ru/api/remap/1.2/entity/currency/")->rows;
                         $rate = null;
                         foreach ($rate_body as $item_rate) {
                             if ($item_rate->name == "тенге" or $item_rate->fullName == "Казахстанский тенге") {
@@ -803,7 +718,7 @@ class TicketService
                             'rate' => $rate
                         ];
                         if ($body['rate'] == null) unlink($body['rate']);
-                        $client->post($url_to_body, $body);
+                        $this->msClient->post($url_to_body, $body);
                     }
                 }
                 break;
@@ -815,7 +730,7 @@ class TicketService
                 if ($entity_type != 'salesreturn') {
                     foreach ($vars['payments'] as $item) {
                         if ($item['type'] == "PAYMENT_CASH") {
-                            switch ($Setting->OperationCash) {
+                            switch ($this->data->setting_document->OperationCash) {
                                 case 1:
                                 {
                                     $url_to_body = $url . 'cashin';
@@ -830,7 +745,7 @@ class TicketService
                                     break;
                             }
                         } elseif ($item['type'] == "PAYMENT_CARD") {
-                            switch ($Setting->OperationCard) {
+                            switch ($this->data->setting_document->OperationCard) {
                                 case 1:
                                 {
                                     $url_to_body = $url . 'cashin';
@@ -845,7 +760,7 @@ class TicketService
                                     break;
                             }
                         } else {
-                            switch ($Setting->OperationMobile) {
+                            switch ($this->data->setting_document->OperationMobile) {
                                 case 1:
                                 {
                                     $url_to_body = $url . 'cashin';
@@ -863,7 +778,7 @@ class TicketService
 
                         if ($url_to_body == null) continue;
 
-                        $rate_body = $client->get("https://api.moysklad.ru/api/remap/1.2/entity/currency/")->rows;
+                        $rate_body = $this->msClient->get("https://api.moysklad.ru/api/remap/1.2/entity/currency/")->rows;
                         $rate = null;
                         foreach ($rate_body as $item_rate) {
                             if ($item_rate->name == "тенге" or $item_rate->fullName == "Казахстанский тенге") {
@@ -904,7 +819,7 @@ class TicketService
                             'rate' => $rate
                         ];
                         if ($body['rate'] == null) unset($body['rate']);
-                        $client->post($url_to_body, $body);
+                        $this->msClient->post($url_to_body, $body);
                     }
                 }
 

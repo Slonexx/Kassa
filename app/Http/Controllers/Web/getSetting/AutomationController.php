@@ -31,9 +31,9 @@ class AutomationController extends Controller
         $Client = new MsClient($Setting->TokenMoySklad);
 
         try {
-            $customerorder = $Client->get('https://online.moysklad.ru/api/remap/1.2/entity/customerorder/metadata');
-            $demand = $Client->get('https://online.moysklad.ru/api/remap/1.2/entity/demand/metadata');
-            $salesreturn = $Client->get('https://online.moysklad.ru/api/remap/1.2/entity/salesreturn/metadata');
+            $customerorder = $Client->get('https://api.moysklad.ru/api/remap/1.2/entity/customerorder/metadata');
+            $demand = $Client->get('https://api.moysklad.ru/api/remap/1.2/entity/demand/metadata');
+            $salesreturn = $Client->get('https://api.moysklad.ru/api/remap/1.2/entity/salesreturn/metadata');
         } catch (BadResponseException $e){
             return view('setting.error', [
                 'accountId' => $accountId,
@@ -42,8 +42,8 @@ class AutomationController extends Controller
             ]);
         }
 
-        $body_project = $Client->get('https://online.moysklad.ru/api/remap/1.2/entity/project');
-        $body_saleschannel = $Client->get('https://online.moysklad.ru/api/remap/1.2/entity/saleschannel');
+        $body_project = $Client->get('https://api.moysklad.ru/api/remap/1.2/entity/project');
+        $body_saleschannel = $Client->get('https://api.moysklad.ru/api/remap/1.2/entity/saleschannel');
 
         $dontChoose = json_decode(json_encode(['id'=>'0', 'name'=>'Не выбирать']));
 

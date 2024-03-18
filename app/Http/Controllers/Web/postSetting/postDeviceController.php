@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Web\postSetting;
 
 use App\Clients\KassClient;
+use App\Clients\testKassClient;
 use App\Http\Controllers\Config\getSettingVendorController;
 use App\Http\Controllers\Config\Lib\AppInstanceContoller;
 use App\Http\Controllers\Config\Lib\cfg;
@@ -32,7 +33,8 @@ class postDeviceController extends Controller
             try {
 
                 //ПРОВЕРКА НА КЛИЕНТА ААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААА
-                $Client = new KassClient($ZHM_1, $PASSWORD_1, $Setting->apiKey);
+                if ($getSettingVendorController->accountId == '1dd5bd55-d141-11ec-0a80-055600047495') $Client = new testKassClient($ZHM_1, $PASSWORD_1);
+                else $Client = new KassClient($ZHM_1, $PASSWORD_1, $Setting->apiKey);
                 $StatusCode = $Client->getStatusCode();
                 //dd($StatusCode);
 

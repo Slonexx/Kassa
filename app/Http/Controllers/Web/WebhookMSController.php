@@ -41,6 +41,12 @@ class WebhookMSController extends Controller
                 'message' => $this->returnMessage("2023-00-00 00:00:00", "Отсутствует auditContext, (изменений не было), скрипт прекращён!"),
             ]);
         }
+      /*  if ( strpos($request->auditContext['uid'], "kaspi-kz.fixcom") !== false ) {
+            return response()->json([
+                'code' => 203,
+                'message' => $this->returnMessage("2023-00-00 00:00:00", "Мы не работаем с fix (они плохие)"),
+            ]);
+        }*/
 
         if (empty($events[0]['updatedFields'])) {
             return response()->json([
@@ -89,9 +95,12 @@ class WebhookMSController extends Controller
 
         foreach ($multiDimensionalArray as $item) {
             $start = ['entity' => false,'state' => false, 'saleschannel' => false, 'project' => false];
-            if ($item['entity'] == "0") {
+            if (in_array($item['entity'], ["0", "1", "2", "3"])) {
                 $start['entity'] = true;
+            } else {
+                $start['entity'] = false;
             }
+
             if ($state->id == $item['status'] and in_array("state", $events[0]['updatedFields'])) {
                 $start['state'] = true;
             }

@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 class postAutomationController extends Controller
 {
 
-    public function postAutomation(Request $request, $accountId)
+    public function postAutomation(Request $request, $accountId): \Illuminate\Http\RedirectResponse
     {
         $Setting = new getSettingVendorController($accountId);
 
@@ -61,7 +61,7 @@ class postAutomationController extends Controller
             $Client = new MsClient($Setting->TokenMoySklad);
             $url_check ='https://dev.smartrekassa.kz/api/webhook/' ;
             $Webhook_check = true;
-            $Webhook_body = $Client->get('https://online.moysklad.ru/api/remap/1.2/entity/webhook/')->rows;
+            $Webhook_body = $Client->get('https://api.moysklad.ru/api/remap/1.2/entity/webhook/')->rows;
             if ($Webhook_body != []){
                 foreach ($Webhook_body as $item){
                     if ($item->url == $url_check){
@@ -70,26 +70,29 @@ class postAutomationController extends Controller
                 }
             }
             if ($Webhook_check) {
-                foreach ($Client->get('https://online.moysklad.ru/api/remap/1.2/entity/webhook/')->rows as $item){
-                    if (strpos(($item->url), "https://dev.smartrekassa.kz/") !== false) {
+                foreach ($Client->get('https://api.moysklad.ru/api/remap/1.2/entity/webhook/')->rows as $item){
+                    if (strpos(($item->url), "https://smartrekassa.kz/") !== false) {
                         $Client->delete($item->meta->href,null);
                     }
                 }
 
-                $Client->post('https://online.moysklad.ru/api/remap/1.2/entity/webhook/', [
-                    'url' => 'https://dev.smartrekassa.kz/api/webhook/customerorder',
+
+                $Client->post('https://api.moysklad.ru/api/remap/1.2/entity/webhook/', [
+                    'url' => 'https://smartrekassa.kz/api/webhook/customerorder',
                     'action' => "UPDATE",
                     'entityType' => 'customerorder',
                     'diffType' => "FIELDS",
                 ]);
-                $Client->post('https://online.moysklad.ru/api/remap/1.2/entity/webhook/', [
-                    'url' => 'https://dev.smartrekassa.kz/api/webhook/demand',
+
+                $Client->post('https://api.moysklad.ru/api/remap/1.2/entity/webhook/', [
+                    'url' => 'https://smartrekassa.kz/api/webhook/demand',
                     'action' => "UPDATE",
                     'entityType' => 'demand',
                     'diffType' => "FIELDS",
                 ]);
-                $Client->post('https://online.moysklad.ru/api/remap/1.2/entity/webhook/', [
-                    'url' => 'https://dev.smartrekassa.kz/api/webhook/salesreturn',
+
+                $Client->post('https://api.moysklad.ru/api/remap/1.2/entity/webhook/', [
+                    'url' => 'https://smartrekassa.kz/api/webhook/salesreturn',
                     'action' => "UPDATE",
                     'entityType' => 'salesreturn',
                     'diffType' => "FIELDS",

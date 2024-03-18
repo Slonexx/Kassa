@@ -1,4 +1,3 @@
-
 @extends('popup.index')
 
 @section('content')
@@ -27,7 +26,7 @@
                 }
         };*/
 
-        window.addEventListener("message", function() {
+        window.addEventListener("message", function () {
             FU_AnimationDownloadGIF('toggle', 'Загрузка')
             newPopup()
             let receivedMessage = event.data
@@ -36,9 +35,9 @@
                 accountId = receivedMessage.popupParameters.accountId;
                 entity_type = receivedMessage.popupParameters.entity_type;
 
-                let data = { object_Id: object_Id, accountId: accountId, };
+                let data = {object_Id: object_Id, accountId: accountId,};
 
-               // receivedMessage = null
+                // receivedMessage = null
 
                 let settings = ajax_settings(url, "GET", data);
                 console.log(url + ' settings ↓ ')
@@ -59,34 +58,34 @@
                     for (let i = 0; i < products.length; i++) {
                         if (products[i].propety === true) {
 
-                            let vat =  products[i].vat + '%'
+                            let vat = products[i].vat + '%'
                             let minus = 0
                             let plus = 1
-                            if (products[i].vat === 0)  vat = "без НДС"
+                            if (products[i].vat === 0) vat = "без НДС"
 
-                            $('#main').append('<div id="'+i+'" class="divTableRow" >' +
-                                '<div class="divTableCell">'+i+'</div>' +
-                                '<div id="productId_'+i+'" class="divTableCell" style="display: none">'+products[i].position+'</div>' +
-                                '<div id="productName_'+i+'" class="divTableCell"> '+products[i].name+'</div>' +
+                            $('#main').append('<div id="' + i + '" class="divTableRow" >' +
+                                '<div class="divTableCell">' + i + '</div>' +
+                                '<div id="productId_' + i + '" class="divTableCell" style="display: none">' + products[i].position + '</div>' +
+                                '<div id="productName_' + i + '" class="divTableCell"> ' + products[i].name + '</div>' +
 
                                 '<div class="divTableCell">' +
-                                '<span><i onclick="updateQuantity('+ i +', '+minus+')" class="fa-solid fa-circle-minus text-danger" style="cursor: pointer"></i></span>' +
-                                '<span id="productQuantity_'+ i +'" class="mx-3">' + products[i].quantity + '</span>' +
-                                '<span><i onclick="updateQuantity( '+ i +', '+plus+')" class="fa-solid fa-circle-plus text-success" style="cursor: pointer"></i></span>' +
+                                '<span><i onclick="updateQuantity(' + i + ', ' + minus + ')" class="fa-solid fa-circle-minus text-danger" style="cursor: pointer"></i></span>' +
+                                '<span id="productQuantity_' + i + '" class="mx-3">' + products[i].quantity + '</span>' +
+                                '<span><i onclick="updateQuantity( ' + i + ', ' + plus + ')" class="fa-solid fa-circle-plus text-success" style="cursor: pointer"></i></span>' +
                                 '</div>' +
 
-                                '<div id="productUOM_'+i+'" class="divTableCell">'+products[i].uom['name']+'</div>' +
-                                '<div id="productIDUOM_'+i+'" class="divTableCell" style="display: none">'+products[i].uom['id']+'</div>' +
+                                '<div id="productUOM_' + i + '" class="divTableCell">' + products[i].uom['name'] + '</div>' +
+                                '<div id="productIDUOM_' + i + '" class="divTableCell" style="display: none">' + products[i].uom['id'] + '</div>' +
 
-                                '<div id="productPrice_'+ i +'" class="divTableCell"> '+ products[i].price +' </div>' +
+                                '<div id="productPrice_' + i + '" class="divTableCell"> ' + products[i].price + ' </div>' +
 
-                                '<div id="productVat_'+ i +'" class="divTableCell"> '+ vat + ' </div>' +
+                                '<div id="productVat_' + i + '" class="divTableCell"> ' + vat + ' </div>' +
 
-                                '<div id="productDiscount_'+ i +'" class="divTableCell"> '+ products[i].discount + '%' + ' </div>' +
+                                '<div id="productDiscount_' + i + '" class="divTableCell"> ' + products[i].discount + '%' + ' </div>' +
 
-                                '<div id="productFinal_'+ i +'" class="divTableCell"> '+ products[i].final + ' </div>' +
+                                '<div id="productFinal_' + i + '" class="divTableCell"> ' + products[i].final + ' </div>' +
 
-                                '<span onclick="deleteBTNClick('+ i +')" class="divTableCell" > <i class="fa-solid fa-rectangle-xmark" style="cursor: pointer; margin-left: 2rem" ></i> </span>' +
+                                '<span onclick="deleteBTNClick(' + i + ')" class="divTableCell" > <i class="fa-solid fa-rectangle-xmark" style="cursor: pointer; margin-left: 2rem" ></i> </span>' +
 
                                 " </div>")
 
@@ -96,7 +95,7 @@
 
                         } else {
 
-                            $('#main').append('<div id="'+i+'" class="divTableRow" style="display: none">' + " </div>")
+                            $('#main').append('<div id="' + i + '" class="divTableRow" style="display: none">' + " </div>")
 
                             window.document.getElementById("messageAlert").innerText = "Позиции, у которых не системные единицы измерения не могут быть добавлены "
                             window.document.getElementById("message").style.display = "block"
@@ -107,7 +106,7 @@
                     FU_AnimationDownloadGIF('hide', 'Загрузка')
                     payment_type_on_set_option(payment_type, window.document.getElementById("sum").innerHTML)
 
-                    if (json.attributes.ticket_id != null){
+                    if (json.attributes.ticket_id != null) {
                         window.document.getElementById("ShowCheck").style.display = "block";
                         window.document.getElementById("refundCheck").style.display = "block";
                     } else {
@@ -120,8 +119,9 @@
         });
 
 
-        function sendKKM(pay_type){
-            let url = 'https://dev.smartrekassa.kz/Popup/customerorder/send'
+
+        function sendKKM(pay_type) {
+            let url = 'https://smartrekassa.kz/Popup/customerorder/send'
             //let url = 'https://rekassa/Popup/customerorder/send'
 
             let button_hide = ''
@@ -143,26 +143,26 @@
             if (error_what === true) modalShowHide = 'hide'
 
 
-            if (total-0.01 <= money_card+money_cash+money_mobile) {
-                if (modalShowHide === 'show'){
+            if (total - 0.01 <= money_card + money_cash + money_mobile) {
+                if (modalShowHide === 'show') {
                     window.document.getElementById('HeaderGIF').innerText = 'Отправка'
                     FU_AnimationDownloadGIF('toggle', 'Отправка')
                     let products = []
                     for (let i = 0; i < products_length; i++) {
                         if (window.document.getElementById(i).style.display !== 'none') {
                             products[i] = {
-                                id:window.document.getElementById('productId_'+i).innerText,
-                                name:window.document.getElementById('productName_'+i).innerText,
-                                quantity:window.document.getElementById('productQuantity_'+i).innerText,
-                                UOM:window.document.getElementById('productIDUOM_'+i).innerText,
-                                price:window.document.getElementById('productPrice_'+i).innerText,
-                                is_nds:window.document.getElementById('productVat_'+i).innerText,
-                                discount:window.document.getElementById('productDiscount_'+i).innerText
+                                id: window.document.getElementById('productId_' + i).innerText,
+                                name: window.document.getElementById('productName_' + i).innerText,
+                                quantity: window.document.getElementById('productQuantity_' + i).innerText,
+                                UOM: window.document.getElementById('productIDUOM_' + i).innerText,
+                                price: window.document.getElementById('productPrice_' + i).innerText,
+                                is_nds: window.document.getElementById('productVat_' + i).innerText,
+                                discount: window.document.getElementById('productDiscount_' + i).innerText
                             }
                         }
                     }
 
-                    let data =  {
+                    let data = {
                         "accountId": accountId,
                         "object_Id": object_Id,
                         "entity_type": entity_type,
@@ -184,11 +184,11 @@
                         method: 'post',
                         dataType: 'json',
                         data: data,
-                        success: function(response){
+                        success: function (response) {
                             FU_AnimationDownloadGIF('hide', 'Отправка')
                             console.log(url + ' response ↓ ')
                             console.log(response)
-                            if (response.code === 200){
+                            if (response.code === 200) {
                                 window.document.getElementById("messageGoodAlert").innerText = "Чек создан"
                                 window.document.getElementById("messageGood").style.display = "block"
                                 window.document.getElementById("ShowCheck").style.display = "block"
@@ -201,7 +201,7 @@
                                             window.document.getElementById('messageAlert').innerText = "Предыдущая смена не закрыта !"
                                             window.document.getElementById('message').style.display = "block"
                                             window.document.getElementById(button_hide).style.display = "block"
-                                        } else  {
+                                        } else {
                                             window.document.getElementById('messageAlert').innerText = response.res.error.code
                                             window.document.getElementById('message').style.display = "block"
                                             window.document.getElementById(button_hide).style.display = "block"
@@ -214,17 +214,16 @@
                                 }
                             }
                         },
-                        error: function(errorResponse) {
+                        error: function (errorResponse) {
                             console.log(url + ' errorResponse ↓ ')
                             console.log(errorResponse)
                             FU_AnimationDownloadGIF('hide', 'Отправка')
-                            window.document.getElementById('messageAlert').innerText = "Ошибка 400. "+errorResponse.responseJSON.message
+                            window.document.getElementById('messageAlert').innerText = "Ошибка 400. " + errorResponse.responseJSON.message
                             window.document.getElementById('message').style.display = "block"
                             window.document.getElementById(button_hide).style.display = "block"
                         },
                     });
-                }
-                else window.document.getElementById(button_hide).style.display = "block";
+                } else window.document.getElementById(button_hide).style.display = "block";
             } else {
                 window.document.getElementById('messageAlert').innerText = 'Сумма некорректна, введите больше';
                 window.document.getElementById('message').style.display = "block";
@@ -239,27 +238,30 @@
     <div class="main-container">
         <div class="row gradient rounded p-2">
             <div class="col-9">
-                <div class="mx-2"> <img src="https://app.rekassa.kz/static/logo.png" width="45" height="45"  alt="">
+                <div class="mx-2"><img src="https://app.rekassa.kz/static/logo.png" width="45" height="45" alt="">
                     <span class="text-white" style="font-size: 23px"> reKassa </span>
                     <span class="text-white" style="font-size: 20px; margin-left: 5.5rem">Заказ покупателя №</span>
                     <span id="numberOrder" class="text-white" style="font-size: 20px"></span>
                 </div>
             </div>
             <div class="col-3">
-                <div class="row"> <div class="col-6"></div>
+                <div class="row">
+                    <div class="col-6"></div>
                     <div class="col-6">
-                        <button id="closeButtonId" type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modal" >Закрыть смену</button>
+                        <button id="closeButtonId" type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                data-bs-target="#modal">Закрыть смену
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
-        <div id="message" class="mt-2 row" style="display:none;" >
+        <div id="message" class="mt-2 row" style="display:none;">
             <div class="col-12">
                 <div id="messageAlert" class=" mx-3 p-2 alert alert-danger text-center ">
                 </div>
             </div>
         </div>
-        <div id="messageGood" class="mt-2 row" style="display:none;" >
+        <div id="messageGood" class="mt-2 row" style="display:none;">
             <div class="col-12">
                 <div id="messageGoodAlert" class=" mx-3 p-2 alert alert-success text-center ">
                 </div>
@@ -280,7 +282,7 @@
                                 <div class="divTableHead text-black">НДС</div>
                                 <div class="divTableHead text-black">Скидка</div>
                                 <div class="divTableHead text-black">Сумма</div>
-                                <div class="divTableHead text-black">Учитывать </div>
+                                <div class="divTableHead text-black">Учитывать</div>
                                 <div class="buttons-container-head mt-1"></div>
 
                             </div>
@@ -310,7 +312,7 @@
                 </div>
                 <div class="col-1">
 
-                    </div>
+                </div>
                 <div class="col-2">
 
                 </div>
@@ -337,18 +339,27 @@
                     </div>
                     <div class="col-6">
                         <div class="row">
-                            <div class="col-4"> <div id="Visibility_Cash" class="mx-2" style="display: none">
-                                    <input id="cash" type="number" step="0.1" placeholder="Сумма наличных"  onkeypress="return isNumberKeyCash(event)"
+                            <div class="col-4">
+                                <div id="Visibility_Cash" class="mx-2" style="display: none">
+                                    <input id="cash" type="number" step="0.1" placeholder="Сумма наличных"
+                                           onkeypress="return isNumberKeyCash(event)"
                                            class="form-control float" required maxlength="255" value="">
-                                </div> </div>
-                            <div class="col-4"> <div id="Visibility_Card" class="mx-2" style="display: none">
-                                    <input id="card" type="number" step="0.1"  placeholder="Сумма картой" onkeypress="return isNumberKeyCard(event)"
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div id="Visibility_Card" class="mx-2" style="display: none">
+                                    <input id="card" type="number" step="0.1" placeholder="Сумма картой"
+                                           onkeypress="return isNumberKeyCard(event)"
                                            class="form-control float" required maxlength="255" value="">
-                                </div> </div>
-                            <div class="col-4"> <div id="Visibility_Mobile" class="mx-2" style="display: none">
-                                    <input id="mobile" type="number" step="0.1"  placeholder="Сумма мобильных" onkeypress="return isNumberKeyMobile(event)"
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div id="Visibility_Mobile" class="mx-2" style="display: none">
+                                    <input id="mobile" type="number" step="0.1" placeholder="Сумма мобильных"
+                                           onkeypress="return isNumberKeyMobile(event)"
                                            class="form-control float" required maxlength="255" value="">
-                                </div> </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="col-1"></div>
@@ -368,7 +379,7 @@
         <div class="modal-dialog modal-sm">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title"> <i class="fa-solid fa-circle-exclamation text-danger"></i>
+                    <h5 class="modal-title"><i class="fa-solid fa-circle-exclamation text-danger"></i>
                         <span id="HeaderGIF">Загрузка</span>
                     </h5>
                 </div>
@@ -401,8 +412,9 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button  onclick="closeShift()" id="closeShift"
-                             data-bs-dismiss="modal" class="btn btn-danger">Закрыть смену</button>
+                    <button onclick="closeShift()" id="closeShift"
+                            data-bs-dismiss="modal" class="btn btn-danger">Закрыть смену
+                    </button>
                 </div>
             </div>
         </div>

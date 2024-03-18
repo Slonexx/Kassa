@@ -1,14 +1,14 @@
 <?php
 
 use App\Http\Controllers\AttributeController;
+use App\Http\Controllers\integration\actionClientController;
+use App\Http\Controllers\integration\connectController;
 use App\Http\Controllers\ShiftController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\Web\WebhookMSController;
 use App\Http\Controllers\WebHookController;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Storage;
+
 
 
 Route::post('attributes',[AttributeController::class,'setAllAttributes']);
@@ -26,4 +26,11 @@ Route::post('webhook/{accountId}/demand',[WebHookController::class,'newDemand'])
 Route::post('/webhook/customerorder/',[WebhookMSController::class, 'customerorder']);
 Route::post('/webhook/demand/',[WebhookMSController::class, 'customerorder']);
 Route::post('/webhook/salesreturn/',[WebhookMSController::class, 'customerorder']);
+
+
+Route::group(["prefix" => "integration"], function () {
+    Route::get('client/connect/{accountId}', [connectController::class, 'connectClient']);
+    Route::get('client/get/ticket/', [TicketController::class, 'getUrlTicket']);
+    Route::post('client/send/ticket/', [actionClientController::class, 'sendTicket']);
+});
 
