@@ -4,7 +4,7 @@
 
     <script>
 
-        const url = 'https://smartrekassa.kz/Popup/customerorder/show'
+        const url = 'https://dev.smartrekassa.kz/Popup/customerorder/show'
         //const url = 'https://rekassa/Popup/customerorder/show'
         let object_Id = ''
         let accountId = ''
@@ -119,6 +119,7 @@
         });
 
 
+
         function sendKKM(pay_type) {
             let url = 'https://smartrekassa.kz/Popup/customerorder/send'
             //let url = 'https://rekassa/Popup/customerorder/send'
@@ -207,7 +208,7 @@
                                         }
                                     }
                                 } else {
-                                    window.document.getElementById('messageAlert').innerText = "Ошибка 400"
+                                    window.document.getElementById('messageAlert').innerText = JSON.stringify(response)
                                     window.document.getElementById('message').style.display = "block"
                                     window.document.getElementById(button_hide).style.display = "block"
                                 }

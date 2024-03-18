@@ -26,6 +26,11 @@ class salesreturnController extends Controller
 
         $json = $this->info_object_Id($object_Id, $Setting);
 
+        $payment_type = $Setting->payment_type;
+        if ($payment_type == null or $payment_type == '') $payment_type = 1;
+
+        $json['application']['payment_type'] = (int) $payment_type ;
+
         return response()->json($json);
     }
 
