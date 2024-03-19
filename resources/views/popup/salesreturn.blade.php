@@ -5,7 +5,7 @@
 
     <script>
 
-        const url = 'https://dev.smartrekassa.kz/Popup/salesreturn/show';
+        const url = 'https://smartrekassa.kz/Popup/salesreturn/show';
         //const url = 'https://rekassa/Popup/salesreturn/show';
         let object_Id = '';
         let accountId = '';
@@ -82,7 +82,7 @@
         });
 
         function sendKKM(pay_type){
-            let url = 'https://dev.smartrekassa.kz/Popup/salesreturn/send';
+            let url = 'https://smartrekassa.kz/Popup/salesreturn/send';
 
             let button_hide = '';
             if (pay_type == 'return') button_hide = 'refundCheck';
@@ -157,22 +157,23 @@
                                 modalShowHide = 'hide';
                                 id_ticket = response.res.response.id;
                             } else {
-                                if (response.hasOwnProperty('res')) {
-                                    if (response.res.hasOwnProperty('error')) {
-                                        if (response.res.error.code === 'CASH_REGISTER_SHIFT_PERIOD_EXPIRED') {
-                                            window.document.getElementById('messageAlert').innerText = "Предыдущая смена не закрыта !"
-                                            window.document.getElementById('message').style.display = "block"
-                                            window.document.getElementById(button_hide).style.display = "block"
-                                        } else  {
-                                            window.document.getElementById('messageAlert').innerText = response.res.error.code
-                                            window.document.getElementById('message').style.display = "block"
-                                            window.document.getElementById(button_hide).style.display = "block"
-                                        }
+                                if (response.res.hasOwnProperty('error')) {
+                                    if (response.res.error.code === 'CASH_REGISTER_SHIFT_PERIOD_EXPIRED') {
+                                        window.document.getElementById('messageAlert').innerText = "Предыдущая смена не закрыта !";
+                                        window.document.getElementById('message').style.display = "block";
+                                        window.document.getElementById(button_hide).style.display = "block";
+                                        modalShowHide = 'hide';
+                                    } else  {
+                                        window.document.getElementById('messageAlert').innerText = response.res.error.code;
+                                        window.document.getElementById('message').style.display = "block";
+                                        window.document.getElementById(button_hide).style.display = "block";
+                                        modalShowHide = 'hide';
                                     }
                                 } else {
-                                    window.document.getElementById('messageAlert').innerText = JSON.stringify(response)
-                                    window.document.getElementById('message').style.display = "block"
-                                    window.document.getElementById(button_hide).style.display = "block"
+                                    window.document.getElementById('messageAlert').innerText = "Ошибка 400";
+                                    window.document.getElementById('message').style.display = "block";
+                                    window.document.getElementById(button_hide).style.display = "block";
+                                    modalShowHide = 'hide';
                                 }
                             }
                         }
@@ -189,9 +190,9 @@
         }
 
         function ShowCheck(){
-            let urlrekassa = 'https://app-test.rekassa.kz/'
+            let urlrekassa = 'https://app.rekassa.kz/'
             //let url = 'http://rekassa/Popup/customerorder/closeShift';
-            let url = 'https://dev.smartrekassa.kz/api/ticket';
+            let url = 'https://smartrekassa.kz/api/ticket';
             let data = {
                 accountId: accountId,
                 id_ticket: id_ticket,
@@ -648,7 +649,7 @@
             accountId: accountId,
             pincode: pinCode,
         };
-        let url = 'https://dev.smartrekassa.kz/Popup/customerorder/closeShift';
+        let url = 'https://smartrekassa.kz/Popup/customerorder/closeShift';
         let settings = ajax_settings(url, "GET", params);
         console.log(url + ' settings ↓ ')
         console.log(settings)

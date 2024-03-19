@@ -56,7 +56,7 @@
                 password: idKassa,
             };
 
-            let url = 'https://dev.smartrekassa.kz/kassa/get_shift_report/info/'+accountId;
+            let url = 'https://smartrekassa.kz/kassa/get_shift_report/info/'+accountId;
             //let url = 'https://rekassa/kassa/get_shift_report/info/'+accountId;
 
 
@@ -99,7 +99,7 @@
                 sum:inputSum,
             };
 
-            let url = 'https://dev.smartrekassa.kz/kassa/change/'+accountId;
+            let url = 'https://smartrekassa.kz/kassa/change/'+accountId;
            // let url = 'https://rekassa/kassa/change/'+accountId;
 
             let final = url + formatParams(params);
@@ -146,7 +146,7 @@
                 pin_code:pin_code,
             };
 
-            let url = 'https://dev.smartrekassa.kz/kassa/get_close_report/'+accountId;
+            let url = 'https://smartrekassa.kz/kassa/get_close_report/'+accountId;
             //let url = 'https://rekassa/kassa/get_close_report/'+accountId;
 
 
@@ -294,7 +294,7 @@
                     password: idKassa,
                 };
 
-                let url = 'https://dev.smartrekassa.kz/kassa/get_shift_report/'+accountId;
+                let url = 'https://smartrekassa.kz/kassa/get_shift_report/'+accountId;
                 //let url = 'https://rekassa/kassa/get_shift_report/'+accountId;
                 let final = url + formatParams(params);
 

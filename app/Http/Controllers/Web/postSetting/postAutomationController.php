@@ -59,7 +59,7 @@ class postAutomationController extends Controller
 
         try {
             $Client = new MsClient($Setting->TokenMoySklad);
-            $url_check ='https://dev.smartrekassa.kz/api/webhook/' ;
+            $url_check ='https://smartrekassa.kz/api/webhook/' ;
             $Webhook_check = true;
             $Webhook_body = $Client->get('https://api.moysklad.ru/api/remap/1.2/entity/webhook/')->rows;
             if ($Webhook_body != []){
@@ -76,21 +76,18 @@ class postAutomationController extends Controller
                     }
                 }
 
-
                 $Client->post('https://api.moysklad.ru/api/remap/1.2/entity/webhook/', [
                     'url' => 'https://smartrekassa.kz/api/webhook/customerorder',
                     'action' => "UPDATE",
                     'entityType' => 'customerorder',
                     'diffType' => "FIELDS",
                 ]);
-
                 $Client->post('https://api.moysklad.ru/api/remap/1.2/entity/webhook/', [
                     'url' => 'https://smartrekassa.kz/api/webhook/demand',
                     'action' => "UPDATE",
                     'entityType' => 'demand',
                     'diffType' => "FIELDS",
                 ]);
-
                 $Client->post('https://api.moysklad.ru/api/remap/1.2/entity/webhook/', [
                     'url' => 'https://smartrekassa.kz/api/webhook/salesreturn',
                     'action' => "UPDATE",
