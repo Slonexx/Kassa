@@ -42,6 +42,8 @@
 
                     id_ticket = json.attributes.ticket_id
                     window.document.getElementById("numberOrder").innerHTML = json.name;
+                    payment_type = json.application.payment_type - 1
+                    console.log('payment_type = ' + payment_type)
                     let products = json.products;
 
                     for (let i = 0; i < products.length; i++) {
@@ -174,7 +176,7 @@
                                         window.document.getElementById(button_hide).style.display = "block";
                                         modalShowHide = 'hide';
                                     } else  {
-                                        window.document.getElementById('messageAlert').innerText = response.res.error.code;
+                                        window.document.getElementById('messageAlert').innerText = JSON.stringify(response.res.error);
                                         window.document.getElementById('message').style.display = "block";
                                         window.document.getElementById(button_hide).style.display = "block";
                                         modalShowHide = 'hide';
@@ -293,7 +295,7 @@
     <div class="main-container">
         <div class="row gradient rounded p-2">
             <div class="col-9">
-                <div class="mx-2"> <img src="https://app.rekassa.kz/static/logo.png" width="45" height="45"  alt="">
+                <div class="mx-2"> <img src="https://static.tildacdn.pro/tild6231-6435-4138-a431-346337363461/Layer_1.svg" width="45" height="45"  alt="">
                     <span class="text-white"> reKassa </span>
                     <span class="mx-5 text-white">Отгрузка №</span>
                     <span id="numberOrder" class="text-white"></span>

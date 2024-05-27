@@ -75,7 +75,7 @@
 
     <div class="row gradient rounded p-2">
         <div class="col-10">
-            <div class="mx-2"> <img src="https://app.rekassa.kz/static/logo.png" width="35" height="35"  alt="">
+            <div class="mx-2"> <img src="https://static.tildacdn.pro/tild6231-6435-4138-a431-346337363461/Layer_1.svg" width="35" height="35"  alt="">
                 <span class="text-white"> re:Kassa </span>
             </div>
         </div>

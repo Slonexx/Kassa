@@ -201,7 +201,7 @@
                                             window.document.getElementById('message').style.display = "block"
                                             window.document.getElementById(button_hide).style.display = "block"
                                         } else {
-                                            window.document.getElementById('messageAlert').innerText = response.res.error.code
+                                            window.document.getElementById('messageAlert').innerText = JSON.stringify( response.res.error )
                                             window.document.getElementById('message').style.display = "block"
                                             window.document.getElementById(button_hide).style.display = "block"
                                         }
@@ -237,7 +237,7 @@
     <div class="main-container">
         <div class="row gradient rounded p-2">
             <div class="col-9">
-                <div class="mx-2"><img src="https://app.rekassa.kz/static/logo.png" width="45" height="45" alt="">
+                <div class="mx-2"><img src="https://static.tildacdn.pro/tild6231-6435-4138-a431-346337363461/Layer_1.svg" width="45" height="45" alt="">
                     <span class="text-white" style="font-size: 23px"> reKassa </span>
                     <span class="text-white" style="font-size: 20px; margin-left: 5.5rem">Заказ покупателя №</span>
                     <span id="numberOrder" class="text-white" style="font-size: 20px"></span>

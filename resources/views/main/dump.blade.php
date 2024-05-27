@@ -14,7 +14,7 @@
 
 <div class="row gradient rounded p-2">
     <div class="col-12 text-center">
-        <div class="mx-2"> <img src="https://app.rekassa.kz/static/logo.png" width="50" height="50"  alt="">
+        <div class="mx-2"> <img src="https://static.tildacdn.pro/tild6231-6435-4138-a431-346337363461/Layer_1.svg" width="50" height="50"  alt="">
             <span class="text-white"> Данная интеграция находиться в МоемСкладе </span>
         </div>
     </div>

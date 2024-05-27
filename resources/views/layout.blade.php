@@ -8,13 +8,7 @@
 
         <div class="p-2 gradient ">
             <div class="row text-white">
-                <div class="col-2">
-                    <img src="https://app.rekassa.kz/static/logo.png" width="35" height="35" alt="">
-                </div>
-                <div class="mt-1 col-10">
-                    <label class="s-min-16"> reKassa </label>
-                </div>
-
+                <img src="https://static.tildacdn.pro/tild6231-6435-4138-a431-346337363461/Layer_1.svg" width="55" height="55" alt="">
             </div>
         </div>
         <br>
